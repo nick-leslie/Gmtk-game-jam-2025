@@ -1,12 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://bw8emd6n56kf8"]
+[gd_scene load_steps=7 format=3 uid="uid://bw8emd6n56kf8"]
 
 [ext_resource type="Script" uid="uid://c22op1g0202hr" path="res://follow_mouse.gd" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://cm1h0xl5gt6nq" path="res://line_collider.gd" id="1_lquwl"]
-[ext_resource type="PackedScene" uid="uid://cx3epoiu21pwy" path="res://point.tscn" id="2_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://cx3epoiu21pwy" path="res://Scenes/point.tscn" id="2_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://dxxihuobndwvl" path="res://icon.svg" id="2_h2yge"]
 [ext_resource type="Script" uid="uid://bp2pjt4dtaffb" path="res://head_collider_body.gd" id="5_7mycd"]
 
+[sub_resource type="GDScript" id="GDScript_fkybt"]
+script/source = "extends Node2D
+"
+
 [node name="Node2D" type="Node2D"]
+script = SubResource("GDScript_fkybt")
 
 [node name="HeadColliderBody" type="Area2D" parent="."]
 collision_layer = 2
