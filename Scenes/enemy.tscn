@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c72goxnk8uioy" path="res://Sprites/enemy_temp.png" id="2_qi2p4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1f0kj"]
-size = Vector2(118, 94)
+size = Vector2(116, 70)
 
 [node name="Enemy" type="Node2D"]
 script = ExtResource("1_4gyqm")

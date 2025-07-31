@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://c3v30e6n6jbwd"]
+
+[ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_366os"]
+[ext_resource type="Script" uid="uid://whxlnigxtbwl" path="res://Scripts/Enemies/test_enemy.gd" id="2_kksxm"]
+[ext_resource type="Texture2D" uid="uid://0yrxu2thlidg" path="res://Sprites/enemy_temp2.PNG" id="3_v1mop"]
+
+[node name="Enemy" instance=ExtResource("1_366os")]
+script = ExtResource("2_kksxm")
+
+[node name="Sprite2D" parent="." index="0"]
+scale = Vector2(0.06, 0.06)
+texture = ExtResource("3_v1mop")

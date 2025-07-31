@@ -22,22 +22,24 @@ func _ready(): #setup
 	pass
 	
 func _process(delta: float) -> void: #loop
-	pass
+	state_logic()
+	current_state = get_transition()
+	
 
 func get_transition() -> State:
 	match current_state:
 		State.IDLE:
-			idleTransition()
+			return idleTransition()
 		State.MOVE:
-			moveTransition()
+			return moveTransition()
 		State.ATTACK:
-			attackTransition()
+			return attackTransition()
 		State.WINDUP:
-			windupTransition()
+			return windupTransition()
 		State.RUNANDGUN:
-			runAndGunTransition()
+			return runAndGunTransition()
 		State.DASH:
-			dashTransition()
+			return dashTransition()
 	return State.IDLE #default is override
 
 #State logic
@@ -58,22 +60,28 @@ func state_logic():
 		
 	
 #Transistion functions
-func idleTransition():
+func idleTransition() -> State:
+	return State.IDLE
 	pass
 	
-func moveTransition():
+func moveTransition() -> State:
+	return State.IDLE
 	pass
 	
-func windupTransition():
+func windupTransition() -> State:
+	return State.IDLE
 	pass
 	
-func attackTransition():
+func attackTransition() -> State:
+	return State.IDLE
 	pass
 	
-func runAndGunTransition():
+func runAndGunTransition() -> State:
+	return State.IDLE
 	pass	
 	
-func dashTransition():
+func dashTransition() -> State:
+	return State.IDLE
 	pass
 
 # State logic functions
