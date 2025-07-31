@@ -1,15 +1,40 @@
-[gd_scene load_steps=3 format=3 uid="uid://bw8emd6n56kf8"]
+[gd_scene load_steps=5 format=3 uid="uid://bw8emd6n56kf8"]
 
 [ext_resource type="Script" uid="uid://c22op1g0202hr" path="res://follow_mouse.gd" id="1_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://cx3epoiu21pwy" path="res://point.tscn" id="2_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://dxxihuobndwvl" path="res://icon.svg" id="2_h2yge"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h2yge"]
+radius = 34.0588
 
 [node name="Node2D" type="Node2D"]
 
-[node name="Line2D" type="Line2D" parent="."]
+[node name="Line" type="Line2D" parent="."]
 
-[node name="Node2D" type="Node2D" parent="." node_paths=PackedStringArray("line")]
+[node name="StaticBody2D" type="StaticBody2D" parent="Line"]
+
+[node name="Stylest" type="Node2D" parent="." node_paths=PackedStringArray("line", "start_obj", "main_node", "collider")]
 script = ExtResource("1_0xm2m")
-line = NodePath("../Line2D")
+line = NodePath("../Line")
+start_obj = NodePath("../StartNode")
+col_dist = 70.0
+too_close_count = 80
+point_scene = ExtResource("2_1bvp3")
+main_node = NodePath("..")
+collider = NodePath("../Line/StaticBody2D")
 
-[node name="Sprite2D" type="Sprite2D" parent="Node2D"]
+[node name="Sprite2D" type="Sprite2D" parent="Stylest"]
+position = Vector2(0.999996, 2)
+scale = Vector2(0.4375, 0.4375)
+texture = ExtResource("2_h2yge")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Stylest"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Stylest/StaticBody2D"]
+shape = SubResource("CircleShape2D_h2yge")
+
+[node name="StartNode" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="StartNode"]
+scale = Vector2(0.53125, 0.488281)
 texture = ExtResource("2_h2yge")
