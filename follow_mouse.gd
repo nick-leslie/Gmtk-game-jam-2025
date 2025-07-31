@@ -16,7 +16,7 @@ func _ready():
 	pass
 
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	var mouse_position = get_viewport().get_mouse_position()
 	
 	if Input.is_mouse_button_pressed( 1 ): # Left click
@@ -31,13 +31,13 @@ func _process(delta: float) -> void:
 			#point.position = pos
 			#main_node.add_child(point)
 			var count = line.get_point_count() 
-			if count > 2:  
+			if count > 3:  
 				#print("running")
 				# Adding the collider to the line
 				var col_shape = CollisionShape2D.new()
 				var line_col = SegmentShape2D.new()
-				line_col.a = line.get_point_position(count-2)
-				line_col.b = line.get_point_position(count-3)
+				line_col.a = line.get_point_position(count-3)
+				line_col.b = line.get_point_position(count-4)
 				#print(pos)
 				#print(line.get_point_position(count-2))
 				col_shape.shape = line_col
