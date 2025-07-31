@@ -8,7 +8,7 @@ var drawing = false
 var prev_pos = Vector2(0, 0) 
 @export var point_scene: PackedScene
 @export var main_node: Node2D
-@export var collider: StaticBody2D
+@export var collider: Area2D
 @export var head_collider : CollisionShape2D
 
 
@@ -26,26 +26,27 @@ func _process(delta: float) -> void:
 		if pos.distance_to(prev_pos) > 1:
 			
 			line.add_point(pos)
-			var point = point_scene.instantiate()
-			point.position = pos
-			main_node.add_child(point)
+			#Adding points for vizulizing line
+			#var point = point_scene.instantiate()
+			#point.position = pos
+			#main_node.add_child(point)
 			var count = line.get_point_count() 
-			if count > 4:  
+			if count > 2:  
 				#print("running")
 				# Adding the collider to the line
 				var col_shape = CollisionShape2D.new()
 				var line_col = SegmentShape2D.new()
-				line_col.a = line.get_point_position(count-3)
-				line_col.b = line.get_point_position(count-4)
-				print(pos)
-				print(line.get_point_position(count-2))
+				line_col.a = line.get_point_position(count-2)
+				line_col.b = line.get_point_position(count-3)
+				#print(pos)
+				#print(line.get_point_position(count-2))
 				col_shape.shape = line_col
 				collider.add_child(col_shape)
 				
 			if count > 1:
 				#Adding the second line from the sytlist to the last point
 				var head_line_shape = SegmentShape2D.new()
-				head_line_shape.a = pos
+				head_line_shape.a = mouse_position
 				head_line_shape.b = line.get_point_position(count-2)
 				head_collider.shape = head_line_shape
 
@@ -55,7 +56,7 @@ func _process(delta: float) -> void:
 			start_obj.position = pos
 		# collision detection test
 		var point_count = line.get_point_count()
-		print(point_count)
+		#print(point_count)
 		if point_count < 1:
 			prev_pos = mouse_position
 			return
