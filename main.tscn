@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bw8emd6n56kf8"]
+
+[ext_resource type="Script" uid="uid://c22op1g0202hr" path="res://follow_mouse.gd" id="1_0xm2m"]
+[ext_resource type="Texture2D" uid="uid://dxxihuobndwvl" path="res://icon.svg" id="2_h2yge"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Line2D" type="Line2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="." node_paths=PackedStringArray("line")]
+script = ExtResource("1_0xm2m")
+line = NodePath("../Line2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D"]
+texture = ExtResource("2_h2yge")
