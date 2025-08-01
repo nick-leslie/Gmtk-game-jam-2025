@@ -9,3 +9,10 @@ script = ExtResource("1_bo1nx")
 enemy_scene = ExtResource("2_bo1nx")
 
 [node name="Player" parent="." instance=ExtResource("2_8gbba")]
+
+[node name="Enemy" parent="." instance=ExtResource("2_bo1nx")]
+position = Vector2(197, 178)
+ray_count = 1
+ray_length = 100.0
+
+[connection signal="loop_complete" from="Player" to="Enemy" method="_on_player_loop_complete"]

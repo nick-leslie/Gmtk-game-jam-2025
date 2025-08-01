@@ -1,48 +1,32 @@
-[gd_scene load_steps=7 format=3 uid="uid://bw8emd6n56kf8"]
+[gd_scene load_steps=4 format=3 uid="uid://bw8emd6n56kf8"]
 
-[ext_resource type="Script" uid="uid://c22op1g0202hr" path="res://follow_mouse.gd" id="1_0xm2m"]
-[ext_resource type="Script" uid="uid://cm1h0xl5gt6nq" path="res://line_collider.gd" id="1_lquwl"]
-[ext_resource type="PackedScene" uid="uid://cx3epoiu21pwy" path="res://Scenes/point.tscn" id="2_1bvp3"]
+[ext_resource type="Script" uid="uid://cagswdrat2x2a" path="res://Scripts/player.gd" id="1_vgqql"]
 [ext_resource type="Texture2D" uid="uid://dxxihuobndwvl" path="res://icon.svg" id="2_h2yge"]
 [ext_resource type="Script" uid="uid://bp2pjt4dtaffb" path="res://head_collider_body.gd" id="5_7mycd"]
 
-[sub_resource type="GDScript" id="GDScript_fkybt"]
-script/source = "extends Node2D
-"
+[node name="PlayerRoot" type="Node2D" groups=["player"]]
+script = ExtResource("1_vgqql")
 
-[node name="Node2D" type="Node2D"]
-script = SubResource("GDScript_fkybt")
-
-[node name="HeadColliderBody" type="Area2D" parent="."]
+[node name="HeadColliderBody" type="Area2D" parent="." groups=["player"]]
 collision_layer = 2
 script = ExtResource("5_7mycd")
 
-[node name="HeadCollider" type="CollisionShape2D" parent="HeadColliderBody"]
+[node name="HeadCollider" type="CollisionShape2D" parent="HeadColliderBody" groups=["player"]]
 
-[node name="Line" type="Line2D" parent="."]
+[node name="Line" type="Line2D" parent="." groups=["player"]]
 
-[node name="LineCollider" type="Area2D" parent="Line"]
+[node name="LineCollider" type="Area2D" parent="Line" groups=["player"]]
 collision_mask = 2
-script = ExtResource("1_lquwl")
 
-[node name="Stylest" type="Node2D" parent="." node_paths=PackedStringArray("line", "start_obj", "main_node", "collider", "head_collider")]
-script = ExtResource("1_0xm2m")
-line = NodePath("../Line")
-start_obj = NodePath("../StartNode")
-col_dist = 70.0
-too_close_count = 80
-point_scene = ExtResource("2_1bvp3")
-main_node = NodePath("..")
-collider = NodePath("../Line/LineCollider")
-head_collider = NodePath("../HeadColliderBody/HeadCollider")
+[node name="Stylest" type="Node2D" parent="." groups=["player"]]
 
-[node name="Sprite2D" type="Sprite2D" parent="Stylest"]
+[node name="Sprite2D" type="Sprite2D" parent="Stylest" groups=["player"]]
 position = Vector2(0.999996, 2)
 scale = Vector2(0.4375, 0.4375)
 texture = ExtResource("2_h2yge")
 
-[node name="StartNode" type="Node2D" parent="."]
+[node name="StartNode" type="Node2D" parent="." groups=["player"]]
 
-[node name="Sprite2D" type="Sprite2D" parent="StartNode"]
+[node name="Sprite2D" type="Sprite2D" parent="StartNode" groups=["player"]]
 scale = Vector2(0.53125, 0.488281)
 texture = ExtResource("2_h2yge")

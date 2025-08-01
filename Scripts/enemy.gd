@@ -8,7 +8,7 @@ class_name Enemy
 @export var dash_mult: float
 @export var ray_count:int
 @export var ray_length:float
-@export var collision_mask: int = 1
+@export_flags_2d_physics var collision_mask: int
 enum State {
 	IDLE,
 	MOVE,
@@ -26,6 +26,10 @@ func _ready(): #setup
 func _process(delta: float) -> void: #loop
 	pass
 
+func _on_player_loop_complete() -> void: # godot refrence magic?
+	check_line_col()
+	pass # Replace with function body.
+
 # we need to move
 func check_line_col():
 	var space = get_world_2d().direct_space_state
@@ -33,17 +37,18 @@ func check_line_col():
 		var angle = TAU * i / ray_count
 		var dir = Vector2(cos(angle), sin(angle))
 		var to = position + dir * ray_length
+		print(position)
+		print(to)
 		var query = PhysicsRayQueryParameters2D.create(position, to)
 		query.exclude = [self]
-		query.collision_mask = 1
+		query.collision_mask = collision_mask
 		var hit = space.intersect_ray(query)
 		# hit will be {} if no collision, otherwise a dictionary with keys:
 		#   position (Vector2), normal (Vector2), collider, etc.
 		if hit.size() == 0:
 			print("one of the rays hasnt collided with the line")
-			return
-
-
+			# return
+	print("we caught the sheep")
 	pass
 
 func get_transition() -> State:
