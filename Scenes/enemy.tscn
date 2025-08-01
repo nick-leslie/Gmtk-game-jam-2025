@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://1vwnd0vx5oax" path="res://Scripts/enemy.gd" id="1_4gyqm"]
 [ext_resource type="Texture2D" uid="uid://c72goxnk8uioy" path="res://Sprites/enemy_temp.png" id="2_qi2p4"]
+[ext_resource type="Texture2D" uid="uid://brugnqiduxnm5" path="res://Sprites/Arrow.svg" id="3_afpow"]
 
 [sub_resource type="Curve" id="Curve_1f0kj"]
 _data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
@@ -14,18 +15,29 @@ size = Vector2(116, 70)
 [node name="Enemy" type="Node2D"]
 position = Vector2(1, 0)
 script = ExtResource("1_4gyqm")
+<<<<<<< HEAD
 max_speed = 3.5
 dash_mult = 1.5
 capture_threashold = 15.0
 decay_duration = 2.0
 decay_rate = SubResource("Curve_1f0kj")
 decay_wait_time = 4.0
+=======
+health = 10.0
+max_speed = 3.5
+dash_mult = 1.5
+edge_gap = 150
+>>>>>>> 17eef8b6dd483d6e31770b525ac73e319ba69c2f
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="EnemySprite" type="Sprite2D" parent="."]
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_qi2p4")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="EnemyArea" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="EnemyHitbox" type="CollisionShape2D" parent="EnemyArea"]
 shape = SubResource("RectangleShape2D_1f0kj")
+
+[node name="TelegraphSprite" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("3_afpow")
