@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgso3ttnhyoq"]
+[gd_scene load_steps=6 format=3 uid="uid://bgso3ttnhyoq"]
 
 [ext_resource type="Script" uid="uid://bgxtm4ok06e4q" path="res://Scripts/main.gd" id="1_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://bw8emd6n56kf8" path="res://Scenes/player.tscn" id="2_8gbba"]
 [ext_resource type="PackedScene" uid="uid://c3v30e6n6jbwd" path="res://Scenes/Enemies/test_enemy.tscn" id="2_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://cx3epoiu21pwy" path="res://Scenes/point.tscn" id="4_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://ecmn2amgrast" path="res://Scenes/ui/combo_ui.tscn" id="5_kry3j"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_bo1nx")
@@ -11,3 +12,7 @@ enemy_scene = ExtResource("2_jjvhh")
 
 [node name="Player" parent="." instance=ExtResource("2_8gbba")]
 point_scene = ExtResource("4_jjvhh")
+
+[node name="UI" parent="." instance=ExtResource("5_kry3j")]
+offset_left = 59.0
+offset_right = 59.0

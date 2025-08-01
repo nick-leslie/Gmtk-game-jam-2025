@@ -36,9 +36,9 @@ var dash_elapsed_time := 0.0
 
 
 @export_group("Raycast")
-@export var ray_count:int
-@export var ray_length:float
-@export_flags_2d_physics var collision_mask: int
+@export var ray_count:int = 10
+@export var ray_length:float =10000
+@export_flags_2d_physics var collision_mask: int = 1
 @onready var debug_line = Line2D.new()
 
 enum State {
@@ -61,16 +61,24 @@ var magnitude := randi_range(1, max_speed)
 
 func _ready(): #setup
 	get_parent().add_child(debug_line)
-	get_parent().get_node("Player").connect("loop_complete",_on_player_loop_complete)
+	EventBus.LoopCreated.connect(check_circled)
+	EventBus.ComboIncreased.connect(take_damage)
 	pass
 
 func _process(delta: float) -> void: #loop
 	state_logic()
 	current_state = get_transition(delta)
 
-func _on_player_loop_complete() -> void: # godot refrence magic?
+func take_damage(combo:int):
+	health -= combo
+	print(health)
+
+func check_circled() -> void: # godot refrence magic?
+	print("gaming????")
 	var looped = check_line_col()
 	print(looped)
+	if looped:
+		EventBus.EnemeyCircled.emit()
 	pass # Replace with function body.
 
 # we need to move

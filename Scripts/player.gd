@@ -11,26 +11,25 @@ class_name player
 @export var point_scene: PackedScene
 var col_shape_dict: Dictionary = {}
 
-
-signal loop_complete
-
 var drawing = false
 var prev_pos = Vector2(0, 0)
+
+var combo = 0
 
 
 func _ready():
 	line_colider.area_entered.connect(on_loop_created)
+	EventBus.EnemeyCircled.connect(increase_combo)
 	pass
+
+func increase_combo():
+	combo+=1
+	EventBus.ComboIncreased.emit(combo)
 
 func on_loop_created(area):
 	if area.name == "HeadColliderBody":
-		loop_complete.emit()
-		print("Line is overlapping")
+		EventBus.LoopCreated.emit()
 		var closest_index = get_closest_point_index()
-		print(closest_index)
-		var debug = point_scene.instantiate()
-		debug.position = line.get_point_position(closest_index)
-		get_parent().add_child(debug)
 		remove_colider(closest_index)
 		remove_colider(closest_index-1)
 		remove_colider(closest_index-2)
@@ -45,7 +44,8 @@ func on_loop_created(area):
 func remove_colider(index:int):
 	if col_shape_dict.has(index):
 		var collider = col_shape_dict[index]
-		collider.queue_free()
+		if is_instance_valid(collider):
+			collider.queue_free()
 		col_shape_dict.erase(index)
 
 
@@ -107,5 +107,7 @@ func _physics_process(delta: float) -> void:
 		line.clear_points()
 		for child in line_colider.get_children():
 			child.queue_free()
+		combo = 0
+		EventBus.ComboEnded.emit()
 			#TODO maybe not free all of these
 		drawing = false

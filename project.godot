@@ -14,3 +14,7 @@ config/name="game-jam-prototype"
 run/main_scene="uid://bgso3ttnhyoq"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+EventBus="*res://Scripts/event_bus.gd"
