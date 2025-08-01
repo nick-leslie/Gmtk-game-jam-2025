@@ -4,7 +4,7 @@ class_name Enemy
 
 #@export var enemy_stats: Resource #use .tres
 @export var health: int
-@export var speed: float
+@export var max_speed: float
 @export var dash_mult: float
 @export var ray_count:int
 @export var ray_length:float
@@ -25,6 +25,11 @@ func _ready(): #setup
 	pass
 
 func _process(delta: float) -> void: #loop
+	state_logic()
+	current_state = get_transition(delta)
+	
+
+func get_transition(delta: float) -> State:
 	get_parent().add_child(debug_line)
 	pass
 
@@ -56,17 +61,17 @@ func check_line_col():
 func get_transition() -> State:
 	match current_state:
 		State.IDLE:
-			idleTransition()
+			return idleTransition(delta)
 		State.MOVE:
-			moveTransition()
+			return moveTransition(delta)
 		State.ATTACK:
-			attackTransition()
+			return attackTransition(delta)
 		State.WINDUP:
-			windupTransition()
+			return windupTransition(delta)
 		State.RUNANDGUN:
-			runAndGunTransition()
+			return runAndGunTransition(delta)
 		State.DASH:
-			dashTransition()
+			return dashTransition(delta)
 	return State.IDLE #default is override
 
 #State logic
@@ -87,22 +92,28 @@ func state_logic():
 
 
 #Transistion functions
-func idleTransition():
+func idleTransition(delta: float) -> State:
+	return State.IDLE
 	pass
-
-func moveTransition():
+	
+func moveTransition(delta: float) -> State:
+	return State.IDLE
 	pass
-
-func windupTransition():
+	
+func windupTransition(delta: float) -> State:
+	return State.IDLE
 	pass
-
-func attackTransition():
+	
+func attackTransition(delta: float) -> State:
+	return State.IDLE
 	pass
-
-func runAndGunTransition():
-	pass
-
-func dashTransition():
+	
+func runAndGunTransition(delta: float) -> State:
+	return State.IDLE
+	pass	
+	
+func dashTransition(delta: float) -> State:
+	return State.IDLE
 	pass
 
 # State logic functions
