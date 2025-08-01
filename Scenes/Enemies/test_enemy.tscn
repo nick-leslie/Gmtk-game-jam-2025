@@ -6,10 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://0yrxu2thlidg" path="res://Sprites/enemy_temp2.PNG" id="3_v1mop"]
 
 [node name="TestEnemy" instance=ExtResource("1_366os")]
-position = Vector2(0, 0)
 script = ExtResource("2_kksxm")
 projectile_scene = ExtResource("3_ca8xo")
 health = 0.0
+number_of_projectiles = 5
 edge_gap = 30
 idle_state_time = 3.0
 telegraph_state_time = 0.5

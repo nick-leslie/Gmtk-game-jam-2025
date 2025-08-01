@@ -11,6 +11,7 @@ class_name Enemy
 @export var telegraph_blink_count: int = 3 # How many times you want the telegraph to blink
 @export var edge_gap: int = 50 # Pixels away it can get to the edge 
 var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
+var current_projectiles := 0 # Number of projectiles shot
 
 @export_category("State Machine")
 @export var idle_state_time: float
