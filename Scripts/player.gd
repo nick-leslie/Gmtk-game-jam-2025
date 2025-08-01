@@ -28,9 +28,9 @@ func on_loop_created(area):
 		print("Line is overlapping")
 		var closest_index = get_closest_point_index()
 		print(closest_index)
-		var debug = point_scene.instantiate()
-		debug.position = line.get_point_position(closest_index)
-		get_parent().add_child(debug)
+		#var debug = point_scene.instantiate()
+		#debug.position = line.get_point_position(closest_index)
+		#get_parent().add_child(debug)
 		remove_colider(closest_index)
 		remove_colider(closest_index-1)
 		remove_colider(closest_index-2)
@@ -45,7 +45,8 @@ func on_loop_created(area):
 func remove_colider(index:int):
 	if col_shape_dict.has(index):
 		var collider = col_shape_dict[index]
-		collider.queue_free()
+		if is_instance_valid(collider):
+			collider.queue_free()
 		col_shape_dict.erase(index)
 
 
