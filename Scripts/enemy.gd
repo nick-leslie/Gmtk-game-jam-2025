@@ -3,13 +3,24 @@ extends Node2D
 class_name Enemy
 
 #@export var enemy_stats: Resource #use .tres
-@export var health: int
+
 @export var max_speed: float
 @export var dash_mult: float
 @export var ray_count:int = 10
 @export var ray_length:float =10000
 @export_flags_2d_physics var collision_mask: int = 1
 @onready var debug_line = Line2D.new()
+
+
+
+@export var capture_threashold: float
+@export var decay_duration:float # duration for decay in seconds
+var currrent_decay_duration:float
+@export var decay_rate:Curve # decay rate curve that we sample
+@onready var decay_start_timer:Timer = Timer.new()
+@export var decay_wait_time:float # time we have till decay begins on capture progress
+var capture_health:float = 0.0
+var is_decaying:bool = false
 
 enum State {
 	IDLE,
@@ -26,23 +37,58 @@ func _ready(): #setup
 	get_parent().add_child(debug_line)
 	EventBus.LoopCreated.connect(check_circled)
 	EventBus.ComboIncreased.connect(take_damage)
+	add_child(decay_start_timer)
+	decay_start_timer.timeout.connect(start_decay)
+	decay_start_timer.autostart = true
+	reset_timer()
 	pass
 
 func _process(delta: float) -> void: #loop
 	state_logic()
 	current_state = get_transition(delta)
+	print(capture_health)
+	if is_decaying:
+		currrent_decay_duration+=delta
+		var normalized_decay = get_normalized_value(currrent_decay_duration,0,decay_duration)
+		capture_health -= decay_rate.sample(normalized_decay)
+		if capture_health > capture_threashold:
+			print("we have been captured")
+	if capture_health < 0:
+		capture_health = 0
+		is_decaying = false
+		decay_start_timer.stop()
+
+
+
+func start_decay():
+	is_decaying=true
+	pass
 
 func take_damage(combo:int):
-	health -= combo
-	print(health)
+	capture_health += combo
+	if capture_health > capture_threashold:
+		print("captureded")
+	print(capture_health)
+	reset_timer()
 
-func check_circled() -> void: # godot refrence magic?
+func reset_timer():
+	decay_start_timer.stop()
+	decay_start_timer.wait_time = decay_wait_time
+	decay_start_timer.start()
+	is_decaying=false
+
+func check_circled() -> void:
 	print("gaming????")
 	var looped = check_line_col()
 	print(looped)
 	if looped:
 		EventBus.EnemeyCircled.emit()
 	pass # Replace with function body.
+
+func get_normalized_value(current: float, min_value: float, max_value: float) -> float:
+	if max_value == min_value:
+		return 0.0 # Avoid division by zero
+	return clamp((current - min_value) / (max_value - min_value), 0.0, 1.0)
 
 # we need to move
 func check_line_col():
@@ -58,8 +104,6 @@ func check_line_col():
 		query.collision_mask = collision_mask
 		query.collide_with_areas = true
 		var hit = space.intersect_ray(query)
-		# hit will be {} if no collision, otherwise a dictionary with keys:
-		#   position (Vector2), normal (Vector2), collider, etc.
 		if hit.size() == 0:
 			return false
 	return true
