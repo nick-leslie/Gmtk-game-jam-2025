@@ -1,29 +1,30 @@
 extends Enemy
 
-@export var idle_state_time: float
-var idle_counter := 0.0
-
-@export var move_state_time: float
-var move_counter := 0.0
-
-var direction := Vector2(0,0)
-var magnitude := 0.0
 
 #Transistion functions
 func idleTransition(delta: float):
-	if idle_counter < idle_state_time:
-		idle_counter += delta
+	if idle_elapsed_time < idle_state_time:
+		idle_elapsed_time += delta
 		return State.IDLE
 	else:
-		idle_counter = 0.0
+		idle_elapsed_time = 0.0
+		return State.TELEGRAPH
+	
+func telegraphTransition(delta: float) -> State:
+	if telegraph_elapsed_time < telegraph_state_time:
+		telegraph_elapsed_time += delta
+		return State.TELEGRAPH
+	else:
+		telegraph_elapsed_time = 0.0
 		return State.MOVE
+	pass
 	
 func moveTransition(delta: float):
-	if move_counter < move_state_time:
-		move_counter += delta
+	if move_elapsed_time < move_state_time:
+		move_elapsed_time += delta
 		return State.MOVE
 	else:
-		move_counter = 0.0
+		move_elapsed_time = 0.0
 		return State.IDLE
 	
 func windupTransition(delta: float):
@@ -39,24 +40,14 @@ func dashTransition(delta: float):
 	pass
 
 # State logic functions
-func idleState(): #State logic for idle state
-	pass
 	
 func moveState():
 	var screen_size = get_viewport_rect().size
-	var texture_size = $Sprite2D.texture.get_size()
-	var sprite_size = texture_size * $Sprite2D.scale
+	var texture_size = $EnemySprite.texture.get_size()
+	var sprite_size = texture_size * $EnemySprite.scale
 	
-	#Generate random direction if first time in move state from other state
-	if move_counter == 0:
-		# Generate random direction vector
-		direction = Vector2(
-		randi_range(-1, 1),
-		randi_range(-1,1)
-		)
-	
-		# Generate random magnitude 
-		magnitude = randi_range(1, max_speed)
+	# Disable the telegraph sprite while moving
+	$TelegraphSprite.visible = false
 	
 	# Move by vector
 	var offset = direction * magnitude
@@ -65,15 +56,3 @@ func moveState():
 	#Clamping to screen size
 	position.x = clamp(position.x, 0 + (sprite_size.x/2), screen_size.x - (sprite_size.x/2))
 	position.y = clamp(position.y, 0 + (sprite_size.y/2), screen_size.y - (sprite_size.y/2))
-
-func windupState():
-	pass
-	
-func attackState():
-	pass
-
-func runAndGunState():
-	pass
-	
-func dashState():
-	pass

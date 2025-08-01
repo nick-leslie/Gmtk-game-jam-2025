@@ -6,9 +6,12 @@
 
 [node name="Enemy" instance=ExtResource("1_366os")]
 script = ExtResource("2_kksxm")
+health = 0.0
 idle_state_time = 3.0
+telegraph_state_time = 0.5
 move_state_time = 1.0
 
-[node name="Sprite2D" parent="." index="0"]
-scale = Vector2(0.06, 0.06)
+[node name="EnemySprite" parent="." index="0"]
+position = Vector2(-7.62939e-06, 0)
+scale = Vector2(0.0605744, 0.0591819)
 texture = ExtResource("3_v1mop")
