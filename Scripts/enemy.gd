@@ -22,16 +22,12 @@ enum State {
 var current_state = State.IDLE
 
 func _ready(): #setup
+	get_parent().add_child(debug_line)
 	pass
 
 func _process(delta: float) -> void: #loop
 	state_logic()
 	current_state = get_transition(delta)
-	
-
-func get_transition(delta: float) -> State:
-	get_parent().add_child(debug_line)
-	pass
 
 func _on_player_loop_complete() -> void: # godot refrence magic?
 	var looped = check_line_col()
@@ -58,7 +54,7 @@ func check_line_col():
 			return false
 	return true
 
-func get_transition() -> State:
+func get_transition(delta: float) -> State:
 	match current_state:
 		State.IDLE:
 			return idleTransition(delta)
