@@ -24,6 +24,7 @@ func _ready():
 	line_colider.area_entered.connect(on_loop_created)
 	EventBus.EnemeyCircled.connect(increase_combo)
 	EventBus.EnemyCollision.connect(hit_enemy)
+	EventBus.ProjectileCollision.connect(hit_projectile)
 	print("Starting health: " + str(current_health))
 	call_deferred("_emit_health") # Need to do this so that the UI node has time to also run its _ready() function
 	pass
@@ -44,6 +45,12 @@ func on_loop_created(area):
 			remove_colider(i)
 			
 func hit_enemy():
+	reduce_health()
+	
+func hit_projectile():
+	reduce_health()
+
+func reduce_health():
 	clear_line()
 	been_hit = true
 	end_combo()
@@ -56,8 +63,6 @@ func hit_enemy():
 	
 	print("Hit detected, new health: " + str(current_health))
 	EventBus.SetPlayerHealth.emit(current_health)
-	pass
-
 
 func remove_colider(index:int):
 	if col_shape_dict.has(index):
