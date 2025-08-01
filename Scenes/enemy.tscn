@@ -1,8 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://br6ossimt5dux"]
+[gd_scene load_steps=6 format=3 uid="uid://br6ossimt5dux"]
 
 [ext_resource type="Script" uid="uid://1vwnd0vx5oax" path="res://Scripts/enemy.gd" id="1_4gyqm"]
 [ext_resource type="Texture2D" uid="uid://c72goxnk8uioy" path="res://Sprites/enemy_temp.png" id="2_qi2p4"]
 [ext_resource type="Texture2D" uid="uid://brugnqiduxnm5" path="res://Sprites/Arrow.svg" id="3_afpow"]
+
+[sub_resource type="GDScript" id="GDScript_afpow"]
+script/source = "extends Area2D
+
+
+#func _ready(): #setup
+	#connect(\"area_entered\", Callable(self, \"_on_area_entered\"))
+	#
+	#
+#func _on_area_entered(area) -> void:
+	#if area.name == \"HeadColliderBody\" or area.name == \"LineCollider\" or area.name == \"LineColliderBody\":
+		#print(\"Get hit bozo\")
+		#pass
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1f0kj"]
 size = Vector2(116, 70)
@@ -20,6 +34,9 @@ scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_qi2p4")
 
 [node name="EnemyArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 3
+script = SubResource("GDScript_afpow")
 
 [node name="EnemyHitbox" type="CollisionShape2D" parent="EnemyArea"]
 shape = SubResource("RectangleShape2D_1f0kj")
