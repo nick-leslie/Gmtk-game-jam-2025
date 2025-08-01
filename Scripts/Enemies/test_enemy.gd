@@ -1,32 +1,40 @@
 extends Enemy
 
+@export var idle_state_time: float
+var idle_counter := 0.0
+
+@export var move_state_time: float
+var move_counter := 0.0
+
+
+
 #Transistion functions
-func idleTransition():
-	var random_number = randi() % 10
-	if random_number > 5:
-		print("Going to move state")
+func idleTransition(delta: float):
+	if idle_counter < idle_state_time:
+		idle_counter += delta
+		return State.IDLE
+	else:
+		idle_counter = 0.0
+		return State.MOVE
+	
+func moveTransition(delta: float):
+	if move_counter < move_state_time:
+		move_counter += delta
 		return State.MOVE
 	else:
+		move_counter = 0.0
 		return State.IDLE
 	
-func moveTransition():
-	var random_number = randi() % 10
-	if random_number > 5:
-		print("Going to move state")
-		return State.MOVE
-	else:
-		return State.IDLE
-	
-func windupTransition():
+func windupTransition(delta: float):
 	pass
 	
-func attackTransition():
+func attackTransition(delta: float):
 	pass
 	
-func runAndGunTransition():
+func runAndGunTransition(delta: float):
 	pass	
 	
-func dashTransition():
+func dashTransition(delta: float):
 	pass
 
 # State logic functions
@@ -38,7 +46,6 @@ func moveState():
 	var texture_size = $Sprite2D.texture.get_size()
 	var sprite_size = texture_size * $Sprite2D.scale
 	
-	print("In move state")
 	var direction_x = randi_range(-1, 1)
 	var random_number_x = (randi() % 10) * direction_x
 	
