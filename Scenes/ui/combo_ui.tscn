@@ -21,3 +21,11 @@ bbcode_enabled = true
 text = "[font_size={100}]0[/font_size]"
 fit_content = true
 tab_size = 5
+
+[node name="ComboLabel" type="RichTextLabel" parent="Combo"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 112.0
+offset_right = 68.0
+offset_bottom = 152.0
+text = "Combo"

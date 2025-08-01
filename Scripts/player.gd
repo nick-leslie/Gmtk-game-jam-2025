@@ -10,7 +10,7 @@ class_name player
 @export var close_point_count: int
 @export var point_scene: PackedScene
 var col_shape_dict: Dictionary = {}
-var current_health = 0
+var current_health
 
 var drawing = false
 var been_hit := false
@@ -20,10 +20,16 @@ var prev_pos = Vector2(0, 0)
 var combo = 0
 
 func _ready():
+	current_health = starting_health
 	line_colider.area_entered.connect(on_loop_created)
 	EventBus.EnemeyCircled.connect(increase_combo)
 	EventBus.EnemyCollision.connect(hit_enemy)
+	print("Starting health: " + str(current_health))
+	call_deferred("_emit_health") # Need to do this so that the UI node has time to also run its _ready() function
 	pass
+
+func _emit_health():
+	EventBus.SetPlayerHealth.emit(current_health)
 
 func on_loop_created(area):
 	if area.name == "HeadColliderBody":
@@ -38,10 +44,18 @@ func on_loop_created(area):
 			remove_colider(i)
 			
 func hit_enemy():
-	print("Recieved hit")
 	clear_line()
 	been_hit = true
 	end_combo()
+	if current_health > 0: #making sure health doesn't go negative
+		current_health -= 1
+	
+	if current_health == 0:
+		EventBus.GameOver.emit()
+		print("Game over!")
+	
+	print("Hit detected, new health: " + str(current_health))
+	EventBus.SetPlayerHealth.emit(current_health)
 	pass
 
 
