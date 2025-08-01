@@ -3,7 +3,7 @@ extends Enemy
 @export var projectile_scene: PackedScene
 
 var projectile_direction := Vector2.ZERO
-
+var projectile_timer := 0.0
 
 #Transistion functions
 func idleTransition(delta: float):
@@ -58,15 +58,24 @@ func runAndGunTransition(delta: float):
 func dashTransition(delta: float):
 	pass
 	
-func attackState():
+func attackState(delta: float):
 	#Do the first time the state is entered
 	if attack_elapsed_time == 0.0:
 		print("First time in attack state")
-		projectile_scene.
+		projectile_direction = Utils.random_direction()
+		projectile_timer = 0.0
+		current_projectiles = 0
+		
+	
+	var projectile_period = attack_state_time / number_of_projectiles
 	
 	if current_projectiles < number_of_projectiles:
-		var projectile = projectile_scene.instantiate()
-		get_tree().current_scene.add_child(projectile)
-		projectile.global_position = global_position
-		current_projectiles += 1
-	pass
+		projectile_timer += delta
+		if projectile_timer >= projectile_period:
+			projectile_timer -= projectile_period
+			var projectile = projectile_scene.instantiate()
+			projectile.set_direction(projectile_direction)
+			get_tree().current_scene.add_child(projectile)
+			projectile.global_position = global_position
+			current_projectiles += 1
+	

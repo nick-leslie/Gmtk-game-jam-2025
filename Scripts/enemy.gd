@@ -2,6 +2,8 @@
 extends Node2D
 class_name Enemy
 
+const Utils = preload("res://Scripts/utils.gd")
+
 #@export var enemy_stats: Resource #use .tres
 @export_category("Stats")
 @export var health: float
@@ -71,7 +73,7 @@ func _ready(): #setup
 	pass
 
 func _process(delta: float) -> void: #loop
-	state_logic()
+	state_logic(delta)
 	current_state = get_transition(delta)
 
 func _on_area_entered(area) -> void:
@@ -131,22 +133,22 @@ func get_transition(delta: float) -> State:
 	return State.IDLE #default is override
 
 #State logic
-func state_logic():
+func state_logic(delta: float):
 	match current_state:
 		State.IDLE:
-			idleState()
+			idleState(delta)
 		State.TELEGRAPH:
-			telegraphState()
+			telegraphState(delta)
 		State.MOVE:
-			moveState()
+			moveState(delta)
 		State.ATTACK:
-			attackState()
+			attackState(delta)
 		State.WINDUP:
-			windupState()
+			windupState(delta)
 		State.RUNANDGUN:
-			runAndGunState()
+			runAndGunState(delta)
 		State.DASH:
-			dashState()
+			dashState(delta)
 
 
 #Transistion functions
@@ -183,10 +185,10 @@ func dashTransition(delta: float) -> State:
 	pass
 
 # State logic functions
-func idleState(): #State logic for idle state
+func idleState(delta: float): #State logic for idle state
 	pass
 	
-func telegraphState():
+func telegraphState(delta: float):
 	var texture_size = $EnemySprite.texture.get_size()
 	var sprite_size = texture_size * $EnemySprite.scale
 	var enemy_radius = max(sprite_size.x, sprite_size.y) * 0.5
@@ -287,7 +289,7 @@ func telegraphState():
 	var blink_phase = int(telegraph_elapsed_time / telegraph_period) % 2
 	$TelegraphSprite.visible = blink_phase == 0
 
-func moveState(): #Default movement behavior
+func moveState(delta: float): #Default movement behavior
 	var screen_size = get_viewport_rect().size
 	var texture_size = $EnemySprite.texture.get_size()
 	var sprite_size = texture_size * $EnemySprite.scale
@@ -312,14 +314,14 @@ func moveState(): #Default movement behavior
 	elif position.y > screen_size.y - margin:
 		position.y = lerp(position.y, screen_size.y - margin, 0.5)
 
-func windupState():
+func windupState(delta: float):
 	pass
 
-func attackState():
+func attackState(delta: float):
 	pass
 
-func runAndGunState():
+func runAndGunState(delta: float):
 	pass
 
-func dashState():
+func dashState(delta: float):
 	pass
