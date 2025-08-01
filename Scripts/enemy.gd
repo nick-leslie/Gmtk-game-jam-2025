@@ -3,15 +3,46 @@ extends Node2D
 class_name Enemy
 
 #@export var enemy_stats: Resource #use .tres
-@export var health: int
+@export_category("Stats")
+@export var health: float
 @export var max_speed: float
 @export var dash_mult: float
+@export var telegraph_blink_count: int = 3 # How many times you want the telegraph to blink
+var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
+
+@export_category("State Machine")
+@export var idle_state_time: float
+var idle_elapsed_time := 0.0
+
+@export var telegraph_state_time: float
+var telegraph_elapsed_time := 0.0
+
+@export var move_state_time: float
+var move_elapsed_time := 0.0
+
+@export var windup_state_time: float
+var windup_elapsed_time := 0.0
+
+@export var attack_state_time: float
+var attack_elapsed_time := 0.0
+
+@export var run_and_gun_state_time: float
+var run_and_gun_elapsed_time := 0.0
+
+@export var dash_state_time: float
+var dash_elapsed_time := 0.0
+
+
+
+@export_group("Raycast")
 @export var ray_count:int
 @export var ray_length:float
 @export_flags_2d_physics var collision_mask: int
 @onready var debug_line = Line2D.new()
+
 enum State {
 	IDLE,
+	TELEGRAPH,
 	MOVE,
 	WINDUP,
 	ATTACK,
@@ -58,6 +89,8 @@ func get_transition(delta: float) -> State:
 	match current_state:
 		State.IDLE:
 			return idleTransition(delta)
+		State.TELEGRAPH:
+			return telegraphTransition(delta)
 		State.MOVE:
 			return moveTransition(delta)
 		State.ATTACK:
@@ -75,6 +108,8 @@ func state_logic():
 	match current_state:
 		State.IDLE:
 			idleState()
+		State.TELEGRAPH:
+			telegraphState()
 		State.MOVE:
 			moveState()
 		State.ATTACK:
@@ -90,6 +125,10 @@ func state_logic():
 #Transistion functions
 func idleTransition(delta: float) -> State:
 	return State.IDLE
+	pass
+	
+func telegraphTransition(delta: float) -> State:
+	return State.TELEGRAPH
 	pass
 	
 func moveTransition(delta: float) -> State:
@@ -114,6 +153,9 @@ func dashTransition(delta: float) -> State:
 
 # State logic functions
 func idleState(): #State logic for idle state
+	pass
+	
+func telegraphState():
 	pass
 
 func moveState():
