@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://cy7kv1ou0ubfa"]
+
+[ext_resource type="Texture2D" uid="uid://bmpalbvlvjq0h" path="res://Sprites/Projectiles/catfish.png" id="1_f8cdk"]
+[ext_resource type="Script" uid="uid://c04lcrg1lmi21" path="res://Scripts/projectile.gd" id="1_yr2qt"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_yr2qt"]
+radius = 18.5
+height = 70.0
+
+[node name="Projectile" type="Node2D"]
+script = ExtResource("1_yr2qt")
+speed = 5
+
+[node name="ProjectileSprite" type="Sprite2D" parent="."]
+scale = Vector2(0.02, 0.02)
+texture = ExtResource("1_f8cdk")
+
+[node name="ProjectileArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 3
+
+[node name="ProjectileHitbox" type="CollisionShape2D" parent="ProjectileArea"]
+position = Vector2(0, -2.5)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_yr2qt")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(-2.86102e-06, -2)
+scale = Vector2(3.4, 1.4)

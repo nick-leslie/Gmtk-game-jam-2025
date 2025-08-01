@@ -27,7 +27,6 @@ script/source = "extends Area2D
 size = Vector2(116, 70)
 
 [node name="Enemy" type="Node2D"]
-position = Vector2(1, 0)
 script = ExtResource("1_4gyqm")
 max_speed = 3.5
 dash_mult = 1.5

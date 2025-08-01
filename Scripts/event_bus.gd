@@ -10,6 +10,7 @@ signal ComboIncreased(count:int)
 signal ComboEnded
 
 signal EnemyCollision
+signal ProjectileCollision
 
 signal SetPlayerHealth(current_health:int)
 

@@ -2,17 +2,19 @@
 
 [ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_366os"]
 [ext_resource type="Script" uid="uid://whxlnigxtbwl" path="res://Scripts/Enemies/test_enemy.gd" id="2_kksxm"]
-[ext_resource type="Texture2D" uid="uid://c72goxnk8uioy" path="res://Sprites/enemy_temp.png" id="3_v1mop"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1f0kj"]
-size = Vector2(116, 70)
+[ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_ca8xo"]
+[ext_resource type="Texture2D" uid="uid://0yrxu2thlidg" path="res://Sprites/enemy_temp2.PNG" id="3_v1mop"]
 
 [node name="TestEnemy" instance=ExtResource("1_366os")]
 script = ExtResource("2_kksxm")
+projectile_scene = ExtResource("3_ca8xo")
+health = 0.0
+number_of_projectiles = 5
 edge_gap = 30
 idle_state_time = 3.0
 telegraph_state_time = 0.5
 move_state_time = 1.0
+attack_state_time = 1.5
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 scale = Vector2(0.3, 0.3)
