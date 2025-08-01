@@ -7,6 +7,7 @@ class_name Enemy
 @export var health: float
 @export var max_speed: float
 @export var dash_mult: float
+@export var number_of_projectiles: int
 @export var telegraph_blink_count: int = 3 # How many times you want the telegraph to blink
 @export var edge_gap: int = 50 # Pixels away it can get to the edge 
 var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
