@@ -1,7 +1,7 @@
 extends Node2D
 class_name player
 
-
+@export var starting_health: int = 3
 @onready var line: Line2D = get_node("Line")
 @onready var stylest = get_node("Stylest")
 @onready var start_obj: Node2D = get_node("StartNode")
@@ -10,21 +10,20 @@ class_name player
 @export var close_point_count: int
 @export var point_scene: PackedScene
 var col_shape_dict: Dictionary = {}
+var current_health = 0
 
 var drawing = false
+var been_hit := false
+var mouse_prev_state := false #true is pressed, false is not pressed
 var prev_pos = Vector2(0, 0)
 
 var combo = 0
 
-
 func _ready():
 	line_colider.area_entered.connect(on_loop_created)
 	EventBus.EnemeyCircled.connect(increase_combo)
+	EventBus.EnemyCollision.connect(hit_enemy)
 	pass
-
-func increase_combo():
-	combo+=1
-	EventBus.ComboIncreased.emit(combo)
 
 func on_loop_created(area):
 	if area.name == "HeadColliderBody":
@@ -37,8 +36,13 @@ func on_loop_created(area):
 		for i in range(closest_index+1,point_count+1):
 			line.remove_point(closest_index+1)
 			remove_colider(i)
-
-
+			
+func hit_enemy():
+	print("Recieved hit")
+	clear_line()
+	been_hit = true
+	end_combo()
+	pass
 
 
 func remove_colider(index:int):
@@ -66,7 +70,9 @@ func get_closest_point_index():
 func _physics_process(delta: float) -> void:
 	var mouse_position = get_viewport().get_mouse_position()
 
-	if Input.is_mouse_button_pressed( 1 ): # Left click
+	if Input.is_mouse_button_pressed( 1 ) and !been_hit: # Left click
+		head_collider.disabled = false
+		mouse_prev_state = true
 		var pos = mouse_position
 		stylest.position = mouse_position
 
@@ -96,6 +102,7 @@ func _physics_process(delta: float) -> void:
 		if drawing == false:
 			drawing = true
 			start_obj.position = pos
+		
 		var point_count = line.get_point_count()
 
 		if point_count < 1:
@@ -104,10 +111,25 @@ func _physics_process(delta: float) -> void:
 
 		prev_pos = mouse_position
 	elif drawing:
-		line.clear_points()
-		for child in line_colider.get_children():
-			child.queue_free()
-		combo = 0
-		EventBus.ComboEnded.emit()
+		clear_line()
+		end_combo()
 			#TODO maybe not free all of these
-		drawing = false
+	#Reset the hit counter so the user can start drawing again
+	if mouse_prev_state and !Input.is_mouse_button_pressed( 1 ) and been_hit == true:
+		been_hit = false
+	mouse_prev_state = Input.is_mouse_button_pressed( 1 )
+
+func end_combo():
+	combo = 0
+	EventBus.ComboEnded.emit()
+
+func increase_combo():
+	combo+=1
+	EventBus.ComboIncreased.emit(combo)
+
+func clear_line():
+	line.clear_points()
+	head_collider.disabled = true
+	for child in line_colider.get_children():
+		child.queue_free()
+	drawing = false
