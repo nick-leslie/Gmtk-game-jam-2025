@@ -6,7 +6,8 @@ var idle_counter := 0.0
 @export var move_state_time: float
 var move_counter := 0.0
 
-
+var direction := Vector2(0,0)
+var magnitude := 0.0
 
 #Transistion functions
 func idleTransition(delta: float):
@@ -46,13 +47,20 @@ func moveState():
 	var texture_size = $Sprite2D.texture.get_size()
 	var sprite_size = texture_size * $Sprite2D.scale
 	
-	var direction_x = randi_range(-1, 1)
-	var random_number_x = (randi() % 10) * direction_x
+	#Generate random direction if first time in move state from other state
+	if move_counter == 0:
+		# Generate random direction vector
+		direction = Vector2(
+		randi_range(-1, 1),
+		randi_range(-1,1)
+		)
 	
-	var direction_y = randi_range(-1, 1)
-	var random_number_y = (randi() % 10) * direction_y
-	position.x += random_number_x
-	position.y += random_number_y
+		# Generate random magnitude 
+		magnitude = randi_range(1, speed)
+	
+	# Move by vector
+	var offset = direction * magnitude
+	position += offset
 	
 	#Clamping to screen size
 	position.x = clamp(position.x, 0 + (sprite_size.x/2), screen_size.x - (sprite_size.x/2))

@@ -7,7 +7,8 @@
 [node name="Enemy" instance=ExtResource("1_366os")]
 script = ExtResource("2_kksxm")
 idle_state_time = 3.0
-move_state_time = 1.5
+move_state_time = 1.0
+speed = 3.5
 
 [node name="Sprite2D" parent="." index="0"]
 scale = Vector2(0.06, 0.06)
