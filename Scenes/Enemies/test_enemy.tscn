@@ -1,26 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://c3v30e6n6jbwd"]
+[gd_scene load_steps=6 format=3 uid="uid://c3v30e6n6jbwd"]
 
 [ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_366os"]
 [ext_resource type="Script" uid="uid://whxlnigxtbwl" path="res://Scripts/Enemies/test_enemy.gd" id="2_kksxm"]
 [ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_ca8xo"]
 [ext_resource type="Texture2D" uid="uid://0yrxu2thlidg" path="res://Sprites/enemy_temp2.PNG" id="3_v1mop"]
 
+[sub_resource type="Curve" id="Curve_ca8xo"]
+_limits = [0.0, 15.0, 0.0, 30.0]
+_data = [Vector2(0, 0), 0.0, 0.5, 0, 1, Vector2(30, 15), 0.5, 0.0, 1, 0]
+point_count = 2
+
 [node name="TestEnemy" instance=ExtResource("1_366os")]
 script = ExtResource("2_kksxm")
 projectile_scene = ExtResource("3_ca8xo")
-health = 0.0
 number_of_projectiles = 5
 edge_gap = 30
+decay_rate = SubResource("Curve_ca8xo")
 idle_state_time = 3.0
 telegraph_state_time = 0.5
 move_state_time = 1.0
 attack_state_time = 1.5
 
-[node name="Sprite2D" type="Sprite2D" parent="." index="0"]
-scale = Vector2(0.3, 0.3)
+[node name="EnemySprite" parent="." index="0"]
+position = Vector2(-7.62939e-06, 0)
+scale = Vector2(0.0605744, 0.0591819)
 texture = ExtResource("3_v1mop")
-
-[node name="Area2D" type="Area2D" parent="." index="1"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
-shape = SubResource("RectangleShape2D_1f0kj")
