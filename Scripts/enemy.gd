@@ -9,6 +9,7 @@ class_name Enemy
 @export var ray_count:int
 @export var ray_length:float
 @export_flags_2d_physics var collision_mask: int
+@onready var debug_line = Line2D.new()
 enum State {
 	IDLE,
 	MOVE,
@@ -24,10 +25,12 @@ func _ready(): #setup
 	pass
 
 func _process(delta: float) -> void: #loop
+	get_parent().add_child(debug_line)
 	pass
 
 func _on_player_loop_complete() -> void: # godot refrence magic?
-	check_line_col()
+	var looped = check_line_col()
+	print(looped)
 	pass # Replace with function body.
 
 # we need to move
@@ -37,19 +40,18 @@ func check_line_col():
 		var angle = TAU * i / ray_count
 		var dir = Vector2(cos(angle), sin(angle))
 		var to = position + dir * ray_length
-		print(position)
-		print(to)
+		# debug_line.add_point(position)
+		# debug_line.add_point(to)
 		var query = PhysicsRayQueryParameters2D.create(position, to)
 		query.exclude = [self]
 		query.collision_mask = collision_mask
+		query.collide_with_areas = true
 		var hit = space.intersect_ray(query)
 		# hit will be {} if no collision, otherwise a dictionary with keys:
 		#   position (Vector2), normal (Vector2), collider, etc.
 		if hit.size() == 0:
-			print("one of the rays hasnt collided with the line")
-			# return
-	print("we caught the sheep")
-	pass
+			return false
+	return true
 
 func get_transition() -> State:
 	match current_state:
