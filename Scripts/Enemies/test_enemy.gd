@@ -38,21 +38,3 @@ func runAndGunTransition(delta: float):
 	
 func dashTransition(delta: float):
 	pass
-
-# State logic functions
-	
-func moveState():
-	var screen_size = get_viewport_rect().size
-	var texture_size = $EnemySprite.texture.get_size()
-	var sprite_size = texture_size * $EnemySprite.scale
-	
-	# Disable the telegraph sprite while moving
-	$TelegraphSprite.visible = false
-	
-	# Move by vector
-	var offset = direction * magnitude
-	position += offset
-	
-	#Clamping to screen size
-	position.x = clamp(position.x, 0 + (sprite_size.x/2), screen_size.x - (sprite_size.x/2))
-	position.y = clamp(position.y, 0 + (sprite_size.y/2), screen_size.y - (sprite_size.y/2))

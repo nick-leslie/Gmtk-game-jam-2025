@@ -12,6 +12,7 @@ script = ExtResource("1_4gyqm")
 health = 10.0
 max_speed = 3.5
 dash_mult = 1.5
+edge_gap = 150
 
 [node name="EnemySprite" type="Sprite2D" parent="."]
 scale = Vector2(0.3, 0.3)
