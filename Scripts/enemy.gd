@@ -5,15 +5,24 @@ class_name Enemy
 const Utils = preload("res://Scripts/utils.gd")
 
 #@export var enemy_stats: Resource #use .tres
+
 @export_category("Stats")
-@export var health: float
 @export var max_speed: float
 @export var dash_mult: float
 @export var number_of_projectiles: int
 @export var telegraph_blink_count: int = 3 # How many times you want the telegraph to blink
-@export var edge_gap: int = 50 # Pixels away it can get to the edge 
+@export var edge_gap: int = 50 # Pixels away it can get to the edge
 var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
 var current_projectiles := 0 # Number of projectiles shot
+
+@export_group("capture stats")
+@export var decay_wait_time:float # time we have till decay begins on capture progress
+@export var decay_rate:Curve # decay rate curve that we sample
+var capture_health:float = 0.0
+var is_decaying:bool = false
+var decay_duration:float
+@onready var decay_start_timer:Timer = Timer.new()
+@onready var capture_bar:ProgressBar = get_node("HeathBar")
 
 @export_category("State Machine")
 @export var idle_state_time: float
@@ -70,11 +79,54 @@ func _ready(): #setup
 	enemey_colider.area_entered.connect(_on_area_entered)
 	EventBus.LoopCreated.connect(check_circled)
 	EventBus.ComboIncreased.connect(take_damage)
+	add_child(decay_start_timer)
+	decay_start_timer.timeout.connect(start_decay)
+	decay_start_timer.autostart = true
+	capture_bar.max_value = decay_rate.max_value
+	reset_timer()
 	pass
 
 func _process(delta: float) -> void: #loop
 	state_logic(delta)
 	current_state = get_transition(delta)
+	if is_decaying:
+		decay_duration-=delta
+		capture_health = decay_rate.sample(decay_duration)
+		# decay_rate.sample(t)
+
+	if capture_health > decay_rate.max_value:
+		print("we have been captured")
+	if capture_health < 0:
+		capture_health = 0
+		is_decaying = false
+		decay_start_timer.stop()
+
+	capture_bar.value = capture_health
+
+
+
+func start_decay():
+	decay_duration = get_x_from_y(decay_rate,capture_health)
+	print(decay_duration)
+	is_decaying=true
+	decay_start_timer.stop()
+	pass
+
+func get_x_from_y(curve: Curve, target_y: float, step: float = 0.1) -> float:
+	var closest_x = 0.0
+	var closest_diff = INF
+
+	for x in range(0, int(curve.max_domain / step) + 1):
+		var sample_x = x * step
+		var sample_y = curve.sample(sample_x)
+		var diff = abs(sample_y - target_y)
+		if diff < closest_diff:
+			closest_diff = diff
+			closest_x = sample_x
+		if closest_diff == 0.0:
+			return closest_x
+
+	return closest_x
 
 func _on_area_entered(area) -> void:
 	if area.name == "HeadColliderBody" or area.name == "LineCollider" or area.name == "LineColliderBody":
@@ -83,16 +135,30 @@ func _on_area_entered(area) -> void:
 		pass
 
 func take_damage(combo:int):
-	health -= combo
-	print(health)
+	capture_health += combo
+	if capture_health > decay_rate.max_domain:
+		print("captureded")
+	print(capture_health)
+	reset_timer()
 
-func check_circled() -> void: # godot refrence magic?
+func reset_timer():
+	decay_start_timer.stop()
+	decay_start_timer.wait_time = decay_wait_time
+	decay_start_timer.start()
+	is_decaying=false
+
+func check_circled() -> void:
 	print("gaming????")
 	var looped = check_line_col()
 	print(looped)
 	if looped:
 		EventBus.EnemeyCircled.emit()
 	pass # Replace with function body.
+
+func get_normalized_value(current: float, min_value: float, max_value: float) -> float:
+	if max_value == min_value:
+		return 0.0 # Avoid division by zero
+	return clamp((current - min_value) / (max_value - min_value), 0.0, 1.0)
 
 # we need to move
 func check_line_col():
@@ -108,8 +174,6 @@ func check_line_col():
 		query.collision_mask = collision_mask
 		query.collide_with_areas = true
 		var hit = space.intersect_ray(query)
-		# hit will be {} if no collision, otherwise a dictionary with keys:
-		#   position (Vector2), normal (Vector2), collider, etc.
 		if hit.size() == 0:
 			return false
 	return true
@@ -159,7 +223,7 @@ func idleTransition(delta: float) -> State: # Default transition strucuture for 
 	else:
 		idle_elapsed_time = 0.0
 		return State.IDLE
-	
+
 func telegraphTransition(delta: float) -> State:
 	return State.TELEGRAPH
 	pass
@@ -192,15 +256,15 @@ func telegraphState(delta: float):
 	var texture_size = $EnemySprite.texture.get_size()
 	var sprite_size = texture_size * $EnemySprite.scale
 	var enemy_radius = max(sprite_size.x, sprite_size.y) * 0.5
-	
+
 	# First time entering state logic
 	if telegraph_elapsed_time == 0:
-		
+
 		#Repel enemy away from edge of screen if too close
 		var screen_size = get_viewport_rect().size
 		var repel_force := Vector2.ZERO
 		var global_pos = global_position
-		
+
 		# Vector from screen center to NPC
 		var to_center = (screen_size * 0.5) - global_pos
 
@@ -213,7 +277,7 @@ func telegraphState(delta: float):
 			repel_force = to_center.normalized() * repel_strength
 		else:
 			repel_force = Vector2.ZERO
-		
+
 		# Generate random direction vector
 		# Determine edge proximity
 		var near_left = global_pos.x - enemy_radius < edge_gap
@@ -228,7 +292,7 @@ func telegraphState(delta: float):
 		for i in max_attempts:
 			var angle = randf_range(0, TAU)
 			var test_direction = Vector2(cos(angle), sin(angle))
-			
+
 			# Check if direction is trying to go toward an edge we’re near
 			var invalid = (
 				(near_left and test_direction.x < 0.0) or
@@ -236,7 +300,7 @@ func telegraphState(delta: float):
 				(near_top and test_direction.y < 0.0) or
 				(near_bottom and test_direction.y > 0.0)
 			)
-			
+
 			if not invalid:
 				direction = test_direction.normalized()
 				found_valid = true
@@ -245,12 +309,12 @@ func telegraphState(delta: float):
 		# If no safe direction found, default to something safe (e.g. toward center)
 		if not found_valid:
 			direction = (global_pos - screen_size * 0.5).normalized()
-			
-		# Generate random magnitude 
+
+		# Generate random magnitude
 		magnitude = randi_range(1, max_speed)
-		
+
 	#Scale the telegraph sprite
-	
+
 	# Parameters you can tweak to balance visual size
 	var base_scale := 0.5  # Minimum scale when magnitude is low
 	var scale_range := 0.5 # Additional scale at max speed (total = base + range = 1.0 at max speed)
@@ -258,12 +322,12 @@ func telegraphState(delta: float):
 	# Calculate scale based on speed
 	var speed_ratio = clamp(magnitude / max_speed, 0.0, 1.0)
 	var desired_scale = base_scale + (scale_range * speed_ratio)
-	
+
 	var telegraph_texture_size = $TelegraphSprite.texture.get_size()
-	
+
 	# Determine the maximum size we want relative to the enemy sprite
 	var target_size = sprite_size * desired_scale
-	
+
 	# Calculate uniform scale factor based on the smaller ratio (to fit within bounds)
 	var scale_factor = min(
 		target_size.x / telegraph_texture_size.x,
@@ -271,21 +335,21 @@ func telegraphState(delta: float):
 	)
 	# Apply uniform scale to preserve aspect ratio
 	$TelegraphSprite.scale = Vector2.ONE * scale_factor
-	
+
 	if direction != Vector2.ZERO:
-			
+
 		# Rotate the sprite to the same direction as vector
 		var telegraph_direction = direction.normalized()
 		$TelegraphSprite.rotation = direction.angle() + deg_to_rad(90)
-			
-			
+
+
 	# Position the telegraph arrow next to the enemy sprite, in the given direction
 	var offset_distance = enemy_radius + 10  # "10" is margin to push it slightly outside
 	$TelegraphSprite.position = $EnemySprite.position + direction * offset_distance
-	
+
 	# Dynamically figure out how long to blink for based on delta and telegraph blink counter
-	var telegraph_period = (telegraph_state_time / (telegraph_blink_count * 2)) 
-	
+	var telegraph_period = (telegraph_state_time / (telegraph_blink_count * 2))
+
 	var blink_phase = int(telegraph_elapsed_time / telegraph_period) % 2
 	$TelegraphSprite.visible = blink_phase == 0
 
@@ -293,14 +357,14 @@ func moveState(delta: float): #Default movement behavior
 	var screen_size = get_viewport_rect().size
 	var texture_size = $EnemySprite.texture.get_size()
 	var sprite_size = texture_size * $EnemySprite.scale
-	
+
 	# Disable the telegraph sprite while moving
 	$TelegraphSprite.visible = false
-	
+
 	# Move by vector
 	var offset = direction * magnitude
 	position += offset
-	
+
 	#Clamping to screen size
 	var margin = (sprite_size.x / 2) + edge_gap
 

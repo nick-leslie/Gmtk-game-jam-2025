@@ -9,7 +9,8 @@ class_name player
 @onready var head_collider : CollisionShape2D = get_node("HeadColliderBody/HeadCollider")
 @export var close_point_count: int
 @export var point_scene: PackedScene
-var col_shape_dict: Dictionary = {}
+@export var max_range:float
+var col_shape_dict: Dictionary = {} # every colider is indexed by
 var current_health
 
 var drawing = false
@@ -43,7 +44,7 @@ func on_loop_created(area):
 		for i in range(closest_index+1,point_count+1):
 			line.remove_point(closest_index+1)
 			remove_colider(i)
-			
+
 func hit_enemy():
 	if !been_hit:
 		reduce_health()
@@ -60,12 +61,11 @@ func reduce_health():
 	end_combo()
 	if current_health > 0: #making sure health doesn't go negative
 		current_health -= 1
-	
+
 	if current_health == 0:
 		EventBus.GameOver.emit()
 		print("Game over!")
-	
-	
+
 	EventBus.SetPlayerHealth.emit(current_health)
 
 func remove_colider(index:int):
@@ -93,45 +93,24 @@ func get_closest_point_index():
 func _physics_process(delta: float) -> void:
 	var mouse_position = get_viewport().get_mouse_position()
 	var viewport_size = get_viewport().get_visible_rect().size
-	
+	queue_redraw()
 	var is_offscreen = false
 	if mouse_position.x < 0 or mouse_position.y < 0 or mouse_position.x > viewport_size.x or mouse_position.y > viewport_size.y:
 		is_offscreen = true
 	#print("Mouse Offscreen: " + str(is_offscreen))
 
+	var pos = mouse_position
 	if Input.is_mouse_button_pressed( 1 ) and !been_hit and !is_offscreen: # Left click
 		head_collider.disabled = false
 		mouse_prev_state = true
-		var pos = mouse_position
-		stylest.position = mouse_position
 
-		if pos.distance_to(prev_pos) > 1:
-
-			line.add_point(pos)
-			var count = line.get_point_count()
-			if count > 3:
-				#print("running")
-				# Adding the collider to the line
-				var col_shape = CollisionShape2D.new()
-				var line_col = SegmentShape2D.new()
-				line_col.a = line.get_point_position(count-3)
-				line_col.b = line.get_point_position(count-4)
-				col_shape.shape = line_col
-				col_shape_dict[count-4] = col_shape
-				line_colider.add_child(col_shape)
-
-			if count > 1:
-				#Adding the second line from the sytlist to the last point
-				var head_line_shape = SegmentShape2D.new()
-				head_line_shape.a = mouse_position
-				head_line_shape.b = line.get_point_position(count-2)
-				head_collider.shape = head_line_shape
-
+		if drawing && pos.distance_to(start_obj.position) < max_range:
+			move_stylest(pos)
 
 		if drawing == false:
 			drawing = true
-			start_obj.position = pos
-		
+			start_obj.position = mouse_position
+
 		var point_count = line.get_point_count()
 
 		if point_count < 1:
@@ -140,13 +119,30 @@ func _physics_process(delta: float) -> void:
 
 		prev_pos = mouse_position
 	elif drawing:
+		start_obj.position = pos
 		clear_line()
 		end_combo()
+
+	else:
+		stylest.position = pos
+		start_obj.position = pos
 			#TODO maybe not free all of these
 	#Reset the hit counter so the user can start drawing again
 	if mouse_prev_state and !Input.is_mouse_button_pressed( 1 ) and been_hit == true:
 		been_hit = false
 	mouse_prev_state = Input.is_mouse_button_pressed( 1 )
+
+func _draw():
+	var center = start_obj.position  # Position of the circle
+	var radius = max_range                 # Circle radius
+	var start_angle = 0             # Start angle in radians
+	var end_angle = TAU             # Full circle (TAU = 2 * PI)
+	var point_count = 64            # Smoothness of the circle
+	var color = Color(0, 0, 0,1)      # Red color
+	var line_width = 2.0            # Thickness of the circle line
+
+	draw_arc(center, radius, start_angle, end_angle, point_count, color, line_width)
+
 
 func end_combo():
 	combo = 0
@@ -162,3 +158,28 @@ func clear_line():
 	for child in line_colider.get_children():
 		child.queue_free()
 	drawing = false
+
+func move_stylest(pos:Vector2):
+	stylest.position = pos
+
+	if pos.distance_to(prev_pos) > 5:
+
+		line.add_point(pos)
+		var count = line.get_point_count()
+		if count > 3:
+			#print("running")
+			# Adding the collider to the line
+			var col_shape = CollisionShape2D.new()
+			var line_col = SegmentShape2D.new()
+			line_col.a = line.get_point_position(count-3)
+			line_col.b = line.get_point_position(count-4)
+			col_shape.shape = line_col
+			col_shape_dict[count-4] = col_shape
+			line_colider.add_child(col_shape)
+
+		if count > 1:
+			#Adding the second line from the sytlist to the last point
+			var head_line_shape = SegmentShape2D.new()
+			head_line_shape.a = pos
+			head_line_shape.b = line.get_point_position(count-2)
+			head_collider.shape = head_line_shape
