@@ -31,9 +31,10 @@ func _process(delta: float) -> void: #loop
 	state_logic()
 	current_state = get_transition(delta)
 
-func _on_player_loop_complete() -> void: # godot refrence magic?
-	var looped = check_line_col()
-	print(looped)
+func _on_player_loop_complete(combo_count:int) -> void: # godot refrence magic?
+	if combo_count > 0:
+		var looped = check_line_col()
+		print("COMBO",combo_count)
 	pass # Replace with function body.
 
 # we need to move
