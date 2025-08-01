@@ -64,9 +64,20 @@ func telegraphState():
 		# Generate random magnitude 
 		magnitude = randi_range(1, max_speed)
 		
-	#Scale the telegraph sprite	
+	#Scale the telegraph sprite
+	
+	# Parameters you can tweak to balance visual size
+	var base_scale := 0.5  # Minimum scale when magnitude is low
+	var scale_range := 0.5 # Additional scale at max speed (total = base + range = 1.0 at max speed)
+
+	# Calculate scale based on speed
+	var speed_ratio = clamp(magnitude / max_speed, 0.0, 1.0)
+	var desired_scale = base_scale + (scale_range * speed_ratio)
+	
 	var telegraph_texture_size = $TelegraphSprite.texture.get_size()
-	var target_size = sprite_size * (magnitude / max_speed) # TODO might need to scale this better
+	
+	# Determine the maximum size we want relative to the enemy sprite
+	var target_size = sprite_size * desired_scale
 	
 	# Calculate uniform scale factor based on the smaller ratio (to fit within bounds)
 	var scale_factor = min(
@@ -98,6 +109,8 @@ func moveState():
 	var texture_size = $EnemySprite.texture.get_size()
 	var sprite_size = texture_size * $EnemySprite.scale
 	
+	# Disable the telegraph sprite while moving
+	$TelegraphSprite.visible = false
 	
 	# Move by vector
 	var offset = direction * magnitude
