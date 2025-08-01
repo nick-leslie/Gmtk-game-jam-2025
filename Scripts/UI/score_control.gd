@@ -4,15 +4,20 @@ extends Control
 
 
 func _ready() -> void:
-	var player = get_parent().get_node("Player")
-	print(player)
-	if player != null:
-		player.connect("loop_complete",on_loop_compleate)
+	EventBus.ComboIncreased.connect(combo_increaded)
+	EventBus.ComboEnded.connect(combo_ended)
 	pass
 
-func on_loop_compleate(combo:int):
+func combo_increaded(combo:int):
 	var string = "[font_size={{size}}]{combo}[/font_size]".format({"combo":combo,"size":100+combo})
 	#todo animation???? cool like scaling fount based on combo sizer
+	set_counter(string)
+	pass
+
+func combo_ended():
+	var string = "[font_size={{size}}]{combo}[/font_size]".format({"combo":0,"size":100})
+	set_counter(string)
+
+func set_counter(string):
 	combo_counnter.clear()
 	combo_counnter.append_text(string)
-	pass

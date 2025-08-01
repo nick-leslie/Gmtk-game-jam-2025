@@ -10,23 +10,25 @@ class_name player
 @export var close_point_count: int
 @export var point_scene: PackedScene
 var col_shape_dict: Dictionary = {}
-var combo:int = 0
-
-
-signal loop_complete
 
 var drawing = false
 var prev_pos = Vector2(0, 0)
 
+var combo = 0
+
 
 func _ready():
 	line_colider.area_entered.connect(on_loop_created)
+	EventBus.EnemeyCircled.connect(increase_combo)
 	pass
+
+func increase_combo():
+	combo+=1
+	EventBus.ComboIncreased.emit(combo)
 
 func on_loop_created(area):
 	if area.name == "HeadColliderBody":
-		combo +=1;
-		loop_complete.emit(combo)
+		EventBus.LoopCreated.emit()
 		var closest_index = get_closest_point_index()
 		remove_colider(closest_index)
 		remove_colider(closest_index-1)
@@ -102,10 +104,10 @@ func _physics_process(delta: float) -> void:
 
 		prev_pos = mouse_position
 	elif drawing:
-		loop_complete.emit(0)
 		line.clear_points()
 		for child in line_colider.get_children():
 			child.queue_free()
-		combo= 0
+		combo = 0
+		EventBus.ComboEnded.emit()
 			#TODO maybe not free all of these
 		drawing = false

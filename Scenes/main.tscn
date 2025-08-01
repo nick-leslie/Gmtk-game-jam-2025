@@ -14,3 +14,5 @@ enemy_scene = ExtResource("2_jjvhh")
 point_scene = ExtResource("4_jjvhh")
 
 [node name="UI" parent="." instance=ExtResource("5_kry3j")]
+offset_left = 59.0
+offset_right = 59.0

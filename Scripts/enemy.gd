@@ -6,9 +6,9 @@ class_name Enemy
 @export var health: int
 @export var max_speed: float
 @export var dash_mult: float
-@export var ray_count:int
-@export var ray_length:float
-@export_flags_2d_physics var collision_mask: int
+@export var ray_count:int = 10
+@export var ray_length:float =10000
+@export_flags_2d_physics var collision_mask: int = 1
 @onready var debug_line = Line2D.new()
 
 enum State {
@@ -24,17 +24,24 @@ var current_state = State.IDLE
 
 func _ready(): #setup
 	get_parent().add_child(debug_line)
-	get_parent().get_node("Player").connect("loop_complete",_on_player_loop_complete)
+	EventBus.LoopCreated.connect(check_circled)
+	EventBus.ComboIncreased.connect(take_damage)
 	pass
 
 func _process(delta: float) -> void: #loop
 	state_logic()
 	current_state = get_transition(delta)
 
-func _on_player_loop_complete(combo_count:int) -> void: # godot refrence magic?
-	if combo_count > 0:
-		var looped = check_line_col()
-		print("COMBO",combo_count)
+func take_damage(combo:int):
+	health -= combo
+	print(health)
+
+func check_circled() -> void: # godot refrence magic?
+	print("gaming????")
+	var looped = check_line_col()
+	print(looped)
+	if looped:
+		EventBus.EnemeyCircled.emit()
 	pass # Replace with function body.
 
 # we need to move
