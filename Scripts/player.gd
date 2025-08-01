@@ -9,7 +9,8 @@ class_name player
 @onready var head_collider : CollisionShape2D = get_node("HeadColliderBody/HeadCollider")
 @export var close_point_count: int
 @export var point_scene: PackedScene
-@export var max_range:float
+@export var min_range:float
+@onready var current_range = min_range
 var col_shape_dict: Dictionary = {} # every colider is indexed by
 var current_health
 
@@ -96,7 +97,7 @@ func _physics_process(delta: float) -> void:
 		head_collider.disabled = false
 		mouse_prev_state = true
 
-		if drawing && pos.distance_to(start_obj.position) < max_range:
+		if drawing && pos.distance_to(start_obj.position) < current_range:
 			move_stylest(pos)
 
 		if drawing == false:
@@ -126,7 +127,7 @@ func _physics_process(delta: float) -> void:
 
 func _draw():
 	var center = start_obj.position  # Position of the circle
-	var radius = max_range                 # Circle radius
+	var radius = current_range                 # Circle radius
 	var start_angle = 0             # Start angle in radians
 	var end_angle = TAU             # Full circle (TAU = 2 * PI)
 	var point_count = 64            # Smoothness of the circle
@@ -138,10 +139,12 @@ func _draw():
 
 func end_combo():
 	combo = 0
+	current_range=min_range
 	EventBus.ComboEnded.emit()
 
 func increase_combo():
 	combo+=1
+	current_range+=(20*combo)
 	EventBus.ComboIncreased.emit(combo)
 
 func clear_line():
