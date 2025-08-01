@@ -10,6 +10,7 @@ class_name Enemy
 @export var ray_length:float
 @export_flags_2d_physics var collision_mask: int
 @onready var debug_line = Line2D.new()
+
 enum State {
 	IDLE,
 	MOVE,
@@ -23,6 +24,7 @@ var current_state = State.IDLE
 
 func _ready(): #setup
 	get_parent().add_child(debug_line)
+	get_parent().get_node("Player").connect("loop_complete",_on_player_loop_complete)
 	pass
 
 func _process(delta: float) -> void: #loop
@@ -91,23 +93,23 @@ func state_logic():
 func idleTransition(delta: float) -> State:
 	return State.IDLE
 	pass
-	
+
 func moveTransition(delta: float) -> State:
 	return State.IDLE
 	pass
-	
+
 func windupTransition(delta: float) -> State:
 	return State.IDLE
 	pass
-	
+
 func attackTransition(delta: float) -> State:
 	return State.IDLE
 	pass
-	
+
 func runAndGunTransition(delta: float) -> State:
 	return State.IDLE
-	pass	
-	
+	pass
+
 func dashTransition(delta: float) -> State:
 	return State.IDLE
 	pass

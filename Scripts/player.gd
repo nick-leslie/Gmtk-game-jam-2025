@@ -7,8 +7,9 @@ class_name player
 @onready var start_obj: Node2D = get_node("StartNode")
 @onready var line_colider: Area2D = get_node("Line/LineCollider")
 @onready var head_collider : CollisionShape2D = get_node("HeadColliderBody/HeadCollider")
-# @export var point_scene: PackedScene
-# @export var main_node: Node2D
+@export var close_point_count: int
+@export var point_scene: PackedScene
+var col_shape_dict: Dictionary = {}
 
 
 signal loop_complete
@@ -25,7 +26,42 @@ func on_loop_created(area):
 	if area.name == "HeadColliderBody":
 		loop_complete.emit()
 		print("Line is overlapping")
-	pass
+		var closest_index = get_closest_point_index()
+		print(closest_index)
+		var debug = point_scene.instantiate()
+		debug.position = line.get_point_position(closest_index)
+		get_parent().add_child(debug)
+		remove_colider(closest_index)
+		remove_colider(closest_index-1)
+		remove_colider(closest_index-2)
+		var point_count = line.get_point_count()
+		for i in range(closest_index+1,point_count+1):
+			line.remove_point(closest_index+1)
+			remove_colider(i)
+
+
+
+
+func remove_colider(index:int):
+	if col_shape_dict.has(index):
+		var collider = col_shape_dict[index]
+		collider.queue_free()
+		col_shape_dict.erase(index)
+
+
+func get_closest_point_index():
+	var point_count = line.get_point_count()
+	var last_point = line.get_point_position(point_count-2)
+	var closest = 0
+	var closest_dist = last_point.distance_to(line.get_point_position(0))
+
+	for i in range(1,point_count-close_point_count):
+		var point = line.get_point_position(i+1)
+		var dist = point.distance_to(last_point)
+		if dist < closest_dist:
+			closest = i
+			closest_dist = dist
+	return closest
 
 func _physics_process(delta: float) -> void:
 	var mouse_position = get_viewport().get_mouse_position()
@@ -46,6 +82,7 @@ func _physics_process(delta: float) -> void:
 				line_col.a = line.get_point_position(count-3)
 				line_col.b = line.get_point_position(count-4)
 				col_shape.shape = line_col
+				col_shape_dict[count-4] = col_shape
 				line_colider.add_child(col_shape)
 
 			if count > 1:
