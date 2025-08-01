@@ -41,6 +41,8 @@ var dash_elapsed_time := 0.0
 @export_flags_2d_physics var collision_mask: int = 1
 @onready var debug_line = Line2D.new()
 
+@onready var enemey_colider:Area2D = get_node("EnemyArea")
+
 enum State {
 	IDLE,
 	TELEGRAPH,
@@ -61,6 +63,7 @@ var magnitude := randi_range(1, max_speed)
 
 func _ready(): #setup
 	get_parent().add_child(debug_line)
+	enemey_colider.area_entered.connect(_on_area_entered)
 	EventBus.LoopCreated.connect(check_circled)
 	EventBus.ComboIncreased.connect(take_damage)
 	pass
@@ -68,6 +71,11 @@ func _ready(): #setup
 func _process(delta: float) -> void: #loop
 	state_logic()
 	current_state = get_transition(delta)
+
+func _on_area_entered(area) -> void:
+	if area.name == "HeadColliderBody" or area.name == "LineCollider" or area.name == "LineColliderBody":
+		print("Get hit bozo")
+		pass
 
 func take_damage(combo:int):
 	health -= combo
