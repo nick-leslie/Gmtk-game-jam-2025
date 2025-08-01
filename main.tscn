@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://boppujkkmpmn5"]
+
+[ext_resource type="Script" uid="uid://cagswdrat2x2a" path="res://Scripts/player.gd" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://cm1h0xl5gt6nq" path="res://Scripts/line_collider.gd" id="1_lquwl"]
+[ext_resource type="Texture2D" uid="uid://dxxihuobndwvl" path="res://icon.svg" id="2_h2yge"]
+[ext_resource type="Script" uid="uid://bp2pjt4dtaffb" path="res://head_collider_body.gd" id="5_7mycd"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="HeadColliderBody" type="Area2D" parent="."]
+collision_layer = 2
+script = ExtResource("5_7mycd")
+
+[node name="HeadCollider" type="CollisionShape2D" parent="HeadColliderBody"]
+
+[node name="Line" type="Line2D" parent="."]
+
+[node name="LineCollider" type="Area2D" parent="Line"]
+collision_mask = 2
+script = ExtResource("1_lquwl")
+
+[node name="Stylest" type="Node2D" parent="."]
+script = ExtResource("1_0xm2m")
+
+[node name="Sprite2D" type="Sprite2D" parent="Stylest"]
+position = Vector2(0.999996, 2)
+scale = Vector2(0.4375, 0.4375)
+texture = ExtResource("2_h2yge")
+
+[node name="StartNode" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="StartNode"]
+scale = Vector2(0.53125, 0.488281)
+texture = ExtResource("2_h2yge")
+
+[node name="col_checker" type="Node2D" parent="."]
