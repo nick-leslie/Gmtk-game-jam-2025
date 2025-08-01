@@ -4,10 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://c72goxnk8uioy" path="res://Sprites/enemy_temp.png" id="2_qi2p4"]
 [ext_resource type="Texture2D" uid="uid://brugnqiduxnm5" path="res://Sprites/Arrow.svg" id="3_afpow"]
 
-[sub_resource type="Curve" id="Curve_1f0kj"]
-_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
-point_count = 2
-metadata/_snap_enabled = true
+[sub_resource type="Curve" id="Curve_afpow"]
+_limits = [0.0, 15.0, 0.0, 30.0]
+_data = [Vector2(0, 0), 0.0, 1.80803, 0, 1, Vector2(5.96591, 10.7865), 0.0, 0.0, 0, 0, Vector2(30, 15), 0.175313, 0.0, 1, 0]
+point_count = 3
 
 [sub_resource type="GDScript" id="GDScript_afpow"]
 script/source = "extends Area2D
@@ -31,10 +31,8 @@ position = Vector2(1, 0)
 script = ExtResource("1_4gyqm")
 max_speed = 3.5
 dash_mult = 1.5
-capture_threashold = 15.0
-decay_duration = 2.0
-decay_rate = SubResource("Curve_1f0kj")
 decay_wait_time = 4.0
+decay_rate = SubResource("Curve_afpow")
 
 [node name="EnemySprite" type="Sprite2D" parent="."]
 scale = Vector2(0.3, 0.3)
@@ -51,3 +49,9 @@ shape = SubResource("RectangleShape2D_1f0kj")
 [node name="TelegraphSprite" type="Sprite2D" parent="."]
 visible = false
 texture = ExtResource("3_afpow")
+
+[node name="HeathBar" type="ProgressBar" parent="."]
+offset_left = -71.0
+offset_top = 50.0
+offset_right = 71.0
+offset_bottom = 95.0

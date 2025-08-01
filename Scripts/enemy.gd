@@ -12,14 +12,13 @@ class_name Enemy
 var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
 
 @export_group("capture stats")
-@export var capture_threashold: float
-@export var decay_duration:float # duration for decay in seconds
-@export var decay_rate:Curve # decay rate curve that we sample
 @export var decay_wait_time:float # time we have till decay begins on capture progress
+@export var decay_rate:Curve # decay rate curve that we sample
 var capture_health:float = 0.0
 var is_decaying:bool = false
-var currrent_decay_duration:float
+var decay_duration:float
 @onready var decay_start_timer:Timer = Timer.new()
+@onready var capture_bar:ProgressBar = get_node("HeathBar")
 
 @export_category("State Machine")
 @export var idle_state_time: float
@@ -79,29 +78,51 @@ func _ready(): #setup
 	add_child(decay_start_timer)
 	decay_start_timer.timeout.connect(start_decay)
 	decay_start_timer.autostart = true
+	capture_bar.max_value = decay_rate.max_value
 	reset_timer()
 	pass
 
 func _process(delta: float) -> void: #loop
 	state_logic()
 	current_state = get_transition(delta)
-	print(capture_health)
 	if is_decaying:
-		currrent_decay_duration+=delta
-		var normalized_decay = get_normalized_value(currrent_decay_duration,0,decay_duration)
-		capture_health -= decay_rate.sample(normalized_decay)
-	if capture_health > capture_threashold:
+		decay_duration-=delta
+		capture_health = decay_rate.sample(decay_duration)
+		# decay_rate.sample(t)
+
+	if capture_health > decay_rate.max_value:
 		print("we have been captured")
 	if capture_health < 0:
 		capture_health = 0
 		is_decaying = false
 		decay_start_timer.stop()
 
+	capture_bar.value = capture_health
+
 
 
 func start_decay():
+	decay_duration = get_x_from_y(decay_rate,capture_health)
+	print(decay_duration)
 	is_decaying=true
+	decay_start_timer.stop()
 	pass
+
+func get_x_from_y(curve: Curve, target_y: float, step: float = 0.1) -> float:
+	var closest_x = 0.0
+	var closest_diff = INF
+
+	for x in range(0, int(curve.max_domain / step) + 1):
+		var sample_x = x * step
+		var sample_y = curve.sample(sample_x)
+		var diff = abs(sample_y - target_y)
+		if diff < closest_diff:
+			closest_diff = diff
+			closest_x = sample_x
+		if closest_diff == 0.0:
+			return closest_x
+
+	return closest_x
 
 func _on_area_entered(area) -> void:
 	if area.name == "HeadColliderBody" or area.name == "LineCollider" or area.name == "LineColliderBody":
@@ -110,7 +131,7 @@ func _on_area_entered(area) -> void:
 
 func take_damage(combo:int):
 	capture_health += combo
-	if capture_health > capture_threashold:
+	if capture_health > decay_rate.max_domain:
 		print("captureded")
 	print(capture_health)
 	reset_timer()
