@@ -2,14 +2,18 @@
 extends Node2D
 class_name Enemy
 
+const Utils = preload("res://Scripts/utils.gd")
+
 #@export var enemy_stats: Resource #use .tres
 
 @export_category("Stats")
 @export var max_speed: float
 @export var dash_mult: float
+@export var number_of_projectiles: int
 @export var telegraph_blink_count: int = 3 # How many times you want the telegraph to blink
 @export var edge_gap: int = 50 # Pixels away it can get to the edge
 var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
+var current_projectiles := 0 # Number of projectiles shot
 
 @export_group("capture stats")
 @export var decay_wait_time:float # time we have till decay begins on capture progress
@@ -83,7 +87,7 @@ func _ready(): #setup
 	pass
 
 func _process(delta: float) -> void: #loop
-	state_logic()
+	state_logic(delta)
 	current_state = get_transition(delta)
 	if is_decaying:
 		decay_duration-=delta
@@ -127,7 +131,7 @@ func get_x_from_y(curve: Curve, target_y: float, step: float = 0.1) -> float:
 func _on_area_entered(area) -> void:
 	if area.name == "HeadColliderBody" or area.name == "LineCollider" or area.name == "LineColliderBody":
 		EventBus.EnemyCollision.emit()
-		print("Hit deteceted")
+		print("Hit deteceted: " + area.name)
 		pass
 
 func take_damage(combo:int):
@@ -193,22 +197,22 @@ func get_transition(delta: float) -> State:
 	return State.IDLE #default is override
 
 #State logic
-func state_logic():
+func state_logic(delta: float):
 	match current_state:
 		State.IDLE:
-			idleState()
+			idleState(delta)
 		State.TELEGRAPH:
-			telegraphState()
+			telegraphState(delta)
 		State.MOVE:
-			moveState()
+			moveState(delta)
 		State.ATTACK:
-			attackState()
+			attackState(delta)
 		State.WINDUP:
-			windupState()
+			windupState(delta)
 		State.RUNANDGUN:
-			runAndGunState()
+			runAndGunState(delta)
 		State.DASH:
-			dashState()
+			dashState(delta)
 
 
 #Transistion functions
@@ -245,10 +249,10 @@ func dashTransition(delta: float) -> State:
 	pass
 
 # State logic functions
-func idleState(): #State logic for idle state
+func idleState(delta: float): #State logic for idle state
 	pass
-
-func telegraphState():
+	
+func telegraphState(delta: float):
 	var texture_size = $EnemySprite.texture.get_size()
 	var sprite_size = texture_size * $EnemySprite.scale
 	var enemy_radius = max(sprite_size.x, sprite_size.y) * 0.5
@@ -349,7 +353,7 @@ func telegraphState():
 	var blink_phase = int(telegraph_elapsed_time / telegraph_period) % 2
 	$TelegraphSprite.visible = blink_phase == 0
 
-func moveState(): #Default movement behavior
+func moveState(delta: float): #Default movement behavior
 	var screen_size = get_viewport_rect().size
 	var texture_size = $EnemySprite.texture.get_size()
 	var sprite_size = texture_size * $EnemySprite.scale
@@ -374,14 +378,14 @@ func moveState(): #Default movement behavior
 	elif position.y > screen_size.y - margin:
 		position.y = lerp(position.y, screen_size.y - margin, 0.5)
 
-func windupState():
+func windupState(delta: float):
 	pass
 
-func attackState():
+func attackState(delta: float):
 	pass
 
-func runAndGunState():
+func runAndGunState(delta: float):
 	pass
 
-func dashState():
+func dashState(delta: float):
 	pass
