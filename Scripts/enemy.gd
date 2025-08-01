@@ -51,7 +51,7 @@ var dash_elapsed_time := 0.0
 @export_flags_2d_physics var collision_mask: int = 1
 @onready var debug_line = Line2D.new()
 
-
+@onready var enemey_colider:Area2D = get_node("EnemyArea")
 
 enum State {
 	IDLE,
@@ -73,6 +73,7 @@ var magnitude := randi_range(1, max_speed)
 
 func _ready(): #setup
 	get_parent().add_child(debug_line)
+	enemey_colider.area_entered.connect(_on_area_entered)
 	EventBus.LoopCreated.connect(check_circled)
 	EventBus.ComboIncreased.connect(take_damage)
 	add_child(decay_start_timer)
@@ -89,8 +90,8 @@ func _process(delta: float) -> void: #loop
 		currrent_decay_duration+=delta
 		var normalized_decay = get_normalized_value(currrent_decay_duration,0,decay_duration)
 		capture_health -= decay_rate.sample(normalized_decay)
-		if capture_health > capture_threashold:
-			print("we have been captured")
+	if capture_health > capture_threashold:
+		print("we have been captured")
 	if capture_health < 0:
 		capture_health = 0
 		is_decaying = false
@@ -101,6 +102,11 @@ func _process(delta: float) -> void: #loop
 func start_decay():
 	is_decaying=true
 	pass
+
+func _on_area_entered(area) -> void:
+	if area.name == "HeadColliderBody" or area.name == "LineCollider" or area.name == "LineColliderBody":
+		EventBus.EnemyCollision.emit()
+		pass
 
 func take_damage(combo:int):
 	capture_health += combo
