@@ -8,6 +8,7 @@ class_name Enemy
 @export var max_speed: float
 @export var dash_mult: float
 @export var telegraph_blink_count: int = 3 # How many times you want the telegraph to blink
+@export var edge_gap: int = 50 # Pixels away it can get to the edge 
 var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
 
 @export_category("State Machine")
@@ -173,11 +174,57 @@ func telegraphState():
 	
 	# First time entering state logic
 	if telegraph_elapsed_time == 0:
+		
+		#Repel enemy away from edge of screen if too close
+		var screen_size = get_viewport_rect().size
+		var repel_force := Vector2.ZERO
+		var global_pos = global_position
+		
+		# Vector from screen center to NPC
+		var to_center = (screen_size * 0.5) - global_pos
+
+		# If we're near the edge, repel in the direction of `to_center` the closer to edge, the stronger the repel
+		var edge_distance = min(global_pos.x, screen_size.x - global_pos.x,
+						global_pos.y, screen_size.y - global_pos.y)
+
+		if edge_distance < edge_gap:
+			var repel_strength = (edge_gap - edge_distance) / edge_gap
+			repel_force = to_center.normalized() * repel_strength
+		else:
+			repel_force = Vector2.ZERO
+		
 		# Generate random direction vector
-		var angle = randf_range(0, TAU)
-		direction = Vector2(cos(angle), sin(angle))
-		# TODO bias it to move in away from the edge of the screen if it gets too close
-	
+		# Determine edge proximity
+		var near_left = global_pos.x - enemy_radius < edge_gap
+		var near_right = global_pos.x + enemy_radius > screen_size.x - edge_gap
+		var near_top = global_pos.y - enemy_radius < edge_gap
+		var near_bottom = global_pos.y + enemy_radius > screen_size.y - edge_gap
+
+		# Try to find a safe direction
+		var max_attempts = 50
+		var found_valid = false
+
+		for i in max_attempts:
+			var angle = randf_range(0, TAU)
+			var test_direction = Vector2(cos(angle), sin(angle))
+			
+			# Check if direction is trying to go toward an edge we’re near
+			var invalid = (
+				(near_left and test_direction.x < 0.0) or
+				(near_right and test_direction.x > 0.0) or
+				(near_top and test_direction.y < 0.0) or
+				(near_bottom and test_direction.y > 0.0)
+			)
+			
+			if not invalid:
+				direction = test_direction.normalized()
+				found_valid = true
+				break
+
+		# If no safe direction found, default to something safe (e.g. toward center)
+		if not found_valid:
+			direction = (global_pos - screen_size * 0.5).normalized()
+			
 		# Generate random magnitude 
 		magnitude = randi_range(1, max_speed)
 		
@@ -234,8 +281,17 @@ func moveState(): #Default movement behavior
 	position += offset
 	
 	#Clamping to screen size
-	position.x = clamp(position.x, 0 + (sprite_size.x/2), screen_size.x - (sprite_size.x/2))
-	position.y = clamp(position.y, 0 + (sprite_size.y/2), screen_size.y - (sprite_size.y/2))
+	var margin = (sprite_size.x / 2) + edge_gap
+
+	if position.x < margin:
+		position.x = lerp(position.x, margin, 0.5)
+	elif position.x > screen_size.x - margin:
+		position.x = lerp(position.x, screen_size.x - margin, 0.5)
+
+	if position.y < margin:
+		position.y = lerp(position.y, margin, 0.5)
+	elif position.y > screen_size.y - margin:
+		position.y = lerp(position.y, screen_size.y - margin, 0.5)
 
 func windupState():
 	pass
