@@ -4,7 +4,7 @@ class_name Enemy
 
 #@export var enemy_stats: Resource #use .tres
 @export var health: int
-@export var speed: float
+@export var max_speed: float
 @export var dash_mult: float
 
 enum State {

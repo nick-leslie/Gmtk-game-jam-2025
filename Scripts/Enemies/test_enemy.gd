@@ -56,7 +56,7 @@ func moveState():
 		)
 	
 		# Generate random magnitude 
-		magnitude = randi_range(1, speed)
+		magnitude = randi_range(1, max_speed)
 	
 	# Move by vector
 	var offset = direction * magnitude

@@ -9,7 +9,7 @@ size = Vector2(116, 70)
 [node name="Enemy" type="Node2D"]
 script = ExtResource("1_4gyqm")
 health = 10
-speed = 50.0
+max_speed = 3.5
 dash_mult = 1.5
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
