@@ -1,16 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://c3v30e6n6jbwd"]
+[gd_scene load_steps=5 format=3 uid="uid://c3v30e6n6jbwd"]
 
 [ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_366os"]
 [ext_resource type="Script" uid="uid://whxlnigxtbwl" path="res://Scripts/Enemies/test_enemy.gd" id="2_kksxm"]
+[ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_ca8xo"]
 [ext_resource type="Texture2D" uid="uid://0yrxu2thlidg" path="res://Sprites/enemy_temp2.PNG" id="3_v1mop"]
 
 [node name="TestEnemy" instance=ExtResource("1_366os")]
+position = Vector2(0, 0)
 script = ExtResource("2_kksxm")
+projectile_scene = ExtResource("3_ca8xo")
 health = 0.0
 edge_gap = 30
 idle_state_time = 3.0
 telegraph_state_time = 0.5
 move_state_time = 1.0
+attack_state_time = 1.5
 
 [node name="EnemySprite" parent="." index="0"]
 position = Vector2(-7.62939e-06, 0)
