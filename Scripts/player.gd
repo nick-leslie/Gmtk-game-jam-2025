@@ -45,10 +45,14 @@ func on_loop_created(area):
 			remove_colider(i)
 			
 func hit_enemy():
-	reduce_health()
+	if !been_hit:
+		reduce_health()
 	
 func hit_projectile():
-	reduce_health()
+	#print("Hit projectile")
+	#print("Been hit status: " + str(been_hit))
+	if Input.is_mouse_button_pressed( 1 ) and !been_hit:
+		reduce_health()
 
 func reduce_health():
 	clear_line()
@@ -61,7 +65,7 @@ func reduce_health():
 		EventBus.GameOver.emit()
 		print("Game over!")
 	
-	print("Hit detected, new health: " + str(current_health))
+	
 	EventBus.SetPlayerHealth.emit(current_health)
 
 func remove_colider(index:int):

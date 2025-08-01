@@ -79,7 +79,7 @@ func _process(delta: float) -> void: #loop
 func _on_area_entered(area) -> void:
 	if area.name == "HeadColliderBody" or area.name == "LineCollider" or area.name == "LineColliderBody":
 		EventBus.EnemyCollision.emit()
-		print("Hit deteceted")
+		print("Hit deteceted: " + area.name)
 		pass
 
 func take_damage(combo:int):
