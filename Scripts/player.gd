@@ -83,8 +83,14 @@ func get_closest_point_index():
 
 func _physics_process(delta: float) -> void:
 	var mouse_position = get_viewport().get_mouse_position()
+	var viewport_size = get_viewport().get_visible_rect().size
+	
+	var is_offscreen = false
+	if mouse_position.x < 0 or mouse_position.y < 0 or mouse_position.x > viewport_size.x or mouse_position.y > viewport_size.y:
+		is_offscreen = true
+	#print("Mouse Offscreen: " + str(is_offscreen))
 
-	if Input.is_mouse_button_pressed( 1 ) and !been_hit: # Left click
+	if Input.is_mouse_button_pressed( 1 ) and !been_hit and !is_offscreen: # Left click
 		head_collider.disabled = false
 		mouse_prev_state = true
 		var pos = mouse_position
