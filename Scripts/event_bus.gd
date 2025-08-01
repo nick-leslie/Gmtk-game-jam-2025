@@ -11,5 +11,9 @@ signal ComboEnded
 
 signal EnemyCollision
 
+signal SetPlayerHealth(current_health:int)
+
+signal GameOver
+
 
 #loopcreated ->  (enmey confirms circled)EnemeyCircled -> IncreaseCombo(once enemy circled then we raise combo) -> damange enemy
