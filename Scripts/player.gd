@@ -188,8 +188,9 @@ func on_loop_created(area):
 		remove_colider(closest_index-2)
 		var point_count = line.get_point_count()
 		for i in range(closest_index+1,point_count+1):
-			line.remove_point(closest_index+1)
-			remove_colider(i)
+			if closest_index < line.points.size():
+				line.remove_point(closest_index+1)
+				remove_colider(i)
 
 func hit_enemy():
 	if !been_hit:
