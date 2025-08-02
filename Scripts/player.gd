@@ -84,6 +84,7 @@ func _physics_process(delta: float) -> void:
 		if drawing == false:
 			drawing = true
 			start_obj.position = mouse_position
+			line.add_point(start_obj.position)
 
 		var point_count = line.get_point_count()
 
