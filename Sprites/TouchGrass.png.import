@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7p3dkwr6ojt3"
-path="res://.godot/imported/stake.png-f557b9f36d7df2da6427c0a919ee5579.ctex"
+uid="uid://cps670kh28m3n"
+path="res://.godot/imported/TouchGrass.png-f6c7a7f1f025522aea1aef8081c72e44.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://stake.png"
-dest_files=["res://.godot/imported/stake.png-f557b9f36d7df2da6427c0a919ee5579.ctex"]
+source_file="res://Sprites/TouchGrass.png"
+dest_files=["res://.godot/imported/TouchGrass.png-f6c7a7f1f025522aea1aef8081c72e44.ctex"]
 
 [params]
 
