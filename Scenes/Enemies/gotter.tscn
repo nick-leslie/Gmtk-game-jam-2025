@@ -14,7 +14,7 @@ point_count = 2
 [node name="Gotter" instance=ExtResource("1_4ry3o")]
 script = ExtResource("2_0f6d7")
 number_of_dashes = 4
-dash_cone_degrees = 15
+dash_cone_degrees = 60
 max_speed = 15.0
 dash_mult = 1.15
 number_of_projectiles = 2
