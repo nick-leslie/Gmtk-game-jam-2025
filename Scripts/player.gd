@@ -20,7 +20,7 @@ var is_combo_in_danger = false
 var combo_count_decayed = 0
 var max_combo_value:int
 
-
+@onready var loop_sfx: AudioStreamPlayer = get_node("LoopSfx")
 
 var col_shape_dict: Dictionary = {} # every colider is indexed by
 var current_health
@@ -183,6 +183,7 @@ func _emit_health():
 func on_loop_created(area):
 	if area.name == "HeadColliderBody":
 		EventBus.LoopCreated.emit()
+		loop_sfx.play()
 		var closest_index = get_closest_point_index()
 		remove_colider(closest_index)
 		remove_colider(closest_index-1)

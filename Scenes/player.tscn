@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bw8emd6n56kf8"]
+[gd_scene load_steps=8 format=3 uid="uid://bw8emd6n56kf8"]
 
 [ext_resource type="Script" uid="uid://cagswdrat2x2a" path="res://Scripts/player.gd" id="1_vgqql"]
 [ext_resource type="PackedScene" uid="uid://cx3epoiu21pwy" path="res://Scenes/point.tscn" id="2_vgqql"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bp2pjt4dtaffb" path="res://head_collider_body.gd" id="5_7mycd"]
 [ext_resource type="Texture2D" uid="uid://v1afwwa6aou5" path="res://knot.png" id="5_x3wgy"]
 [ext_resource type="Texture2D" uid="uid://7p3dkwr6ojt3" path="res://stake.png" id="6_x3wgy"]
+[ext_resource type="AudioStream" uid="uid://baqdtsv62x735" path="res://SFX/LoopOption1.wav" id="7_3smsa"]
 
 [node name="PlayerRoot" type="Node2D" groups=["player"]]
 script = ExtResource("1_vgqql")
@@ -43,3 +44,6 @@ scale = Vector2(0.36, 0.36)
 [node name="Sprite2D" type="Sprite2D" parent="StartNode" groups=["player"]]
 scale = Vector2(0.53125, 0.488281)
 texture = ExtResource("6_x3wgy")
+
+[node name="LoopSfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_3smsa")

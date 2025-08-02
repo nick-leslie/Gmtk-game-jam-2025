@@ -68,6 +68,8 @@ enum State {
 	DASH
 }
 
+@onready var capture_sfx:AudioStreamPlayer = get_node("CaptureSFX")
+var captured = false
 var current_state = State.IDLE
 
 var direction := Vector2(
@@ -86,6 +88,7 @@ func _ready(): #setup
 	decay_start_timer.autostart = true
 	capture_bar.max_value = decay_rate.max_value
 	EventBus.GameOver.connect(on_game_over)
+	capture_sfx.finished.connect(on_capture)
 	reset_timer()
 	pass
 
@@ -98,9 +101,12 @@ func _process(delta: float) -> void: #loop
 		# decay_rate.sample(t)
 
 	if capture_health >= decay_rate.max_value:
-		print("we have been captured")
-		EventBus.UpdateScore.emit(capture_score)
-		queue_free()
+		if captured == false:
+			print("we have been captured")
+			capture_sfx.playing=true
+			captured = true
+
+
 	if capture_health < 0:
 		capture_health = 0
 		is_decaying = false
@@ -108,6 +114,10 @@ func _process(delta: float) -> void: #loop
 
 	capture_bar.value = capture_health
 
+func on_capture():
+	EventBus.UpdateScore.emit(capture_score)
+	# todo play death animation and await till done
+	queue_free()
 
 func on_game_over():
 	queue_free()
@@ -387,14 +397,14 @@ func moveState(delta: float): #Default movement behavior
 
 func windupState(delta: float):
 	var mat = $EnemySprite.material as ShaderMaterial
-	
+
 	# Dynamically figure out how long to blink for based on delta and windup blink counter
 	var windup_period = (windup_state_time / (windup_blink_count * 2))
 
 	var blink_phase = int(windup_elapsed_time / windup_period) % 2
-	
+
 	var flashing = blink_phase == 0
-	
+
 	mat.set_shader_parameter("active", flashing)
 	#await get_tree().create_timer(0.1).timeout
 	#mat.set_shader_parameter("active", false)
