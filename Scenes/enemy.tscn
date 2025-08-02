@@ -26,7 +26,7 @@ script/source = "extends Area2D
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1f0kj"]
 size = Vector2(85, 71)
 
-[node name="Enemy" type="Node2D"]
+[node name="Enemy2" type="Node2D"]
 script = ExtResource("1_4gyqm")
 max_speed = 3.5
 dash_mult = 1.5
