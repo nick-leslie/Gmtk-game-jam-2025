@@ -1,14 +1,33 @@
-[gd_scene load_steps=5 format=3 uid="uid://cisgmgiyixput"]
+[gd_scene load_steps=8 format=3 uid="uid://cisgmgiyixput"]
 
 [ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_lhl6k"]
 [ext_resource type="Texture2D" uid="uid://cy036kvf4o22f" path="res://Sprites/Enemies/Mowel.png" id="2_8b6l7"]
+[ext_resource type="Script" uid="uid://n3oudpq54nx5" path="res://Scenes/Enemies/mowel.gd" id="2_f31rp"]
 [ext_resource type="Material" uid="uid://d72pxehmuxuq" path="res://Resources/Shaders/flash_shader.tres" id="2_waptr"]
+[ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_f31rp"]
+
+[sub_resource type="Curve" id="Curve_f31rp"]
+_limits = [0.0, 65.67, 0.0, 15.0]
+_data = [Vector2(0, 0), 0.0, 4.378, 0, 1, Vector2(15, 65.67), 4.378, 0.0, 1, 0]
+point_count = 2
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_waptr"]
 radius = 37.6052
 height = 128.0
 
 [node name="Enemy" instance=ExtResource("1_lhl6k")]
+script = ExtResource("2_f31rp")
+number_of_projectile_waves = 2
+projectile_cone = 60
+max_speed = 4.0
+dash_mult = 0.5
+number_of_projectiles = 3
+capture_score = 0
+projectile_scene = ExtResource("3_f31rp")
+decay_wait_time = 5.0
+decay_rate = SubResource("Curve_f31rp")
+idle_state_time = 1.0
+attack_state_time = 3.0
 
 [node name="EnemySprite" parent="." index="0"]
 material = ExtResource("2_waptr")
