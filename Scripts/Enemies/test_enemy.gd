@@ -18,7 +18,7 @@ func idleTransition(delta: float):
 			1:
 				next_state = State.TELEGRAPH
 			2:
-				next_state = State.ATTACK
+				next_state = State.WINDUP
 				print("Entering attack state")
 		idle_elapsed_time = 0.0
 		return next_state
@@ -41,6 +41,12 @@ func moveTransition(delta: float):
 		return State.IDLE
 	
 func windupTransition(delta: float):
+	if windup_elapsed_time < windup_state_time:
+		windup_elapsed_time += delta
+		return State.WINDUP
+	else:
+		windup_elapsed_time = 0.0
+		return State.ATTACK
 	pass
 	
 func attackTransition(delta: float):
@@ -59,6 +65,9 @@ func dashTransition(delta: float):
 	pass
 	
 func attackState(delta: float):
+	var mat = $EnemySprite.material as ShaderMaterial
+	mat.set_shader_parameter("active", false)
+	
 	#Do the first time the state is entered
 	if attack_elapsed_time == 0.0:
 		print("First time in attack state")
