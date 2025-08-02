@@ -1,12 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://bw8emd6n56kf8"]
+[gd_scene load_steps=5 format=3 uid="uid://bw8emd6n56kf8"]
 
 [ext_resource type="Script" uid="uid://cagswdrat2x2a" path="res://Scripts/player.gd" id="1_vgqql"]
 [ext_resource type="Texture2D" uid="uid://dxxihuobndwvl" path="res://icon.svg" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cx3epoiu21pwy" path="res://Scenes/point.tscn" id="2_vgqql"]
 [ext_resource type="Script" uid="uid://bp2pjt4dtaffb" path="res://head_collider_body.gd" id="5_7mycd"]
 
 [node name="PlayerRoot" type="Node2D" groups=["player"]]
 script = ExtResource("1_vgqql")
 close_point_count = 20
+point_scene = ExtResource("2_vgqql")
 min_range = 500.0
 
 [node name="HeadColliderBody" type="Area2D" parent="." groups=["player"]]
