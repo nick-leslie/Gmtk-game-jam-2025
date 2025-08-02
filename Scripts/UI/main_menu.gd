@@ -8,11 +8,11 @@ func _process(delta: float) -> void:
 
 func _on_play_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/main.tscn") #TODO make a level select screen
-	pass # Replace with function body.
+	
 
 
 func _on_options_pressed() -> void:
-	pass # Replace with function body.
+	pass #TODO replace with the options menu
 
 
 func _on_quit_pressed() -> void:
