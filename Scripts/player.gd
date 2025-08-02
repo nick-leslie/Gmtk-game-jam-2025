@@ -9,8 +9,18 @@ class_name player
 @onready var head_collider : CollisionShape2D = get_node("HeadColliderBody/HeadCollider")
 @export var close_point_count: int
 @export var point_scene: PackedScene
+
+
 @export var min_range:float
+@export var combo_decay_timeout:float
+@export var max_allowed_decay:int
 @onready var current_range = min_range
+@onready var combo_decay_timer:Timer = Timer.new()
+var combo_in_danger = false
+var combo_count_decayed = 0
+
+
+
 var col_shape_dict: Dictionary = {} # every colider is indexed by
 var current_health
 
@@ -29,6 +39,8 @@ func _ready():
 	EventBus.ProjectileCollision.connect(hit_projectile)
 	print("Starting health: " + str(current_health))
 	call_deferred("_emit_health") # Need to do this so that the UI node has time to also run its _ready() function
+	combo_decay_timer.wait_time = combo_decay_timeout
+	combo_decay_timer.timeout.connect(decay_combo)
 	pass
 
 func _emit_health():
@@ -49,7 +61,12 @@ func on_loop_created(area):
 func hit_enemy():
 	if !been_hit:
 		reduce_health()
-	
+
+func decay_combo():
+	combo-=1
+	combo_count_decayed+=1
+	pass
+
 func hit_projectile():
 	#print("Hit projectile")
 	#print("Been hit status: " + str(been_hit))
@@ -94,14 +111,33 @@ func get_closest_point_index():
 func _physics_process(delta: float) -> void:
 	var mouse_position = get_viewport().get_mouse_position()
 	var viewport_size = get_viewport().get_visible_rect().size
+
+	# this is range decay from combos
+	# if combo == 0:
+	# 	current_range -= delta * range_decay
+	# if current_range < min_range:
+	# 	current_range = min_range
+	current_range=current_range+(20*combo)
+
+
 	queue_redraw()
 	var is_offscreen = false
 	if mouse_position.x < 0 or mouse_position.y < 0 or mouse_position.x > viewport_size.x or mouse_position.y > viewport_size.y:
 		is_offscreen = true
 	#print("Mouse Offscreen: " + str(is_offscreen))
+	if combo_count_decayed > max_allowed_decay:
+		end_combo()
 
 	var pos = mouse_position
 	if Input.is_mouse_button_pressed( 1 ) and !been_hit and !is_offscreen: # Left click
+
+
+		if combo_in_danger == true:
+			combo_in_danger=false
+			combo_count_decayed=0
+			EventBus.ComboSalvaged.emit()
+
+
 		head_collider.disabled = false
 		mouse_prev_state = true
 
@@ -122,7 +158,8 @@ func _physics_process(delta: float) -> void:
 	elif drawing:
 		start_obj.position = pos
 		clear_line()
-		end_combo()
+		combo_decay_timer.start()
+		combo_in_danger = true
 
 	else:
 		stylest.position = pos
@@ -148,11 +185,14 @@ func _draw():
 func end_combo():
 	combo = 0
 	current_range=min_range
+	combo_in_danger=false
+	combo_count_decayed=0
 	EventBus.ComboEnded.emit()
+
+
 
 func increase_combo():
 	combo+=1
-	current_range+=(20*combo)
 	EventBus.ComboIncreased.emit(combo)
 
 func clear_line():
@@ -186,3 +226,9 @@ func move_stylest(pos:Vector2):
 			head_line_shape.a = pos
 			head_line_shape.b = line.get_point_position(count-2)
 			head_collider.shape = head_line_shape
+
+func reset_timer():
+	combo_decay_timer.stop()
+	combo_decay_timer.wait_time = combo_decay
+	combo_decay_timer.start()
+	is_decaying=false
