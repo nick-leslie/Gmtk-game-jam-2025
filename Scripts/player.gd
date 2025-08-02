@@ -18,6 +18,7 @@ class_name player
 @onready var combo_decay_timer:Timer = Timer.new()
 var is_combo_in_danger = false
 var combo_count_decayed = 0
+var max_combo_value:int
 
 
 
@@ -45,6 +46,135 @@ func _ready():
 	add_child(combo_decay_timer)
 	pass
 
+
+func _physics_process(delta: float) -> void:
+	var mouse_position = get_viewport().get_mouse_position()
+	var viewport_size = get_viewport().get_visible_rect().size
+
+	current_range=min_range+(20*combo)
+
+	if max_combo_value < combo:
+		max_combo_value = combo
+		EventBus.MaxComboIncreased.emit(max_combo_value)
+
+	queue_redraw()
+	var is_offscreen = false
+	if mouse_position.x < 0 or mouse_position.y < 0 or mouse_position.x > viewport_size.x or mouse_position.y > viewport_size.y:
+		is_offscreen = true
+	#print("Mouse Offscreen: " + str(is_offscreen))
+	if combo_count_decayed > max_allowed_decay:
+		end_combo()
+
+	var pos = mouse_position
+	if Input.is_mouse_button_pressed( 1 ) and !been_hit and !is_offscreen: # Left click
+
+
+		if is_combo_in_danger == true:
+			combo_count_decayed=0
+			reset_combo_decay_timer()
+			EventBus.ComboSalvaged.emit()
+
+
+		head_collider.disabled = false
+		mouse_prev_state = true
+
+		if drawing && pos.distance_to(start_obj.position) < current_range:
+			move_stylest(pos)
+
+		if drawing == false:
+			drawing = true
+			start_obj.position = mouse_position
+
+		var point_count = line.get_point_count()
+
+		if point_count < 1:
+			prev_pos = mouse_position
+			return
+
+		prev_pos = mouse_position
+	elif drawing:
+		# we let go of the mouse and should start decaying
+		print("we should be decaying combo")
+		start_obj.position = pos
+		clear_line()
+		start_decaying_combo()
+	else:
+		stylest.position = pos
+		start_obj.position = pos
+			#TODO maybe not free all of these
+	#Reset the hit counter so the user can start drawing again
+	if mouse_prev_state and !Input.is_mouse_button_pressed( 1 ) and been_hit == true:
+		been_hit = false
+	mouse_prev_state = Input.is_mouse_button_pressed( 1 )
+
+func _draw():
+	var center = start_obj.position  # Position of the circle
+	var radius = current_range                 # Circle radius
+	var start_angle = 0             # Start angle in radians
+	var end_angle = TAU             # Full circle (TAU = 2 * PI)
+	var point_count = 64            # Smoothness of the circle
+	var color = Color(0, 0, 0,1)      # Red color
+	var line_width = 2.0            # Thickness of the circle line
+
+	draw_arc(center, radius, start_angle, end_angle, point_count, color, line_width)
+
+
+func move_stylest(pos:Vector2):
+	stylest.position = pos
+
+	if pos.distance_to(prev_pos) > 5:
+
+		line.add_point(pos)
+		var count = line.get_point_count()
+		if count > 3:
+			#print("running")
+			# Adding the collider to the line
+			var col_shape = CollisionShape2D.new()
+			var line_col = SegmentShape2D.new()
+			line_col.a = line.get_point_position(count-3)
+			line_col.b = line.get_point_position(count-4)
+			col_shape.shape = line_col
+			col_shape_dict[count-4] = col_shape
+			line_colider.add_child(col_shape)
+
+		if count > 1:
+			#Adding the second line from the sytlist to the last point
+			var head_line_shape = SegmentShape2D.new()
+			head_line_shape.a = pos
+			head_line_shape.b = line.get_point_position(count-2)
+			head_collider.shape = head_line_shape
+
+func end_combo():
+	combo = 0
+	current_range=min_range
+	reset_combo_decay_timer()
+	combo_count_decayed=0
+	EventBus.ComboEnded.emit()
+
+
+func increase_combo():
+	combo+=1
+	EventBus.ComboIncreased.emit(combo)
+
+func clear_line():
+	line.clear_points()
+	head_collider.disabled = true
+	for child in line_colider.get_children():
+		child.queue_free()
+	drawing = false
+
+
+
+func reset_combo_decay_timer():
+	combo_decay_timer.stop()
+	combo_decay_timer.wait_time = combo_decay_timeout
+	is_combo_in_danger=false
+
+func start_decaying_combo():
+	combo_decay_timer.start()
+	EventBus.ComboDecaying.emit()
+	is_combo_in_danger = true
+
 func _emit_health():
 	EventBus.SetPlayerHealth.emit(current_health)
 
@@ -69,7 +199,8 @@ func decay_combo():
 	combo-=1
 	combo_count_decayed+=1
 	if combo_count_decayed >= max_allowed_decay or combo <= 0:
-		EventBus.ComboEnded.emit()
+		EventBus.ComboEnded.emit(max_combo_value)
+		reset_combo_decay_timer()
 	else:
 		EventBus.ComboDecreased.emit(combo)
 	pass
@@ -115,126 +246,3 @@ func get_closest_point_index():
 			closest = i
 			closest_dist = dist
 	return closest
-
-func _physics_process(delta: float) -> void:
-	var mouse_position = get_viewport().get_mouse_position()
-	var viewport_size = get_viewport().get_visible_rect().size
-
-	current_range=min_range+(20*combo)
-
-
-	queue_redraw()
-	var is_offscreen = false
-	if mouse_position.x < 0 or mouse_position.y < 0 or mouse_position.x > viewport_size.x or mouse_position.y > viewport_size.y:
-		is_offscreen = true
-	#print("Mouse Offscreen: " + str(is_offscreen))
-	if combo_count_decayed > max_allowed_decay:
-		end_combo()
-
-	var pos = mouse_position
-	if Input.is_mouse_button_pressed( 1 ) and !been_hit and !is_offscreen: # Left click
-
-
-		if is_combo_in_danger == true:
-			combo_count_decayed=0
-			reset_combo_decay_timer()
-			EventBus.ComboSalvaged.emit()
-
-
-		head_collider.disabled = false
-		mouse_prev_state = true
-
-		if drawing && pos.distance_to(start_obj.position) < current_range:
-			move_stylest(pos)
-
-		if drawing == false:
-			drawing = true
-			start_obj.position = mouse_position
-
-		var point_count = line.get_point_count()
-
-		if point_count < 1:
-			prev_pos = mouse_position
-			return
-
-		prev_pos = mouse_position
-	elif drawing:
-		print("we should be decaying combo")
-		start_obj.position = pos
-		clear_line()
-		start_decaying_combo()
-	else:
-		stylest.position = pos
-		start_obj.position = pos
-			#TODO maybe not free all of these
-	#Reset the hit counter so the user can start drawing again
-	if mouse_prev_state and !Input.is_mouse_button_pressed( 1 ) and been_hit == true:
-		been_hit = false
-	mouse_prev_state = Input.is_mouse_button_pressed( 1 )
-
-func _draw():
-	var center = start_obj.position  # Position of the circle
-	var radius = current_range                 # Circle radius
-	var start_angle = 0             # Start angle in radians
-	var end_angle = TAU             # Full circle (TAU = 2 * PI)
-	var point_count = 64            # Smoothness of the circle
-	var color = Color(0, 0, 0,1)      # Red color
-	var line_width = 2.0            # Thickness of the circle line
-
-	draw_arc(center, radius, start_angle, end_angle, point_count, color, line_width)
-
-
-func end_combo():
-	combo = 0
-	current_range=min_range
-	reset_combo_decay_timer()
-	combo_count_decayed=0
-	EventBus.ComboEnded.emit()
-
-
-
-func increase_combo():
-	combo+=1
-	EventBus.ComboIncreased.emit(combo)
-
-func clear_line():
-	line.clear_points()
-	head_collider.disabled = true
-	for child in line_colider.get_children():
-		child.queue_free()
-	drawing = false
-
-func move_stylest(pos:Vector2):
-	stylest.position = pos
-
-	if pos.distance_to(prev_pos) > 5:
-
-		line.add_point(pos)
-		var count = line.get_point_count()
-		if count > 3:
-			#print("running")
-			# Adding the collider to the line
-			var col_shape = CollisionShape2D.new()
-			var line_col = SegmentShape2D.new()
-			line_col.a = line.get_point_position(count-3)
-			line_col.b = line.get_point_position(count-4)
-			col_shape.shape = line_col
-			col_shape_dict[count-4] = col_shape
-			line_colider.add_child(col_shape)
-
-		if count > 1:
-			#Adding the second line from the sytlist to the last point
-			var head_line_shape = SegmentShape2D.new()
-			head_line_shape.a = pos
-			head_line_shape.b = line.get_point_position(count-2)
-			head_collider.shape = head_line_shape
-
-func reset_combo_decay_timer():
-	combo_decay_timer.stop()
-	combo_decay_timer.wait_time = combo_decay_timeout
-	is_combo_in_danger=false
-
-func start_decaying_combo():
-	combo_decay_timer.start()
-	EventBus.ComboDecaying.emit()
-	is_combo_in_danger = true

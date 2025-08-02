@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bvxhg5lh1a4ql"]
+[gd_scene load_steps=2 format=3 uid="uid://burdmr57e40wc"]
 
-[ext_resource type="Script" uid="uid://b58h3y0du5c8e" path="res://Scripts/UI/player_heatlh_ui.gd" id="1_xyosg"]
+[ext_resource type="Script" path="res://Scripts/UI/player_heatlh_ui.gd" id="1_xyosg"]
 
 [node name="PlayerHeatlhUI" type="Control"]
 layout_mode = 3
