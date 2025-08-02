@@ -11,6 +11,7 @@ const Utils = preload("res://Scripts/utils.gd")
 @export var dash_mult: float
 @export var number_of_projectiles: int
 @export var telegraph_blink_count: int = 3 # How many times you want the telegraph to blink
+@export var windup_blink_count : int = 3 # How many times you want the windup to blink
 @export var edge_gap: int = 50 # Pixels away it can get to the edge
 @export var capture_score:int
 var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
@@ -385,9 +386,22 @@ func moveState(delta: float): #Default movement behavior
 		position.y = lerp(position.y, screen_size.y - margin, 0.5)
 
 func windupState(delta: float):
-	pass
+	var mat = $EnemySprite.material as ShaderMaterial
+	
+	# Dynamically figure out how long to blink for based on delta and windup blink counter
+	var windup_period = (windup_state_time / (windup_blink_count * 2))
+
+	var blink_phase = int(windup_elapsed_time / windup_period) % 2
+	
+	var flashing = blink_phase == 0
+	
+	mat.set_shader_parameter("active", flashing)
+	#await get_tree().create_timer(0.1).timeout
+	#mat.set_shader_parameter("active", false)
 
 func attackState(delta: float):
+	var mat = $EnemySprite.material as ShaderMaterial
+	mat.set_shader_parameter("active", false)
 	pass
 
 func runAndGunState(delta: float):

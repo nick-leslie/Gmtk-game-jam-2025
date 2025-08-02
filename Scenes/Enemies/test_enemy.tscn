@@ -1,16 +1,22 @@
-[gd_scene load_steps=6 format=3 uid="uid://c3v30e6n6jbwd"]
+[gd_scene load_steps=8 format=3 uid="uid://c3v30e6n6jbwd"]
 
 [ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_366os"]
 [ext_resource type="Script" uid="uid://whxlnigxtbwl" path="res://Scripts/Enemies/test_enemy.gd" id="2_kksxm"]
 [ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_ca8xo"]
-[ext_resource type="Texture2D" uid="uid://0yrxu2thlidg" path="res://Sprites/enemy_temp2.PNG" id="3_v1mop"]
+[ext_resource type="Texture2D" uid="uid://c5hhapen6rqco" path="res://Sprites/Enemies/Ottgle.png" id="4_ca8xo"]
+[ext_resource type="Shader" uid="uid://dmp84e0bq5yjk" path="res://Resources/Shaders/flash_shader.gdshader" id="4_s37h6"]
 
 [sub_resource type="Curve" id="Curve_ca8xo"]
 _limits = [0.0, 15.0, 0.0, 30.0]
 _data = [Vector2(0, 0), 0.0, 0.5, 0, 1, Vector2(30, 15), 0.5, 0.0, 1, 0]
 point_count = 2
 
-[node name="TestEnemy" instance=ExtResource("1_366os")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i7old"]
+shader = ExtResource("4_s37h6")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+
+[node name="Ottgle" instance=ExtResource("1_366os")]
 script = ExtResource("2_kksxm")
 projectile_scene = ExtResource("3_ca8xo")
 number_of_projectiles = 5
@@ -19,9 +25,14 @@ decay_rate = SubResource("Curve_ca8xo")
 idle_state_time = 3.0
 telegraph_state_time = 0.5
 move_state_time = 1.0
+windup_state_time = 0.3
 attack_state_time = 1.5
 
 [node name="EnemySprite" parent="." index="0"]
+material = SubResource("ShaderMaterial_i7old")
 position = Vector2(-7.62939e-06, 0)
-scale = Vector2(0.0605744, 0.0591819)
-texture = ExtResource("3_v1mop")
+scale = Vector2(0.021, 0.021)
+texture = ExtResource("4_ca8xo")
+
+[node name="EnemyHitbox" parent="EnemyArea" index="0"]
+position = Vector2(-0.5, 0.5)

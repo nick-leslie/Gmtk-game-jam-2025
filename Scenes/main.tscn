@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bgso3ttnhyoq"]
 
-[ext_resource type="Script" uid="uid://sueks7qs46og" path="res://Scripts/Spawner.gd" id="1_21xkr"]
+[ext_resource type="Script" path="res://Scripts/Spawner.gd" id="1_21xkr"]
 [ext_resource type="Script" uid="uid://cq4kpe8tmhqtt" path="res://Waves/WaveGenerator.gd" id="2_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bw8emd6n56kf8" path="res://Scenes/player.tscn" id="2_8gbba"]
 [ext_resource type="Resource" uid="uid://dl2u0pcq6pq1f" path="res://Waves/Easy.tres" id="3_344ge"]
