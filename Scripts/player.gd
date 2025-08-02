@@ -149,7 +149,8 @@ func end_combo():
 	current_range=min_range
 	reset_combo_decay_timer()
 	combo_count_decayed=0
-	EventBus.ComboEnded.emit()
+	EventBus.ComboEnded.emit(max_combo_value)
+	max_combo_value=0
 
 
 func increase_combo():

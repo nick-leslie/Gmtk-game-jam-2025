@@ -41,6 +41,7 @@ func combo_ended(max_combo_count):
 	update_score(max_combo_count)
 	var string = "[font_size={{size}}]{combo}[/font_size]".format({"combo":0,"size":100})
 	set_counter(string)
+	set_max_combo(string)
 
 func combo_salvaged():
 	update_score(salvage_score_increase)
