@@ -1,0 +1,85 @@
+[gd_scene load_steps=4 format=3 uid="uid://dnoyk0ai2n5dx"]
+
+[ext_resource type="Theme" uid="uid://dfxk3tpasb5ib" path="res://Themes/tltle_theme.tres" id="1_c2fhx"]
+[ext_resource type="Script" uid="uid://cln3gdx8eq6ao" path="res://Scripts/UI/main_menu.gd" id="1_sn23y"]
+[ext_resource type="Theme" uid="uid://cb154xkmy8usu" path="res://Themes/main_menu_buttons.tres" id="3_baxwh"]
+
+[node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("1_sn23y")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TempBackground" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.227342, 0.506661, 0.661587, 1)
+
+[node name="Title" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -1.0
+offset_top = 109.0
+offset_right = -1.0
+offset_bottom = 205.0
+grow_horizontal = 2
+theme = ExtResource("1_c2fhx")
+theme_type_variation = &"HeaderLarge"
+text = "Game Name Here"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 63.0
+offset_top = 34.0
+offset_right = 360.0
+offset_bottom = -40.0
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="Spacer2" type="Control" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Play" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_baxwh")
+action_mode = 0
+text = "Play"
+
+[node name="Options" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_baxwh")
+action_mode = 0
+text = "Options"
+
+[node name="Quit" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_baxwh")
+action_mode = 0
+text = "Quit"
+
+[node name="Spacer" type="Control" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[connection signal="pressed" from="Control/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
