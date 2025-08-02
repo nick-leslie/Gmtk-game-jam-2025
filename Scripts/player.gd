@@ -16,7 +16,7 @@ class_name player
 @export var max_allowed_decay:int
 @onready var current_range = min_range
 @onready var combo_decay_timer:Timer = Timer.new()
-var combo_in_danger = false
+var is_combo_in_danger = false
 var combo_count_decayed = 0
 
 
@@ -41,6 +41,8 @@ func _ready():
 	call_deferred("_emit_health") # Need to do this so that the UI node has time to also run its _ready() function
 	combo_decay_timer.wait_time = combo_decay_timeout
 	combo_decay_timer.timeout.connect(decay_combo)
+	combo_decay_timer.stop()
+	add_child(combo_decay_timer)
 	pass
 
 func _emit_health():
@@ -63,8 +65,13 @@ func hit_enemy():
 		reduce_health()
 
 func decay_combo():
+	print("decayed")
 	combo-=1
 	combo_count_decayed+=1
+	if combo_count_decayed >= max_allowed_decay or combo <= 0:
+		EventBus.ComboEnded.emit()
+	else:
+		EventBus.ComboDecreased.emit(combo)
 	pass
 
 func hit_projectile():
@@ -112,12 +119,7 @@ func _physics_process(delta: float) -> void:
 	var mouse_position = get_viewport().get_mouse_position()
 	var viewport_size = get_viewport().get_visible_rect().size
 
-	# this is range decay from combos
-	# if combo == 0:
-	# 	current_range -= delta * range_decay
-	# if current_range < min_range:
-	# 	current_range = min_range
-	current_range=current_range+(20*combo)
+	current_range=min_range+(20*combo)
 
 
 	queue_redraw()
@@ -132,9 +134,9 @@ func _physics_process(delta: float) -> void:
 	if Input.is_mouse_button_pressed( 1 ) and !been_hit and !is_offscreen: # Left click
 
 
-		if combo_in_danger == true:
-			combo_in_danger=false
+		if is_combo_in_danger == true:
 			combo_count_decayed=0
+			reset_combo_decay_timer()
 			EventBus.ComboSalvaged.emit()
 
 
@@ -156,11 +158,10 @@ func _physics_process(delta: float) -> void:
 
 		prev_pos = mouse_position
 	elif drawing:
+		print("we should be decaying combo")
 		start_obj.position = pos
 		clear_line()
-		combo_decay_timer.start()
-		combo_in_danger = true
-
+		start_decaying_combo()
 	else:
 		stylest.position = pos
 		start_obj.position = pos
@@ -185,7 +186,7 @@ func _draw():
 func end_combo():
 	combo = 0
 	current_range=min_range
-	combo_in_danger=false
+	reset_combo_decay_timer()
 	combo_count_decayed=0
 	EventBus.ComboEnded.emit()
 
@@ -227,8 +228,12 @@ func move_stylest(pos:Vector2):
 			head_line_shape.b = line.get_point_position(count-2)
 			head_collider.shape = head_line_shape
 
-func reset_timer():
+func reset_combo_decay_timer():
 	combo_decay_timer.stop()
-	combo_decay_timer.wait_time = combo_decay
+	combo_decay_timer.wait_time = combo_decay_timeout
+	is_combo_in_danger=false
+
+func start_decaying_combo():
 	combo_decay_timer.start()
-	is_decaying=false
+	EventBus.ComboDecaying.emit()
+	is_combo_in_danger = true

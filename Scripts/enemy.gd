@@ -251,7 +251,7 @@ func dashTransition(delta: float) -> State:
 # State logic functions
 func idleState(delta: float): #State logic for idle state
 	pass
-	
+
 func telegraphState(delta: float):
 	var texture_size = $EnemySprite.texture.get_size()
 	var sprite_size = texture_size * $EnemySprite.scale
