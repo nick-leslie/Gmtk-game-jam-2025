@@ -7,7 +7,10 @@ signal EnemeyCircled
 
 
 signal ComboIncreased(count:int)
+signal ComboDecreased(count:int)
+signal ComboDecaying
 signal ComboEnded
+signal ComboSalvaged
 
 signal EnemyCollision
 signal ProjectileCollision
