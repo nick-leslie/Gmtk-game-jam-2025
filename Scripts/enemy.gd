@@ -84,6 +84,7 @@ func _ready(): #setup
 	decay_start_timer.timeout.connect(start_decay)
 	decay_start_timer.autostart = true
 	capture_bar.max_value = decay_rate.max_value
+	EventBus.GameOver.connect(on_game_over)
 	reset_timer()
 	pass
 
@@ -98,6 +99,7 @@ func _process(delta: float) -> void: #loop
 	if capture_health >= decay_rate.max_value:
 		print("we have been captured")
 		EventBus.UpdateScore.emit(capture_score)
+		queue_free()
 	if capture_health < 0:
 		capture_health = 0
 		is_decaying = false
@@ -106,6 +108,8 @@ func _process(delta: float) -> void: #loop
 	capture_bar.value = capture_health
 
 
+func on_game_over():
+	queue_free()
 
 func start_decay():
 	decay_duration = get_x_from_y(decay_rate,capture_health)
