@@ -1,0 +1,71 @@
+[gd_scene load_steps=4 format=3 uid="uid://d2c7d7fomb7x6"]
+
+[ext_resource type="Theme" uid="uid://dfxk3tpasb5ib" path="res://Themes/tltle_theme.tres" id="1_76r4p"]
+[ext_resource type="Script" uid="uid://b4x2rn0xo3cit" path="res://Scripts/UI/game_over.gd" id="1_flebf"]
+[ext_resource type="Theme" uid="uid://cb154xkmy8usu" path="res://Themes/main_menu_buttons.tres" id="3_7nrms"]
+
+[node name="GameOver" type="CanvasLayer"]
+script = ExtResource("1_flebf")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.227451, 0.505882, 0.662745, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_right = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spacer" type="Control" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GameOver" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_76r4p")
+theme_type_variation = &"HeaderLarge"
+text = "Game Over!"
+
+[node name="Label" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_76r4p")
+theme_type_variation = &"HeaderMedium"
+text = "Score: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayAgain" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_7nrms")
+text = "Play Again"
+
+[node name="Quit" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_7nrms")
+text = "Quit"
+
+[node name="Spacer2" type="Control" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="pressed" from="Control/VBoxContainer/PlayAgain" to="." method="_on_play_again_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/Quit" to="." method="_on_quit_pressed"]

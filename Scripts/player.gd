@@ -90,6 +90,7 @@ func reduce_health():
 	if current_health == 0:
 		EventBus.GameOver.emit()
 		print("Game over!")
+		get_tree().change_scene_to_file("res://Scenes/ui/game_over.tscn")
 
 	EventBus.SetPlayerHealth.emit(current_health)
 
