@@ -10,6 +10,8 @@ const Utils = preload("res://Scripts/utils.gd")
 @export var max_speed: float
 @export var dash_mult: float
 @export var number_of_projectiles: int
+@export var number_of_dashes: int = 4
+@export var dash_cone_degrees: int = 60
 @export var telegraph_blink_count: int = 3 # How many times you want the telegraph to blink
 @export var windup_blink_count : int = 3 # How many times you want the windup to blink
 @export var edge_gap: int = 50 # Pixels away it can get to the edge
@@ -56,8 +58,6 @@ var dash_windup_elapsed_time := 0.0
 @export var dash_state_time: float
 var dash_elapsed_time := 0.0
 
-
-
 @export_group("Raycast")
 @export var ray_count:int = 10
 @export var ray_length:float =10000
@@ -65,6 +65,12 @@ var dash_elapsed_time := 0.0
 @onready var debug_line = Line2D.new()
 
 @onready var enemey_colider:Area2D = get_node("EnemyArea")
+
+var dash_timer := 0.0
+var previous_dash_number = 0
+
+var dash_speed = max_speed * dash_mult
+var current_dash_direction: Vector2 = Vector2.ZERO
 
 enum State {
 	IDLE,
@@ -458,7 +464,16 @@ func dashWindupState(delta: float):
 	pass
 
 func dashState(delta: float):
-	pass
+	var dash_period = dash_state_time / number_of_dashes
+	var dash_phase = int(dash_elapsed_time / dash_period)
+	dash_speed = max_speed * dash_mult
+
+	if dash_phase != previous_dash_number and dash_phase < number_of_dashes:
+		previous_dash_number = dash_phase
+		#current_dash_direction = change_direction()
+		direction = change_direction()
+	moveInDirection(direction, dash_speed)
+	screenClamp()
 
 func screenClamp():
 	var screen_size = get_viewport_rect().size
@@ -537,3 +552,17 @@ func generate_direction() -> Vector2:
 		return (global_pos - screen_size * 0.5).normalized()
 	else:
 		return direction
+
+func change_direction() -> Vector2:
+	# Calculate the opposite direction
+	var opposite_direction = -direction.normalized()
+	var base_angle = opposite_direction.angle()
+	
+	# Adding random variation
+	var half_cone_rad = deg_to_rad(dash_cone_degrees / 2.0)
+	var random_angle_offset = randf_range(-half_cone_rad, half_cone_rad)
+	
+	var final_angle = base_angle + random_angle_offset
+	
+	var varied_direction = Vector2.RIGHT.rotated(final_angle)
+	return varied_direction

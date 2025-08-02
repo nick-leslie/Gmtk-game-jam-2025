@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://cisgmgiyixput"]
+
+[ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_lhl6k"]
+[ext_resource type="Texture2D" uid="uid://cy036kvf4o22f" path="res://Sprites/Enemies/Mowel.png" id="2_8b6l7"]
+[ext_resource type="Material" uid="uid://d72pxehmuxuq" path="res://Resources/Shaders/flash_shader.tres" id="2_waptr"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_waptr"]
+radius = 37.6052
+height = 128.0
+
+[node name="Enemy" instance=ExtResource("1_lhl6k")]
+
+[node name="EnemySprite" parent="." index="0"]
+material = ExtResource("2_waptr")
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("2_8b6l7")
+
+[node name="EnemyHitbox" parent="EnemyArea" index="0"]
+position = Vector2(5, 4)
+rotation = 0.23911
+shape = SubResource("CapsuleShape2D_waptr")
