@@ -37,7 +37,7 @@ func telegraphTransition(delta: float) -> State:
 		return State.MOVE
 
 func moveTransition(delta: float) -> State:
-	var random_next_state = randi_range(1, 4)
+	var random_next_state = randi_range(1, 6)
 	var next_state = State.MOVE
 	
 	if move_elapsed_time < move_state_time:
@@ -79,7 +79,7 @@ func attackTransition(delta: float) -> State:
 				next_state = State.WINDUP
 			3:
 				next_state = State.DASHWINDUP
-			4:
+			4, 5, 6:
 				next_state = State.IDLE
 		attack_elapsed_time = 0.0
 		return next_state
@@ -99,7 +99,7 @@ func dashWindupTransition(delta: float) -> State:
 		return State.DASH
 
 func dashTransition(delta: float) -> State:
-	var random_next_state = randi_range(1, 3)
+	var random_next_state = randi_range(1, 6)
 	var next_state = State.DASH
 	
 	if dash_elapsed_time < dash_state_time:
@@ -111,7 +111,7 @@ func dashTransition(delta: float) -> State:
 				next_state = State.TELEGRAPH
 			2:
 				next_state = State.WINDUP
-			3:
+			3, 4, 5, 6:
 				next_state = State.IDLE
 		dash_elapsed_time = 0.0
 		return next_state

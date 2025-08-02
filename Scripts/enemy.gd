@@ -165,7 +165,7 @@ func get_x_from_y(curve: Curve, target_y: float, step: float = 0.1) -> float:
 	return closest_x
 
 func _on_area_entered(area) -> void:
-	if area.name == "HeadColliderBody" or area.name == "LineCollider" or area.name == "LineColliderBody":
+	if area.name == "LineCollider" or area.name == "LineColliderBody":
 		EventBus.EnemyCollision.emit()
 		print("Hit deteceted: " + area.name)
 		pass

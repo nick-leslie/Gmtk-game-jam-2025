@@ -25,7 +25,7 @@ func _process(delta: float) -> void:
 	pass
 
 func _on_area_entered(area):
-	if area.name == "HeadColliderBody" or area.name == "LineCollider" or area.name == "LineColliderBody":
+	if area.name == "LineCollider" or area.name == "LineColliderBody":
 		EventBus.ProjectileCollision.emit()
 		#print("Hit detected: " + area.name)
 		
