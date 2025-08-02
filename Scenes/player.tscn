@@ -32,7 +32,7 @@ collision_mask = 2
 [node name="Stylest" type="Node2D" parent="." groups=["player"]]
 scale = Vector2(0.816232, 0.65006)
 
-[node name="Sprite2D" type="Sprite2D" parent="Stylest" groups=["player"]]
+[node name="Knot" type="Sprite2D" parent="Stylest" groups=["player"]]
 position = Vector2(0.999996, 2)
 scale = Vector2(0.4375, 0.4375)
 texture = ExtResource("5_x3wgy")
@@ -40,6 +40,6 @@ texture = ExtResource("5_x3wgy")
 [node name="StartNode" type="Node2D" parent="." groups=["player"]]
 scale = Vector2(0.36, 0.36)
 
-[node name="Sprite2D" type="Sprite2D" parent="StartNode" groups=["player"]]
+[node name="Stake" type="Sprite2D" parent="StartNode" groups=["player"]]
 scale = Vector2(0.53125, 0.488281)
 texture = ExtResource("6_x3wgy")
