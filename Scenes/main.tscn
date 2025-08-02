@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bgso3ttnhyoq"]
 
-[ext_resource type="Script" path="res://Scripts/Spawner.gd" id="1_21xkr"]
+[ext_resource type="Script" uid="uid://sueks7qs46og" path="res://Scripts/Spawner.gd" id="1_21xkr"]
 [ext_resource type="Script" uid="uid://cq4kpe8tmhqtt" path="res://Waves/WaveGenerator.gd" id="2_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bw8emd6n56kf8" path="res://Scenes/player.tscn" id="2_8gbba"]
 [ext_resource type="Resource" uid="uid://dl2u0pcq6pq1f" path="res://Waves/Easy.tres" id="3_344ge"]
@@ -9,7 +9,12 @@
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_21xkr")
-waves = Array[ExtResource("2_6bp64")]([ExtResource("3_344ge")])
+easy_waves = Array[ExtResource("2_6bp64")]([ExtResource("3_344ge")])
+medium_waves = Array[ExtResource("2_6bp64")]([ExtResource("3_344ge")])
+hard_waves = Array[ExtResource("2_6bp64")]([ExtResource("3_344ge")])
+edge_limit = 100.0
+medium_threashold = 15
+hard_threashold = 30
 
 [node name="Player" parent="." instance=ExtResource("2_8gbba")]
 
