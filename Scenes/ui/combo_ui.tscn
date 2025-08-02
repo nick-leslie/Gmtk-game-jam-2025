@@ -50,6 +50,7 @@ bbcode_enabled = true
 text = "[font_size={100}]0[/font_size]"
 
 [node name="ComboLabel" type="RichTextLabel" parent="Max"]
+layout_mode = 0
 offset_left = 1.0
 offset_top = 122.0
 offset_right = 186.0
