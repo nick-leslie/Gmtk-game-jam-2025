@@ -18,9 +18,9 @@ shader_parameter/flash_color = Color(1, 1, 1, 1)
 
 [node name="Ottgle" instance=ExtResource("1_366os")]
 script = ExtResource("2_kksxm")
-projectile_scene = ExtResource("3_ca8xo")
 number_of_projectiles = 5
 edge_gap = 30
+projectile_scene = ExtResource("3_ca8xo")
 decay_rate = SubResource("Curve_ca8xo")
 idle_state_time = 3.0
 telegraph_state_time = 0.5

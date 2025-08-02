@@ -17,6 +17,11 @@ const Utils = preload("res://Scripts/utils.gd")
 var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
 var current_projectiles := 0 # Number of projectiles shot
 
+@export var projectile_scene: PackedScene
+
+var projectile_direction := Vector2.ZERO
+var projectile_timer := 0.0
+
 @export_group("capture stats")
 @export var decay_wait_time:float # time we have till decay begins on capture progress
 @export var decay_rate:Curve # decay rate curve that we sample
@@ -45,6 +50,9 @@ var attack_elapsed_time := 0.0
 @export var run_and_gun_state_time: float
 var run_and_gun_elapsed_time := 0.0
 
+@export var dash_windup_state_time: float
+var dash_windup_elapsed_time := 0.0
+
 @export var dash_state_time: float
 var dash_elapsed_time := 0.0
 
@@ -65,10 +73,12 @@ enum State {
 	WINDUP,
 	ATTACK,
 	RUNANDGUN,
+	DASHWINDUP,
 	DASH
 }
 
 var current_state = State.IDLE
+var previous_state = State.IDLE
 
 var direction := Vector2(
 		randi_range(-1, 1),
@@ -92,6 +102,25 @@ func _ready(): #setup
 func _process(delta: float) -> void: #loop
 	state_logic(delta)
 	current_state = get_transition(delta)
+	if current_state != previous_state:
+		match current_state:
+			State.IDLE:
+				print("In IDLE state")
+			State.TELEGRAPH:
+				print("In TELEGRAPH state")
+			State.MOVE:
+				print("In MOVE state")
+			State.WINDUP:
+				print("In WINDUP state")
+			State.ATTACK:
+				print("In ATTACK state")
+			State.RUNANDGUN:
+				print("In RUNANDGUN state")
+			State.DASHWINDUP:
+				print("In DASHWINDUP state")
+			State.DASH:
+				print("In DASH state")
+	previous_state = current_state
 	if is_decaying:
 		decay_duration-=delta
 		capture_health = decay_rate.sample(decay_duration)
@@ -199,6 +228,8 @@ func get_transition(delta: float) -> State:
 			return windupTransition(delta)
 		State.RUNANDGUN:
 			return runAndGunTransition(delta)
+		State.DASHWINDUP:
+			return dashWindupTransition(delta)
 		State.DASH:
 			return dashTransition(delta)
 	return State.IDLE #default is override
@@ -218,6 +249,8 @@ func state_logic(delta: float):
 			windupState(delta)
 		State.RUNANDGUN:
 			runAndGunState(delta)
+		State.DASHWINDUP:
+			dashWindupState(delta)
 		State.DASH:
 			dashState(delta)
 
@@ -249,6 +282,10 @@ func attackTransition(delta: float) -> State:
 
 func runAndGunTransition(delta: float) -> State:
 	return State.IDLE
+	pass
+
+func dashWindupTransition(delta: float) -> State:
+	return State.DASHWINDUP
 	pass
 
 func dashTransition(delta: float) -> State:
@@ -373,17 +410,7 @@ func moveState(delta: float): #Default movement behavior
 	position += offset
 
 	#Clamping to screen size
-	var margin = (sprite_size.x / 2) + edge_gap
-
-	if position.x < margin:
-		position.x = lerp(position.x, margin, 0.5)
-	elif position.x > screen_size.x - margin:
-		position.x = lerp(position.x, screen_size.x - margin, 0.5)
-
-	if position.y < margin:
-		position.y = lerp(position.y, margin, 0.5)
-	elif position.y > screen_size.y - margin:
-		position.y = lerp(position.y, screen_size.y - margin, 0.5)
+	screenClamp()
 
 func windupState(delta: float):
 	var mat = $EnemySprite.material as ShaderMaterial
@@ -402,10 +429,54 @@ func windupState(delta: float):
 func attackState(delta: float):
 	var mat = $EnemySprite.material as ShaderMaterial
 	mat.set_shader_parameter("active", false)
-	pass
+	
+	#Do the first time the state is entered
+	if attack_elapsed_time == 0.0:
+		print("First time in attack state")
+		projectile_direction = Utils.random_direction()
+		projectile_timer = 0.0
+		current_projectiles = 0
+		
+	
+	var projectile_period = attack_state_time / number_of_projectiles
+	
+	if current_projectiles < number_of_projectiles:
+		projectile_timer += delta
+		if projectile_timer >= projectile_period:
+			projectile_timer -= projectile_period
+			var projectile = projectile_scene.instantiate()
+			projectile.set_direction(projectile_direction)
+			get_tree().current_scene.add_child(projectile)
+			projectile.global_position = global_position
+			current_projectiles += 1
 
 func runAndGunState(delta: float):
 	pass
 
+func dashWindupState(delta: float):
+	pass
+
 func dashState(delta: float):
 	pass
+
+func screenClamp():
+	var screen_size = get_viewport_rect().size
+	var texture_size = $EnemySprite.texture.get_size()
+	var sprite_size = texture_size * $EnemySprite.scale
+
+	# Clamping to screen size
+	var margin = (sprite_size.x / 2) + edge_gap
+
+	if position.x < margin:
+		position.x = lerp(position.x, margin, 0.5)
+	elif position.x > screen_size.x - margin:
+		position.x = lerp(position.x, screen_size.x - margin, 0.5)
+
+	if position.y < margin:
+		position.y = lerp(position.y, margin, 0.5)
+	elif position.y > screen_size.y - margin:
+		position.y = lerp(position.y, screen_size.y - margin, 0.5)
+
+func moveInDirection(new_direction: Vector2, new_magnitude: int):
+	var offset = new_direction * new_magnitude
+	position += offset

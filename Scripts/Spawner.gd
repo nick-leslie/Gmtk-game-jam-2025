@@ -27,9 +27,9 @@ func spawn_new_wave():
 		current_wave.append(enemy)
 		pass
 
-func get_random_screen_position() -> Vector2:
+func get_random_screen_position(buffer: float = 150.0) -> Vector2:
 	var viewport_size = get_viewport().get_visible_rect().size
 	return Vector2(
-		randf() * viewport_size.x,
-		randf() * viewport_size.y
+		randf() * (viewport_size.x - buffer * 2) + buffer,
+		randf() * (viewport_size.y - buffer * 2) + buffer
 	)

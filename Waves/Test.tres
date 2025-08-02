@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Wave" load_steps=3 format=3 uid="uid://ihv2i53n2rcf"]
+
+[ext_resource type="Script" uid="uid://cq4kpe8tmhqtt" path="res://Waves/WaveGenerator.gd" id="1_rhtw6"]
+[ext_resource type="PackedScene" uid="uid://jtuq4uqvde3y" path="res://Scenes/Enemies/gotter.tscn" id="1_sboqw"]
+
+[resource]
+script = ExtResource("1_rhtw6")
+Enemys = Array[PackedScene]([ExtResource("1_sboqw")])
+metadata/_custom_type_script = "uid://cq4kpe8tmhqtt"
