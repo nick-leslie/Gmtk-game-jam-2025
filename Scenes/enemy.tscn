@@ -30,6 +30,7 @@ size = Vector2(116, 70)
 script = ExtResource("1_4gyqm")
 max_speed = 3.5
 dash_mult = 1.5
+capture_score = 10
 decay_wait_time = 4.0
 decay_rate = SubResource("Curve_afpow")
 

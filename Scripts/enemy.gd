@@ -12,6 +12,7 @@ const Utils = preload("res://Scripts/utils.gd")
 @export var number_of_projectiles: int
 @export var telegraph_blink_count: int = 3 # How many times you want the telegraph to blink
 @export var edge_gap: int = 50 # Pixels away it can get to the edge
+@export var capture_score:int
 var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
 var current_projectiles := 0 # Number of projectiles shot
 
@@ -94,8 +95,9 @@ func _process(delta: float) -> void: #loop
 		capture_health = decay_rate.sample(decay_duration)
 		# decay_rate.sample(t)
 
-	if capture_health > decay_rate.max_value:
+	if capture_health >= decay_rate.max_value:
 		print("we have been captured")
+		EventBus.UpdateScore.emit(capture_score)
 	if capture_health < 0:
 		capture_health = 0
 		is_decaying = false
