@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://bw8emd6n56kf8"]
+[gd_scene load_steps=9 format=3 uid="uid://bw8emd6n56kf8"]
 
 [ext_resource type="Script" uid="uid://cagswdrat2x2a" path="res://Scripts/player.gd" id="1_vgqql"]
 [ext_resource type="PackedScene" uid="uid://cx3epoiu21pwy" path="res://Scenes/point.tscn" id="2_vgqql"]
 [ext_resource type="Texture2D" uid="uid://bsl6x7217r78t" path="res://Sprites/stake.png" id="4_3smsa"]
+[ext_resource type="Texture2D" uid="uid://cpeqe77dhnrag" path="res://Sprites/rope_texture_4.png" id="4_8erm5"]
 [ext_resource type="Script" uid="uid://bp2pjt4dtaffb" path="res://head_collider_body.gd" id="5_7mycd"]
 [ext_resource type="Texture2D" uid="uid://b2cuidn1p88vj" path="res://Sprites/knot.png" id="5_8erm5"]
 [ext_resource type="AudioStream" uid="uid://bc5s5onu1sj51" path="res://SFX/Hit1.wav" id="5_fkybt"]
@@ -24,6 +25,7 @@ script = ExtResource("5_7mycd")
 
 [node name="Line" type="Line2D" parent="." groups=["player"]]
 use_parent_material = true
+texture = ExtResource("4_8erm5")
 texture_mode = 1
 
 [node name="LineCollider" type="Area2D" parent="Line" groups=["player"]]
