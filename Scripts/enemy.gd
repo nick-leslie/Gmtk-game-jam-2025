@@ -517,6 +517,9 @@ func screenClamp():
 func moveInDirection(new_direction: Vector2, new_magnitude: int):
 	var offset = new_direction * new_magnitude
 	position += offset
+	#Rotate to match direction
+	$EnemySprite.rotation  = direction.angle() + deg_to_rad(180)
+	$EnemySprite.flip_v = direction.x > 0
 	
 func generate_direction() -> Vector2:
 	var texture_size = $EnemySprite.texture.get_size()
