@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://dbj3bds0122xw"]
+
+[ext_resource type="Texture2D" uid="uid://bf6f0opv4uvjq" path="res://Sprites/Enemies/catfish.png" id="1_mqri0"]
+[ext_resource type="Texture2D" uid="uid://bm66c7dupk7fi" path="res://Sprites/Enemies/Gotter.png" id="3_lqmxc"]
+[ext_resource type="Texture2D" uid="uid://cy036kvf4o22f" path="res://Sprites/Enemies/Mowel.png" id="4_nu60o"]
+[ext_resource type="Texture2D" uid="uid://c5hhapen6rqco" path="res://Sprites/Enemies/Ottgle.png" id="5_mk435"]
+[ext_resource type="Texture2D" uid="uid://8f6iq12ksqrs" path="res://Sprites/Enemies/Wanguine.png" id="6_a1c6y"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_abh3m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_mqri0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_lqmxc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_nu60o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_mk435")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_a1c6y")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Heart Ui" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_abh3m")
+autoplay = "default"
