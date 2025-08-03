@@ -10,22 +10,31 @@ var current_wave: Array[Enemy]
 @export var hard_threashold:int
 @onready var player:player = get_node("Player")
 
+var game_over_status = false
 
 func _ready() -> void:
+
+	EventBus.GameOver.connect(game_over)
+	EventBus.NewGame.connect(new_game)
+	
+
 	spawn_new_wave(easy_waves)
 	pass
+
 
 func _process(delta: float) -> void:
 	for enemy in current_wave:
 		if is_instance_valid(enemy):
 			return
 	current_wave = []
-	if player.combo > medium_threashold:
-		spawn_new_wave(easy_waves)
-	elif player.combo > hard_threashold:
-		spawn_new_wave(medium_waves)
-	else:
-		spawn_new_wave(hard_waves)
+  
+	if !game_over_status:
+    if player.combo > medium_threashold:
+      spawn_new_wave(easy_waves)
+    elif player.combo > hard_threashold:
+      spawn_new_wave(medium_waves)
+    else:
+      spawn_new_wave(hard_waves)
 	pass
 
 
@@ -45,3 +54,9 @@ func get_random_screen_position() -> Vector2:
 		randf() * viewport_size.x + edge_limit,
 		randf() * viewport_size.y + edge_limit
 	)
+
+func game_over():
+	game_over_status = true
+
+func new_game():
+	game_over_status = false

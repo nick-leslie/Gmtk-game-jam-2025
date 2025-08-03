@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://br6ossimt5dux"]
+[gd_scene load_steps=8 format=3 uid="uid://br6ossimt5dux"]
 
 [ext_resource type="Script" uid="uid://1vwnd0vx5oax" path="res://Scripts/enemy.gd" id="1_4gyqm"]
 [ext_resource type="Texture2D" uid="uid://c72goxnk8uioy" path="res://Sprites/enemy_temp.png" id="2_qi2p4"]
 [ext_resource type="Texture2D" uid="uid://brugnqiduxnm5" path="res://Sprites/Arrow.svg" id="3_afpow"]
+[ext_resource type="AudioStream" uid="uid://buy5omigq0yx4" path="res://SFX/Option2.wav" id="4_287tu"]
 
 [sub_resource type="Curve" id="Curve_afpow"]
 _limits = [0.0, 15.0, 0.0, 30.0]
@@ -55,3 +56,6 @@ offset_left = -71.0
 offset_top = 50.0
 offset_right = 71.0
 offset_bottom = 95.0
+
+[node name="CaptureSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_287tu")
