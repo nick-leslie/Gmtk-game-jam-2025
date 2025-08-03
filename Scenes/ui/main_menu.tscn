@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://dnoyk0ai2n5dx"]
+[gd_scene load_steps=7 format=3 uid="uid://dnoyk0ai2n5dx"]
 
 [ext_resource type="Theme" uid="uid://dfxk3tpasb5ib" path="res://Themes/tltle_theme.tres" id="1_c2fhx"]
 [ext_resource type="Script" uid="uid://cln3gdx8eq6ao" path="res://Scripts/UI/main_menu.gd" id="1_sn23y"]
 [ext_resource type="Texture2D" uid="uid://cs6dddllequhh" path="res://Sprites/TitleScreen.png" id="2_1u1h3"]
 [ext_resource type="Theme" uid="uid://cb154xkmy8usu" path="res://Themes/main_menu_buttons.tres" id="3_baxwh"]
 [ext_resource type="AudioStream" uid="uid://bsdsial2l5fev" path="res://SFX/Select.wav" id="4_baxwh"]
+[ext_resource type="FontFile" uid="uid://b7nhwf1hnj08f" path="res://VAST_MX.ttf" id="6_0js1b"]
 
 [node name="MainMenu" type="CanvasLayer"]
 script = ExtResource("1_sn23y")
@@ -64,7 +65,7 @@ theme = ExtResource("3_baxwh")
 action_mode = 0
 text = "Play"
 
-[node name="Options" type="Button" parent="Control/VBoxContainer"]
+[node name="Credits" type="Button" parent="Control/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_baxwh")
 action_mode = 0
@@ -84,6 +85,27 @@ mouse_filter = 2
 [node name="SelectSFX" type="AudioStreamPlayer" parent="Control/VBoxContainer"]
 stream = ExtResource("4_baxwh")
 
+[node name="Credits" type="RichTextLabel" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 401.0
+offset_top = 455.0
+offset_right = 946.0
+offset_bottom = 705.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("6_0js1b")
+bbcode_enabled = true
+text = "[outline_size={10}][color=gold][font_size=30]Creators: Nick Leslie, Robbie Leslie
+Check the Itch for Creative commons work
+[/font_size][/color][/outline_size]
+"
+fit_content = true
+
 [connection signal="pressed" from="Control/VBoxContainer/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="Control/VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/Credits" to="." method="_on_credits_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
