@@ -19,29 +19,30 @@ func _ready() -> void:
 	pass
 
 func max_combo_increased(combo):
-	var string = "[font_size={{size}}]{score}[/font_size]".format({"score":combo,"size":100})
+	var string = "[color=gold][outline_size={5}][font_size={{size}}]Max Combo:{combo}[/font_size][/outline_size][/color]".format({"combo":combo,"size":50})
 	#todo animation???? cool like scaling fount based on combo sizer
 	set_max_combo(string)
 	pass
 
 func update_score(count:int):
 	score+=count
-	var string = "[font_size={{size}}]{score}[/font_size]".format({"score":score,"size":100})
+	var string = "[color=gold][outline_size={5}][font_size={{size}}]Score:{score}[/font_size][/outline_size][/color]".format({"score":score,"size":100})
 	#todo animation???? cool like scaling fount based on combo sizer
 	set_score(string)
 
 func combo_decaying():
 	is_combo_decaying=true
-	var string = "[color=red][font_size={{size}}]{combo}[/font_size][/color]".format({"combo":current_combo,"size":100+current_combo})
+	var string = "[outline_size={5}][color=red][font_size={{size}}]Combo:{combo}[/font_size][/color][/outline_size]".format({"combo":current_combo,"size":100+current_combo})
 	#todo animation???? cool like scaling fount based on combo sizer
 	set_counter(string)
 
 func combo_ended(max_combo_count):
 	is_combo_decaying=false
 	update_score(max_combo_count)
-	var string = "[font_size={{size}}]{combo}[/font_size]".format({"combo":0,"size":100})
+	var string = "[color=gold][outline_size={5}][font_size={{size}}]combo:{combo}[/font_size][/outline_size][/color]".format({"combo":0,"size":100})
 	set_counter(string)
-	set_max_combo(string)
+	var max_combo_string = "[color=gold][outline_size={5}][font_size={{size}}]Max Combo:{combo}[/font_size][/outline_size][/color]".format({"combo":0,"size":50})
+	set_max_combo(max_combo_string)
 
 func combo_salvaged():
 	update_score(salvage_score_increase)
@@ -51,10 +52,10 @@ func combo_salvaged():
 func combo_changed(combo:int):
 	current_combo = combo
 	if is_combo_decaying:
-		var string = "[color=red][font_size={{size}}]{combo}[/font_size][/color]".format({"combo":combo,"size":100+combo})
+		var string = "[outline_size={5}][color=red][font_size={{size}}]Combo:{combo}[/font_size][/color][/outline_size]".format({"combo":combo,"size":100+combo})
 		set_counter(string)
 	else:
-		var string = "[font_size={{size}}]{combo}[/font_size]".format({"combo":combo,"size":100+combo})
+		var string = "[color=gold][outline_size={5}][font_size={{size}}]Combo:{combo}[/font_size][/outline_size][/color]".format({"combo":combo,"size":100+combo})
 		set_counter(string)
 	#todo animation???? cool like scaling fount based on combo sizer
 

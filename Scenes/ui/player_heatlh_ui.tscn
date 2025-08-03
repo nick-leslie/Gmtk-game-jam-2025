@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://burdmr57e40wc"]
 
-[ext_resource type="Script" path="res://Scripts/UI/player_heatlh_ui.gd" id="1_xyosg"]
+[ext_resource type="Script" uid="uid://b58h3y0du5c8e" path="res://Scripts/UI/player_heatlh_ui.gd" id="1_xyosg"]
 
 [node name="PlayerHeatlhUI" type="Control"]
 layout_mode = 3
@@ -11,25 +11,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xyosg")
 
-[node name="PlayerHealthLabel" type="RichTextLabel" parent="."]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 55.0
-offset_top = -102.0
-offset_right = 171.0
-offset_bottom = -74.0
-grow_vertical = 0
-text = "Player Health: "
-
 [node name="PlayerHealth" type="RichTextLabel" parent="."]
-layout_mode = 0
-offset_left = 116.0
-offset_top = 613.0
-offset_right = 150.0
-offset_bottom = 649.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -299.0
+offset_bottom = 69.0
+grow_horizontal = 0
 bbcode_enabled = true
-text = "[font_size={25}]0[/font_size]
+text = "[font_size={50}]Health: 0[/font_size]
 "
 fit_content = true

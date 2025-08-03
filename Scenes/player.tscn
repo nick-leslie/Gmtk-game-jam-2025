@@ -14,7 +14,7 @@ script = ExtResource("1_vgqql")
 close_point_count = 20
 point_scene = ExtResource("2_vgqql")
 min_range = 500.0
-combo_decay_timeout = 1.5
+combo_decay_timeout = 0.7
 max_allowed_decay = 4
 
 [node name="HeadColliderBody" type="Area2D" parent="." groups=["player"]]

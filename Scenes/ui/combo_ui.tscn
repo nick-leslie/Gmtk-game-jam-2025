@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://ecmn2amgrast"]
+[gd_scene load_steps=4 format=3 uid="uid://ecmn2amgrast"]
 
 [ext_resource type="Script" uid="uid://de7q466s317fx" path="res://Scripts/UI/score_control.gd" id="1_esukr"]
 [ext_resource type="AudioStream" uid="uid://buy5omigq0yx4" path="res://SFX/Option2.wav" id="2_24fpj"]
+[ext_resource type="FontFile" uid="uid://b7nhwf1hnj08f" path="res://VAST_MX.ttf" id="2_x2xd0"]
 
 [node name="SCORE COUNTER" type="Control"]
 layout_direction = 1
@@ -22,66 +23,38 @@ offset_left = 1.0
 offset_top = 3.0
 offset_right = 600.0
 offset_bottom = 235.0
+theme_override_fonts/normal_font = ExtResource("2_x2xd0")
 bbcode_enabled = true
-text = "[font_size={100}]0[/font_size]"
+text = "[color=gold][outline_size={5}][font_size={100}]Combo: 0[/font_size][/outline_size][/color]
+"
 fit_content = true
 tab_size = 5
 
-[node name="ComboLabel" type="RichTextLabel" parent="Combo"]
-layout_mode = 0
-offset_left = -1.0
-offset_top = 112.0
-offset_right = 68.0
-offset_bottom = 152.0
-text = "Combo"
-
 [node name="Score" type="RichTextLabel" parent="."]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -149.0
-offset_top = -229.0
-grow_horizontal = 0
+offset_top = -99.0
+grow_horizontal = 2
 grow_vertical = 0
+theme_override_fonts/normal_font = ExtResource("2_x2xd0")
 bbcode_enabled = true
-text = "[font_size={100}]0[/font_size]"
+text = "[color=gold][outline_size={5}][font_size={100}]Score: 0[/font_size][/outline_size][/color]"
+fit_content = true
 
 [node name="Max" type="RichTextLabel" parent="."]
 layout_mode = 0
 offset_left = 3.0
 offset_top = 139.0
-offset_right = 176.0
+offset_right = 766.0
 offset_bottom = 312.0
+theme_override_fonts/normal_font = ExtResource("2_x2xd0")
 bbcode_enabled = true
-text = "[font_size={100}]0[/font_size]"
-
-[node name="ComboLabel" type="RichTextLabel" parent="Max"]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 122.0
-offset_right = 186.0
-offset_bottom = 197.0
-bbcode_enabled = true
-text = "Max Combo"
-
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.794
-anchor_top = 0.849
-anchor_right = 0.794
-anchor_bottom = 0.849
-offset_left = -0.480103
-offset_top = 0.0799561
-offset_right = 165.52
-offset_bottom = 32.08
-grow_horizontal = 2
-grow_vertical = 0
-bbcode_enabled = true
-text = "[font_size={20}]score[/font_size]"
+text = "[color=orange][outline_size={5}][font_size={50}]max Combo: 0[/font_size][/outline_size][/color]
+"
+fit_content = true
 
 [node name="ScoreSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_24fpj")
