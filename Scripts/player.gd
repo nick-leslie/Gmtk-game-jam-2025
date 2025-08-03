@@ -60,6 +60,7 @@ func _physics_process(delta: float) -> void:
 
 	queue_redraw()
 	var is_offscreen = false
+	$Stylest/Knot.visible = false
 	if mouse_position.x < 0 or mouse_position.y < 0 or mouse_position.x > viewport_size.x or mouse_position.y > viewport_size.y:
 		is_offscreen = true
 	#print("Mouse Offscreen: " + str(is_offscreen))
@@ -68,7 +69,8 @@ func _physics_process(delta: float) -> void:
 
 	var pos = mouse_position
 	if Input.is_mouse_button_pressed( 1 ) and !been_hit and !is_offscreen: # Left click
-
+		
+		$Stylest/Knot.visible = true
 
 		if is_combo_in_danger == true:
 			combo_count_decayed=0
