@@ -17,6 +17,7 @@ signal ProjectileCollision
 signal SetPlayerHealth(current_health:int)
 
 signal GameOver
+signal NewGame
 
 signal UpdateScore(count:int)
 
