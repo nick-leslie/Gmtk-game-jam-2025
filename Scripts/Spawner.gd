@@ -30,11 +30,11 @@ func _process(delta: float) -> void:
 
 	if !game_over_status:
 		if player.combo > medium_threashold:
-		  spawn_new_wave(easy_waves)
+			spawn_new_wave(easy_waves)
 		elif player.combo > hard_threashold:
-		  spawn_new_wave(medium_waves)
+			spawn_new_wave(medium_waves)
 		else:
-		  spawn_new_wave(hard_waves)
+			spawn_new_wave(hard_waves)
 
 
 
