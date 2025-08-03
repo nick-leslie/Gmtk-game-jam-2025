@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bw8emd6n56kf8"]
+[gd_scene load_steps=6 format=3 uid="uid://bw8emd6n56kf8"]
 
 [ext_resource type="Script" uid="uid://cagswdrat2x2a" path="res://Scripts/player.gd" id="1_vgqql"]
 [ext_resource type="PackedScene" uid="uid://cx3epoiu21pwy" path="res://Scenes/point.tscn" id="2_vgqql"]
 [ext_resource type="Script" uid="uid://bp2pjt4dtaffb" path="res://head_collider_body.gd" id="5_7mycd"]
+[ext_resource type="AudioStream" uid="uid://bc5s5onu1sj51" path="res://SFX/Hit1.wav" id="5_fkybt"]
 [ext_resource type="AudioStream" uid="uid://baqdtsv62x735" path="res://SFX/LoopOption1.wav" id="7_3smsa"]
 
 [node name="PlayerRoot" type="Node2D" groups=["player"]]
@@ -43,3 +44,4 @@ scale = Vector2(0.53125, 0.488281)
 stream = ExtResource("7_3smsa")
 
 [node name="HitSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_fkybt")
