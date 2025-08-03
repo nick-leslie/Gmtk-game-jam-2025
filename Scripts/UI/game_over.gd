@@ -17,4 +17,5 @@ func _on_play_again_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	select_sfx.play()
+	await select_sfx.finished
 	get_tree().quit()

@@ -20,4 +20,5 @@ func _on_options_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	select_sfx.play()
+	await select_sfx.finished
 	get_tree().quit()
