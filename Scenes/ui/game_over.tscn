@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://d2c7d7fomb7x6"]
+[gd_scene load_steps=6 format=3 uid="uid://d2c7d7fomb7x6"]
 
 [ext_resource type="Theme" uid="uid://dfxk3tpasb5ib" path="res://Themes/tltle_theme.tres" id="1_76r4p"]
 [ext_resource type="Script" uid="uid://b4x2rn0xo3cit" path="res://Scripts/UI/game_over.gd" id="1_flebf"]
+[ext_resource type="Texture2D" uid="uid://cps670kh28m3n" path="res://Sprites/TouchGrass.png" id="2_fl0cq"]
 [ext_resource type="Theme" uid="uid://cb154xkmy8usu" path="res://Themes/main_menu_buttons.tres" id="3_7nrms"]
 [ext_resource type="AudioStream" uid="uid://bsdsial2l5fev" path="res://SFX/Select.wav" id="4_8nag5"]
 
@@ -16,14 +17,27 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="Control"]
+[node name="Background" type="TextureRect" parent="Control"]
+z_index = -1752
+z_as_relative = false
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = -1
+anchor_left = -0.068
+anchor_top = -0.188
+anchor_right = 1.042
+anchor_bottom = 1.119
+offset_left = 13.5599
+offset_top = 0.0398865
+offset_right = 3930.36
+offset_bottom = 2620.48
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.227451, 0.505882, 0.662745, 1)
+scale = Vector2(0.35, 0.35)
+size_flags_horizontal = 6
+size_flags_vertical = 3
+texture = ExtResource("2_fl0cq")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control"]
 layout_mode = 1
