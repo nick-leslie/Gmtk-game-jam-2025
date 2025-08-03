@@ -1,9 +1,9 @@
 extends CanvasLayer
 
 @onready var select_sfx: AudioStreamPlayer = get_node("Control/VBoxContainer/SelectSFX")
-@onready var score_lable:Label = get_node("Control/VBoxContainer/ScoreLabel")
+@onready var score_lable:RichTextLabel = get_node("Control/VBoxContainer/ScoreLabel")
 func _ready() -> void:
-	score_lable.text = "Score: " + str(EventBus.final_score)
+	score_lable.text = "[color=gold][outline_size={5}][font_size={50}]Score: "+ str(EventBus.final_score) + "[/font_size][/outline_size][/color] " 
 	pass
 
 func _process(delta: float) -> void:

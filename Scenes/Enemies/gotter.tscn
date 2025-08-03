@@ -1,15 +1,11 @@
 [gd_scene load_steps=9 format=3 uid="uid://jtuq4uqvde3y"]
 
 [ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_4ry3o"]
-[ext_resource type="Script" path="res://Scripts/Enemies/gotter.gd" id="2_0f6d7"]
+[ext_resource type="Script" uid="uid://bf7q3vamthyl6" path="res://Scripts/Enemies/gotter.gd" id="2_0f6d7"]
 [ext_resource type="Texture2D" uid="uid://bm66c7dupk7fi" path="res://Sprites/Enemies/Gotter.png" id="2_3rbnc"]
 [ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_60bnb"]
 [ext_resource type="Material" uid="uid://d72pxehmuxuq" path="res://Resources/Shaders/flash_shader.tres" id="4_h40cr"]
-
-[sub_resource type="Curve" id="Curve_h40cr"]
-_limits = [0.0, 130.35, 0.0, 22.56]
-_data = [Vector2(0, 0), 0.0, 5.77793, 0, 1, Vector2(22.56, 130.35), 5.77793, 0.0, 1, 0]
-point_count = 2
+[ext_resource type="Curve" uid="uid://cpuoj4imcs0sj" path="res://Resources/HealthCurves/GotterCurve.tres" id="4_iiuo4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h40cr"]
 radius = 22.4582
@@ -21,14 +17,16 @@ height = 114.0
 
 [node name="Gotter" instance=ExtResource("1_4ry3o")]
 script = ExtResource("2_0f6d7")
-max_speed = 10.0
+max_speed = 6.0
 dash_mult = 0.75
 number_of_projectiles = 2
+edge_gap = 200
 capture_score = 0
 projectile_scene = ExtResource("3_60bnb")
 decay_wait_time = 3.0
-decay_rate = SubResource("Curve_h40cr")
+decay_rate = ExtResource("4_iiuo4")
 idle_state_time = 1.3
+telegraph_state_time = 0.6
 move_state_time = 2.0
 windup_state_time = 0.3
 attack_state_time = 1.0

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://p3xsnxuqwvoo"]
+[gd_scene load_steps=0 format=3 uid="uid://p3xsnxuqwvoo"]
 
 [node name="Hit spark" type="CPUParticles2D"]
 emitting = false

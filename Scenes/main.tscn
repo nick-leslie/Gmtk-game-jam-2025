@@ -1,17 +1,32 @@
-[gd_scene load_steps=9 format=3 uid="uid://bgso3ttnhyoq"]
+[gd_scene load_steps=20 format=3 uid="uid://bgso3ttnhyoq"]
 
 [ext_resource type="Script" uid="uid://sueks7qs46og" path="res://Scripts/Spawner.gd" id="1_21xkr"]
 [ext_resource type="Script" uid="uid://cq4kpe8tmhqtt" path="res://Waves/WaveGenerator.gd" id="2_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bw8emd6n56kf8" path="res://Scenes/player.tscn" id="2_8gbba"]
-[ext_resource type="Resource" uid="uid://c1dk07knml4qh" path="res://Waves/Wanguine.tres" id="3_344ge"]
+[ext_resource type="Resource" uid="uid://c1dk07knml4qh" path="res://Waves/Easy/Wanguine.tres" id="3_344ge"]
+[ext_resource type="Resource" uid="uid://bth6i5k7uex21" path="res://Waves/Easy/Gotter.tres" id="3_fevyy"]
 [ext_resource type="Texture2D" uid="uid://cps670kh28m3n" path="res://Sprites/TouchGrass.png" id="4_6bp64"]
+[ext_resource type="Resource" uid="uid://2x5s4upa34ox" path="res://Waves/Easy/Mowel.tres" id="4_hibaj"]
 [ext_resource type="PackedScene" uid="uid://ecmn2amgrast" path="res://Scenes/ui/combo_ui.tscn" id="5_kry3j"]
+[ext_resource type="Resource" uid="uid://dxqp5577sfpxe" path="res://Waves/Easy/Ottgle.tres" id="5_pdsj5"]
 [ext_resource type="PackedScene" uid="uid://burdmr57e40wc" path="res://Scenes/ui/player_heatlh_ui.tscn" id="6_21xkr"]
+[ext_resource type="Resource" uid="uid://c155r7lwor8qb" path="res://Waves/Medium/Gotter_Ottgle.tres" id="7_ee4r6"]
 [ext_resource type="AudioStream" uid="uid://cdpy0ff7vu2ld" path="res://SFX/Soundtrack.wav" id="8_344ge"]
+[ext_resource type="Resource" uid="uid://8jxn8qmivlg2" path="res://Waves/Medium/Mowel_Wanguine.tres" id="8_gt3je"]
+[ext_resource type="Resource" uid="uid://nicrlrxprd3l" path="res://Waves/Medium/Ottgle_Mowel.tres" id="9_3pmx8"]
+[ext_resource type="Resource" uid="uid://bwruwh1fiid77" path="res://Waves/Medium/Wanguine_Gotter.tres" id="10_u50mg"]
+[ext_resource type="Resource" uid="uid://b4sru7g2slft7" path="res://Waves/Hard/Gotter_Ottgle_Mowel.tres" id="11_cbgmd"]
+[ext_resource type="Resource" uid="uid://wnnt2l40gqac" path="res://Waves/Hard/Gotter_Ottgle_Wanguine.tres" id="12_1w6v2"]
+[ext_resource type="Resource" uid="uid://k831gkscum5w" path="res://Waves/Hard/Gotter_Wanguine_Mowel.tres" id="13_ueoa1"]
+[ext_resource type="Resource" uid="uid://bgdbtukvfcgd1" path="res://Waves/Hard/Wanguine_Mowel_Ottgle.tres" id="14_6vcvc"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_21xkr")
-waves = Array[ExtResource("2_6bp64")]([ExtResource("3_344ge")])
+easy_waves = Array[ExtResource("2_6bp64")]([ExtResource("3_fevyy"), ExtResource("4_hibaj"), ExtResource("5_pdsj5"), ExtResource("3_344ge")])
+med_waves = Array[ExtResource("2_6bp64")]([ExtResource("7_ee4r6"), ExtResource("8_gt3je"), ExtResource("9_3pmx8"), ExtResource("10_u50mg")])
+hard_waves = Array[ExtResource("2_6bp64")]([ExtResource("11_cbgmd"), ExtResource("12_1w6v2"), ExtResource("13_ueoa1"), ExtResource("14_6vcvc")])
+med_threashold = 10
+hard_threashold = 20
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -27,6 +42,7 @@ offset_bottom = 0.119995
 size_flags_horizontal = 4
 
 [node name="Player" parent="." instance=ExtResource("2_8gbba")]
+combo_decay_timeout = 1.0
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
 layer = -7
