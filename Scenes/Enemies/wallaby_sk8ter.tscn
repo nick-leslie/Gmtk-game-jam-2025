@@ -1,5 +1,44 @@
-[gd_scene load_steps=2 format=3 uid="uid://bq6ovk20gkdxq"]
+[gd_scene load_steps=8 format=3 uid="uid://bq6ovk20gkdxq"]
 
 [ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_oiqmr"]
+[ext_resource type="Material" uid="uid://d72pxehmuxuq" path="res://Resources/Shaders/flash_shader.tres" id="2_iqaix"]
+[ext_resource type="Script" uid="uid://clvcfnfqst2yh" path="res://Scripts/Enemies/wallaby_sk_8_ter.gd" id="2_n5kk6"]
+[ext_resource type="Texture2D" uid="uid://8f6iq12ksqrs" path="res://Sprites/Enemies/Wanguine.png" id="3_bg4h2"]
+[ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_bw465"]
+[ext_resource type="Curve" uid="uid://cnhhskvkms7d3" path="res://Resources/HealthCurves/wanguine_curve.tres" id="4_iqaix"]
 
-[node name="Enemy" instance=ExtResource("1_oiqmr")]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n5kk6"]
+radius = 38.0
+height = 116.0
+
+[node name="Wanguine" instance=ExtResource("1_oiqmr")]
+material = ExtResource("2_iqaix")
+script = ExtResource("2_n5kk6")
+max_speed = 9.0
+dash_mult = 0.75
+number_of_dashes = 3
+dash_cone_degrees = 80
+edge_gap = 100
+capture_score = 4
+projectile_scene = ExtResource("3_bw465")
+decay_wait_time = 7.0
+decay_rate = ExtResource("4_iqaix")
+idle_state_time = 1.5
+telegraph_state_time = 0.3
+move_state_time = 1.4
+windup_state_time = 0.0
+attack_state_time = 0.0
+dash_windup_state_time = 1.0
+dash_state_time = 4.0
+
+[node name="EnemySprite" parent="." index="0"]
+material = ExtResource("2_iqaix")
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("3_bg4h2")
+
+[node name="EnemyArea" parent="." index="1"]
+script = null
+
+[node name="EnemyHitbox" parent="EnemyArea" index="0"]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_n5kk6")

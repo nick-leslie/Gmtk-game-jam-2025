@@ -74,12 +74,12 @@ var current_dash_direction: Vector2 = Vector2.ZERO
 
 enum State {
 	IDLE,
-	TELEGRAPH,
+	TELEGRAPH, #Before moving
 	MOVE,
-	WINDUP,
+	WINDUP, #Before attacking
 	ATTACK,
 	RUNANDGUN,
-	DASHWINDUP,
+	DASHWINDUP, #Before dashing
 	DASH
 }
 
@@ -281,16 +281,24 @@ func idleTransition(delta: float) -> State: # Default transition strucuture for 
 		return State.IDLE
 
 func telegraphTransition(delta: float) -> State:
-	return State.TELEGRAPH
-	pass
+	if telegraph_elapsed_time < telegraph_state_time:
+		telegraph_elapsed_time += delta
+		return State.TELEGRAPH
+	else:
+		telegraph_elapsed_time = 0.0
+		return State.MOVE
 
 func moveTransition(delta: float) -> State:
 	return State.IDLE
 	pass
 
 func windupTransition(delta: float) -> State:
-	return State.IDLE
-	pass
+	if windup_elapsed_time < windup_state_time:
+		windup_elapsed_time += delta
+		return State.WINDUP
+	else:
+		windup_elapsed_time = 0.0
+		return State.ATTACK
 
 func attackTransition(delta: float) -> State:
 	return State.IDLE
@@ -301,8 +309,13 @@ func runAndGunTransition(delta: float) -> State:
 	pass
 
 func dashWindupTransition(delta: float) -> State:
-	return State.DASHWINDUP
-	pass
+	if dash_windup_elapsed_time < dash_windup_state_time:
+		dash_windup_elapsed_time += delta
+		#print("In dash windup state")
+		return State.DASHWINDUP
+	else:
+		dash_windup_elapsed_time = 0.0
+		return State.DASH
 
 func dashTransition(delta: float) -> State:
 	return State.IDLE
@@ -482,9 +495,14 @@ func runAndGunState(delta: float):
 	pass
 
 func dashWindupState(delta: float):
+	$DashWindupSprite.visible = true
 	pass
 
 func dashState(delta: float):
+	
+	if $DashWindupSprite.visible == true:
+		$DashWindupSprite.visible = false
+		
 	var dash_period = dash_state_time / number_of_dashes
 	var dash_phase = int(dash_elapsed_time / dash_period)
 	dash_speed = max_speed * dash_mult
