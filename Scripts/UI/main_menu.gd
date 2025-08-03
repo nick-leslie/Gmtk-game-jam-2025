@@ -10,6 +10,7 @@ func _process(delta: float) -> void:
 
 func _on_play_pressed() -> void:
 	select_sfx.play()
+	EventBus.NewGame.emit()
 	get_tree().change_scene_to_file("res://Scenes/main.tscn") #TODO make a level select screen
 	
 

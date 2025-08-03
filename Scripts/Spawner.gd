@@ -4,16 +4,20 @@ extends Node
 var enemys
 var current_wave: Array[Enemy]
 
+var game_over_status = false
 
 func _ready() -> void:
-	pass
+	EventBus.GameOver.connect(game_over)
+	EventBus.NewGame.connect(new_game)
+	
 
 func _process(delta: float) -> void:
 	for enemy in current_wave:
 		if is_instance_valid(enemy):
 			return
 	current_wave = []
-	spawn_new_wave()
+	if !game_over_status:
+		spawn_new_wave()
 	pass
 
 
@@ -33,3 +37,9 @@ func get_random_screen_position() -> Vector2:
 		randf() * viewport_size.x,
 		randf() * viewport_size.y
 	)
+
+func game_over():
+	game_over_status = true
+
+func new_game():
+	game_over_status = false
