@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bgso3ttnhyoq"]
+[gd_scene load_steps=8 format=3 uid="uid://bgso3ttnhyoq"]
 
 [ext_resource type="Script" uid="uid://sueks7qs46og" path="res://Scripts/Spawner.gd" id="1_21xkr"]
 [ext_resource type="Script" uid="uid://cq4kpe8tmhqtt" path="res://Waves/WaveGenerator.gd" id="2_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bw8emd6n56kf8" path="res://Scenes/player.tscn" id="2_8gbba"]
 [ext_resource type="Resource" uid="uid://dl2u0pcq6pq1f" path="res://Waves/Easy.tres" id="3_344ge"]
+[ext_resource type="Texture2D" uid="uid://cps670kh28m3n" path="res://Sprites/TouchGrass.png" id="4_6bp64"]
 [ext_resource type="PackedScene" uid="uid://ecmn2amgrast" path="res://Scenes/ui/combo_ui.tscn" id="5_kry3j"]
 [ext_resource type="PackedScene" uid="uid://burdmr57e40wc" path="res://Scenes/ui/player_heatlh_ui.tscn" id="6_21xkr"]
 
@@ -15,6 +16,12 @@ hard_waves = Array[ExtResource("2_6bp64")]([ExtResource("3_344ge")])
 edge_limit = 100.0
 medium_threashold = 15
 hard_threashold = 30
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 6048.0
+offset_bottom = 4032.0
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("4_6bp64")
 
 [node name="Player" parent="." instance=ExtResource("2_8gbba")]
 

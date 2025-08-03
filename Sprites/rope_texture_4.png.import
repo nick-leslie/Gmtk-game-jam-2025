@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cq0p0i28mtgxj"
-path="res://.godot/imported/rope_texture.png-34f31c951ed3bf1193d4c7c761bb1ab4.ctex"
+uid="uid://ipmplwd1tg07"
+path="res://.godot/imported/rope_texture_4.png-06c7034c5bb0c72d32c2b8fc7b3e26b1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://rope_texture.png"
-dest_files=["res://.godot/imported/rope_texture.png-34f31c951ed3bf1193d4c7c761bb1ab4.ctex"]
+source_file="res://Sprites/rope_texture_4.png"
+dest_files=["res://.godot/imported/rope_texture_4.png-06c7034c5bb0c72d32c2b8fc7b3e26b1.ctex"]
 
 [params]
 
