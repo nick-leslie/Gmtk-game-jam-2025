@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Wave" load_steps=5 format=3 uid="uid://bgdbtukvfcgd1"]
+
+[ext_resource type="Script" uid="uid://cq4kpe8tmhqtt" path="res://Waves/WaveGenerator.gd" id="1_luoh8"]
+[ext_resource type="PackedScene" uid="uid://bq6ovk20gkdxq" path="res://Scenes/Enemies/wallaby_sk8ter.tscn" id="1_m6w1b"]
+[ext_resource type="PackedScene" uid="uid://cisgmgiyixput" path="res://Scenes/Enemies/mowel.tscn" id="2_rrv65"]
+[ext_resource type="PackedScene" uid="uid://c3v30e6n6jbwd" path="res://Scenes/Enemies/ottgle.tscn" id="3_3mr53"]
+
+[resource]
+script = ExtResource("1_luoh8")
+Enemys = Array[PackedScene]([ExtResource("1_m6w1b"), ExtResource("2_rrv65"), ExtResource("3_3mr53")])
+metadata/_custom_type_script = "uid://cq4kpe8tmhqtt"

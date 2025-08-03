@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c3v30e6n6jbwd"]
+[gd_scene load_steps=10 format=3 uid="uid://c3v30e6n6jbwd"]
 
 [ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_366os"]
 [ext_resource type="Script" uid="uid://whxlnigxtbwl" path="res://Scripts/Enemies/test_enemy.gd" id="2_kksxm"]
@@ -16,6 +16,10 @@ point_count = 2
 shader = ExtResource("4_s37h6")
 shader_parameter/active = false
 shader_parameter/flash_color = Color(1, 1, 1, 1)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_i7old"]
+radius = 28.1356
+height = 87.9957
 
 [node name="Ottgle" instance=ExtResource("1_366os")]
 script = ExtResource("2_kksxm")
@@ -35,7 +39,9 @@ scale = Vector2(0.021, 0.021)
 texture = ExtResource("4_ca8xo")
 
 [node name="EnemyHitbox" parent="EnemyArea" index="0"]
-position = Vector2(-0.5, 0.5)
+position = Vector2(-10, 4)
+rotation = -0.659734
+shape = SubResource("CapsuleShape2D_i7old")
 
 [node name="CaptureSFX2" type="AudioStreamPlayer" parent="." index="4"]
 stream = ExtResource("6_i7old")
