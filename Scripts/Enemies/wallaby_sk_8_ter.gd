@@ -35,17 +35,10 @@ func moveTransition(delta: float) -> State:
 
 
 func dashTransition(delta: float) -> State:
-	var random_next_state = randi_range(1, 6)
-	var next_state = State.DASH
 	
 	if dash_elapsed_time < dash_state_time:
 		dash_elapsed_time += delta
-		return next_state
+		return State.DASH
 	else:
-		match random_next_state:
-			1:
-				next_state = State.TELEGRAPH
-			2, 3, 4, 5, 6:
-				next_state = State.IDLE
 		dash_elapsed_time = 0.0
-		return next_state
+		return State.IDLE
