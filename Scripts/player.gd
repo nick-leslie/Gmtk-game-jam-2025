@@ -235,7 +235,9 @@ func reduce_health():
 
 func game_over_check():
 	if current_health == 0:
-		EventBus.GameOver.emit()
+		var score_ui = get_parent().get_node("CanvasLayer/ComboUI")
+		print("score ",score_ui.score)
+		EventBus.GameOver.emit(score_ui.score)
 		print("Game over!")
 
 		get_tree().change_scene_to_file("res://Scenes/ui/game_over.tscn")
