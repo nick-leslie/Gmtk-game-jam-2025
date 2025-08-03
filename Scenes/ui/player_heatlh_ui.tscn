@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://burdmr57e40wc"]
+[gd_scene load_steps=3 format=3 uid="uid://burdmr57e40wc"]
 
 [ext_resource type="Script" uid="uid://b58h3y0du5c8e" path="res://Scripts/UI/player_heatlh_ui.gd" id="1_xyosg"]
+[ext_resource type="PackedScene" uid="uid://dbj3bds0122xw" path="res://Scenes/ui/heart_icon.tscn" id="2_jdogr"]
 
 [node name="PlayerHeatlhUI" type="Control"]
 layout_mode = 3
@@ -9,9 +10,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.999672, 1)
 script = ExtResource("1_xyosg")
+distance = 100
 
 [node name="PlayerHealth" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -23,3 +27,16 @@ bbcode_enabled = true
 text = "[font_size={50}]Health: 0[/font_size]
 "
 fit_content = true
+
+[node name="Heart Ui" parent="." instance=ExtResource("2_jdogr")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.00012
+anchor_right = 1.00012
+offset_left = -261.685
+offset_top = 137.0
+offset_right = -261.685
+offset_bottom = 137.0
+grow_horizontal = 0
+scale = Vector2(0.200002, 0.200002)
+metadata/_edit_use_anchors_ = true
