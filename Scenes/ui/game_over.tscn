@@ -54,17 +54,24 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="GameOver" type="Label" parent="Control/VBoxContainer"]
+[node name="GameOver" type="RichTextLabel" parent="Control/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_76r4p")
 theme_type_variation = &"HeaderLarge"
-text = "Game Over!"
+bbcode_enabled = true
+text = "[color=gold][outline_size={5}][font_size={85}]game over![/font_size][/outline_size][/color]
+"
+fit_content = true
+horizontal_alignment = 1
 
-[node name="ScoreLabel" type="Label" parent="Control/VBoxContainer"]
+[node name="ScoreLabel" type="RichTextLabel" parent="Control/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_76r4p")
 theme_type_variation = &"HeaderMedium"
-text = "Score: 0"
+bbcode_enabled = true
+text = "[color=gold][outline_size={5}][font_size={50}]Score: 0[/font_size][/outline_size][/color]
+"
+fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
