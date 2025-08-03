@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dnoyk0ai2n5dx"]
+[gd_scene load_steps=6 format=3 uid="uid://dnoyk0ai2n5dx"]
 
 [ext_resource type="Theme" uid="uid://dfxk3tpasb5ib" path="res://Themes/tltle_theme.tres" id="1_c2fhx"]
 [ext_resource type="Script" uid="uid://cln3gdx8eq6ao" path="res://Scripts/UI/main_menu.gd" id="1_sn23y"]
+[ext_resource type="Texture2D" uid="uid://cs6dddllequhh" path="res://Sprites/TitleScreen.png" id="2_1u1h3"]
 [ext_resource type="Theme" uid="uid://cb154xkmy8usu" path="res://Themes/main_menu_buttons.tres" id="3_baxwh"]
 [ext_resource type="AudioStream" uid="uid://bsdsial2l5fev" path="res://SFX/Select.wav" id="4_baxwh"]
 
@@ -17,15 +18,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TempBackground" type="ColorRect" parent="Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.227342, 0.506661, 0.661587, 1)
+[node name="Background" type="TextureRect" parent="Control"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_1u1h3")
 
 [node name="Title" type="Label" parent="Control"]
 layout_mode = 1
