@@ -45,6 +45,7 @@ text = "[color=gold][outline_size={5}][font_size={100}]Score: 0[/font_size][/out
 fit_content = true
 
 [node name="Max" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 3.0
 offset_top = 139.0
