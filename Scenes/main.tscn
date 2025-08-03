@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cps670kh28m3n" path="res://Sprites/TouchGrass.png" id="4_6bp64"]
 [ext_resource type="PackedScene" uid="uid://ecmn2amgrast" path="res://Scenes/ui/combo_ui.tscn" id="5_kry3j"]
 [ext_resource type="PackedScene" uid="uid://burdmr57e40wc" path="res://Scenes/ui/player_heatlh_ui.tscn" id="6_21xkr"]
-[ext_resource type="AudioStream" uid="uid://bjblcx56jt7yp" path="res://SFX/Soundtrack.wav" id="8_344ge"]
+[ext_resource type="AudioStream" uid="uid://cdpy0ff7vu2ld" path="res://SFX/Soundtrack.wav" id="8_344ge"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_21xkr")
