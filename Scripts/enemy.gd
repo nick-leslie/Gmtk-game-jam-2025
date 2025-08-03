@@ -10,12 +10,19 @@ const Utils = preload("res://Scripts/utils.gd")
 @export var max_speed: float
 @export var dash_mult: float
 @export var number_of_projectiles: int
+@export var number_of_dashes: int = 4
+@export var dash_cone_degrees: int = 60
 @export var telegraph_blink_count: int = 3 # How many times you want the telegraph to blink
 @export var windup_blink_count : int = 3 # How many times you want the windup to blink
 @export var edge_gap: int = 50 # Pixels away it can get to the edge
 @export var capture_score:int
 var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
 var current_projectiles := 0 # Number of projectiles shot
+
+@export var projectile_scene: PackedScene
+
+var projectile_direction := Vector2.ZERO
+var projectile_timer := 0.0
 
 @export_group("capture stats")
 @export var decay_wait_time:float # time we have till decay begins on capture progress
@@ -45,10 +52,11 @@ var attack_elapsed_time := 0.0
 @export var run_and_gun_state_time: float
 var run_and_gun_elapsed_time := 0.0
 
+@export var dash_windup_state_time: float
+var dash_windup_elapsed_time := 0.0
+
 @export var dash_state_time: float
 var dash_elapsed_time := 0.0
-
-
 
 @export_group("Raycast")
 @export var ray_count:int = 10
@@ -58,6 +66,12 @@ var dash_elapsed_time := 0.0
 
 @onready var enemey_colider:Area2D = get_node("EnemyArea")
 
+var dash_timer := 0.0
+var previous_dash_number = 0
+
+var dash_speed = max_speed * dash_mult
+var current_dash_direction: Vector2 = Vector2.ZERO
+
 enum State {
 	IDLE,
 	TELEGRAPH,
@@ -65,12 +79,14 @@ enum State {
 	WINDUP,
 	ATTACK,
 	RUNANDGUN,
+	DASHWINDUP,
 	DASH
 }
 
 @onready var capture_sfx:AudioStreamPlayer = get_node("CaptureSFX")
 var captured = false
 var current_state = State.IDLE
+var previous_state = State.IDLE
 
 var direction := Vector2(
 		randi_range(-1, 1),
@@ -95,6 +111,25 @@ func _ready(): #setup
 func _process(delta: float) -> void: #loop
 	state_logic(delta)
 	current_state = get_transition(delta)
+	if current_state != previous_state:
+		match current_state:
+			State.IDLE:
+				print("In IDLE state")
+			State.TELEGRAPH:
+				print("In TELEGRAPH state")
+			State.MOVE:
+				print("In MOVE state")
+			State.WINDUP:
+				print("In WINDUP state")
+			State.ATTACK:
+				print("In ATTACK state")
+			State.RUNANDGUN:
+				print("In RUNANDGUN state")
+			State.DASHWINDUP:
+				print("In DASHWINDUP state")
+			State.DASH:
+				print("In DASH state")
+	previous_state = current_state
 	if is_decaying:
 		decay_duration-=delta
 		capture_health = decay_rate.sample(decay_duration)
@@ -146,7 +181,7 @@ func get_x_from_y(curve: Curve, target_y: float, step: float = 0.1) -> float:
 	return closest_x
 
 func _on_area_entered(area) -> void:
-	if area.name == "HeadColliderBody" or area.name == "LineCollider" or area.name == "LineColliderBody":
+	if area.name == "LineCollider" or area.name == "LineColliderBody":
 		EventBus.EnemyCollision.emit()
 		print("Hit deteceted: " + area.name)
 		pass
@@ -209,6 +244,8 @@ func get_transition(delta: float) -> State:
 			return windupTransition(delta)
 		State.RUNANDGUN:
 			return runAndGunTransition(delta)
+		State.DASHWINDUP:
+			return dashWindupTransition(delta)
 		State.DASH:
 			return dashTransition(delta)
 	return State.IDLE #default is override
@@ -228,6 +265,8 @@ func state_logic(delta: float):
 			windupState(delta)
 		State.RUNANDGUN:
 			runAndGunState(delta)
+		State.DASHWINDUP:
+			dashWindupState(delta)
 		State.DASH:
 			dashState(delta)
 
@@ -259,6 +298,10 @@ func attackTransition(delta: float) -> State:
 
 func runAndGunTransition(delta: float) -> State:
 	return State.IDLE
+	pass
+
+func dashWindupTransition(delta: float) -> State:
+	return State.DASHWINDUP
 	pass
 
 func dashTransition(delta: float) -> State:
@@ -381,23 +424,22 @@ func moveState(delta: float): #Default movement behavior
 	# Move by vector
 	var offset = direction * magnitude
 	position += offset
+	
+	#Rotate to match direction
+	$EnemySprite.rotation  = direction.angle() + deg_to_rad(180)
+	$EnemySprite.flip_v = direction.x > 0
 
 	#Clamping to screen size
-	var margin = (sprite_size.x / 2) + edge_gap
-
-	if position.x < margin:
-		position.x = lerp(position.x, margin, 0.5)
-	elif position.x > screen_size.x - margin:
-		position.x = lerp(position.x, screen_size.x - margin, 0.5)
-
-	if position.y < margin:
-		position.y = lerp(position.y, margin, 0.5)
-	elif position.y > screen_size.y - margin:
-		position.y = lerp(position.y, screen_size.y - margin, 0.5)
+	screenClamp()
 
 func windupState(delta: float):
 	var mat = $EnemySprite.material as ShaderMaterial
-
+	
+	if windup_elapsed_time == 0.0:
+		projectile_direction = generate_direction()
+		#Rotate to match direction
+		$EnemySprite.rotation  = projectile_direction.angle() + deg_to_rad(180)
+		$EnemySprite.flip_v = direction.x > 0
 	# Dynamically figure out how long to blink for based on delta and windup blink counter
 	var windup_period = (windup_state_time / (windup_blink_count * 2))
 
@@ -412,10 +454,136 @@ func windupState(delta: float):
 func attackState(delta: float):
 	var mat = $EnemySprite.material as ShaderMaterial
 	mat.set_shader_parameter("active", false)
-	pass
+	#Do the first time the state is entered
+	if attack_elapsed_time == 0.0:
+		print("First time in attack state")
+		#projectile_direction = Utils.random_direction()
+		#projectile_direction = generate_direction()
+		projectile_timer = 0.0
+		current_projectiles = 0
+		
+	
+	var projectile_period = attack_state_time / number_of_projectiles
+	
+	if current_projectiles < number_of_projectiles:
+		projectile_timer += delta
+		if projectile_timer >= projectile_period:
+			projectile_timer -= projectile_period
+			var projectile = projectile_scene.instantiate()
+			projectile.set_direction(projectile_direction)
+			#Rotate to match direction
+			$EnemySprite.rotation  = projectile_direction.angle() + deg_to_rad(180)
+			$EnemySprite.flip_v = direction.x > 0
+			get_tree().current_scene.add_child(projectile)
+			projectile.global_position = global_position
+			current_projectiles += 1
 
 func runAndGunState(delta: float):
 	pass
 
-func dashState(delta: float):
+func dashWindupState(delta: float):
 	pass
+
+func dashState(delta: float):
+	var dash_period = dash_state_time / number_of_dashes
+	var dash_phase = int(dash_elapsed_time / dash_period)
+	dash_speed = max_speed * dash_mult
+
+	if dash_phase != previous_dash_number and dash_phase < number_of_dashes:
+		previous_dash_number = dash_phase
+		#current_dash_direction = change_direction()
+		direction = change_direction()
+	moveInDirection(direction, dash_speed)
+	screenClamp()
+
+func screenClamp():
+	var screen_size = get_viewport_rect().size
+	var texture_size = $EnemySprite.texture.get_size()
+	var sprite_size = texture_size * $EnemySprite.scale
+
+	# Clamping to screen size
+	var margin = (sprite_size.x / 2) + edge_gap
+
+	if position.x < margin:
+		position.x = lerp(position.x, margin, 0.5)
+	elif position.x > screen_size.x - margin:
+		position.x = lerp(position.x, screen_size.x - margin, 0.5)
+
+	if position.y < margin:
+		position.y = lerp(position.y, margin, 0.5)
+	elif position.y > screen_size.y - margin:
+		position.y = lerp(position.y, screen_size.y - margin, 0.5)
+
+func moveInDirection(new_direction: Vector2, new_magnitude: int):
+	var offset = new_direction * new_magnitude
+	position += offset
+	
+func generate_direction() -> Vector2:
+	var texture_size = $EnemySprite.texture.get_size()
+	var sprite_size = texture_size * $EnemySprite.scale
+	var enemy_radius = max(sprite_size.x, sprite_size.y) * 0.5
+	
+	#Repel enemy away from edge of screen if too close
+	var screen_size = get_viewport_rect().size
+	var repel_force := Vector2.ZERO
+	var global_pos = global_position
+
+	# Vector from screen center to NPC
+	var to_center = (screen_size * 0.5) - global_pos
+
+	# If we're near the edge, repel in the direction of `to_center` the closer to edge, the stronger the repel
+	var edge_distance = min(global_pos.x, screen_size.x - global_pos.x,
+					global_pos.y, screen_size.y - global_pos.y)
+
+	if edge_distance < edge_gap:
+		var repel_strength = (edge_gap - edge_distance) / edge_gap
+		repel_force = to_center.normalized() * repel_strength
+	else:
+		repel_force = Vector2.ZERO
+
+	# Generate random direction vector
+	# Determine edge proximity
+	var near_left = global_pos.x - enemy_radius < edge_gap
+	var near_right = global_pos.x + enemy_radius > screen_size.x - edge_gap
+	var near_top = global_pos.y - enemy_radius < edge_gap
+	var near_bottom = global_pos.y + enemy_radius > screen_size.y - edge_gap
+
+	# Try to find a safe direction
+	var max_attempts = 50
+	var found_valid = false
+
+	for i in max_attempts:
+		var angle = randf_range(0, TAU)
+		var test_direction = Vector2(cos(angle), sin(angle))
+
+		# Check if direction is trying to go toward an edge we’re near
+		var invalid = (
+			(near_left and test_direction.x < 0.0) or
+			(near_right and test_direction.x > 0.0) or
+			(near_top and test_direction.y < 0.0) or
+			(near_bottom and test_direction.y > 0.0)
+		)
+
+		if not invalid:
+			return test_direction.normalized()
+			
+
+	# If no safe direction found, default to something safe (e.g. toward center)
+	if not found_valid:
+		return (global_pos - screen_size * 0.5).normalized()
+	else:
+		return direction
+
+func change_direction() -> Vector2:
+	# Calculate the opposite direction
+	var opposite_direction = -direction.normalized()
+	var base_angle = opposite_direction.angle()
+	
+	# Adding random variation
+	var half_cone_rad = deg_to_rad(dash_cone_degrees / 2.0)
+	var random_angle_offset = randf_range(-half_cone_rad, half_cone_rad)
+	
+	var final_angle = base_angle + random_angle_offset
+	
+	var varied_direction = Vector2.RIGHT.rotated(final_angle)
+	return varied_direction

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Wave" load_steps=3 format=3 uid="uid://dl2u0pcq6pq1f"]
 
-[ext_resource type="PackedScene" uid="uid://c3v30e6n6jbwd" path="res://Scenes/Enemies/test_enemy.tscn" id="1_gg4ni"]
+[ext_resource type="PackedScene" path="res://Scenes/Enemies/gotter.tscn" id="1_gg4ni"]
 [ext_resource type="Script" uid="uid://cq4kpe8tmhqtt" path="res://Waves/WaveGenerator.gd" id="1_ugtx4"]
 
 [resource]

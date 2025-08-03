@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c3v30e6n6jbwd"]
+[gd_scene load_steps=9 format=3 uid="uid://c3v30e6n6jbwd"]
 
 [ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_366os"]
 [ext_resource type="Script" uid="uid://whxlnigxtbwl" path="res://Scripts/Enemies/test_enemy.gd" id="2_kksxm"]
 [ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_ca8xo"]
 [ext_resource type="Texture2D" uid="uid://c5hhapen6rqco" path="res://Sprites/Enemies/Ottgle.png" id="4_ca8xo"]
 [ext_resource type="Shader" uid="uid://dmp84e0bq5yjk" path="res://Resources/Shaders/flash_shader.gdshader" id="4_s37h6"]
+[ext_resource type="AudioStream" uid="uid://buy5omigq0yx4" path="res://SFX/Option2.wav" id="6_i7old"]
 
 [sub_resource type="Curve" id="Curve_ca8xo"]
 _limits = [0.0, 15.0, 0.0, 30.0]
@@ -18,13 +19,12 @@ shader_parameter/flash_color = Color(1, 1, 1, 1)
 
 [node name="Ottgle" instance=ExtResource("1_366os")]
 script = ExtResource("2_kksxm")
-projectile_scene = ExtResource("3_ca8xo")
 number_of_projectiles = 5
 edge_gap = 30
+projectile_scene = ExtResource("3_ca8xo")
 decay_rate = SubResource("Curve_ca8xo")
 idle_state_time = 3.0
 telegraph_state_time = 0.5
-move_state_time = 1.0
 windup_state_time = 0.3
 attack_state_time = 1.5
 
@@ -36,3 +36,6 @@ texture = ExtResource("4_ca8xo")
 
 [node name="EnemyHitbox" parent="EnemyArea" index="0"]
 position = Vector2(-0.5, 0.5)
+
+[node name="CaptureSFX2" type="AudioStreamPlayer" parent="." index="4"]
+stream = ExtResource("6_i7old")

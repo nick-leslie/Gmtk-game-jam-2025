@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://d72pxehmuxuq"]
+
+[ext_resource type="Shader" uid="uid://dmp84e0bq5yjk" path="res://Resources/Shaders/flash_shader.gdshader" id="1_pvkka"]
+
+[resource]
+shader = ExtResource("1_pvkka")
+shader_parameter/active = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)

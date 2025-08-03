@@ -22,10 +22,13 @@ func _process(delta: float) -> void:
 	# Move by vector
 	var offset = direction * speed
 	position += offset
-	pass
+	
+	#Rotate to match direction
+	rotation  = direction.angle() + deg_to_rad(180)
+	$ProjectileSprite.flip_v = direction.x > 0
 
 func _on_area_entered(area):
-	if area.name == "HeadColliderBody" or area.name == "LineCollider" or area.name == "LineColliderBody":
+	if area.name == "LineCollider" or area.name == "LineColliderBody":
 		EventBus.ProjectileCollision.emit()
 		#print("Hit detected: " + area.name)
 		

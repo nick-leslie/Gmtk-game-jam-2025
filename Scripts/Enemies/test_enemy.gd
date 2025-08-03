@@ -1,10 +1,5 @@
 extends Enemy
 
-@export var projectile_scene: PackedScene
-
-var projectile_direction := Vector2.ZERO
-var projectile_timer := 0.0
-
 #Transistion functions
 func idleTransition(delta: float):
 	var random_next_state = randi_range(1, 2)

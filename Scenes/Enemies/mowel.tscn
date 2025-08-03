@@ -1,0 +1,34 @@
+[gd_scene load_steps=8 format=3 uid="uid://cisgmgiyixput"]
+
+[ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_lhl6k"]
+[ext_resource type="Texture2D" uid="uid://cy036kvf4o22f" path="res://Sprites/Enemies/Mowel.png" id="2_8b6l7"]
+[ext_resource type="Script" uid="uid://n3oudpq54nx5" path="res://Scripts/Enemies/mowel.gd" id="2_f31rp"]
+[ext_resource type="Material" uid="uid://d72pxehmuxuq" path="res://Resources/Shaders/flash_shader.tres" id="2_waptr"]
+[ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_f31rp"]
+[ext_resource type="Curve" uid="uid://bmlsewcpo3kki" path="res://Resources/HealthCurves/MowelCurve.tres" id="4_3j3ch"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_waptr"]
+radius = 37.6052
+height = 128.0
+
+[node name="Mowel" instance=ExtResource("1_lhl6k")]
+script = ExtResource("2_f31rp")
+number_of_projectile_waves = 2
+projectile_cone = 60
+max_speed = 0.0
+dash_mult = 0.0
+number_of_projectiles = 10
+capture_score = 0
+projectile_scene = ExtResource("3_f31rp")
+decay_wait_time = 3.0
+decay_rate = ExtResource("4_3j3ch")
+
+[node name="EnemySprite" parent="." index="0"]
+material = ExtResource("2_waptr")
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("2_8b6l7")
+
+[node name="EnemyHitbox" parent="EnemyArea" index="0"]
+position = Vector2(5, 4)
+rotation = 0.23911
+shape = SubResource("CapsuleShape2D_waptr")
