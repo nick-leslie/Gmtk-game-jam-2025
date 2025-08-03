@@ -31,12 +31,28 @@ salvage_score_increase = 5
 [node name="PlayerHeatlhUI" parent="CanvasLayer" instance=ExtResource("6_21xkr")]
 size_flags_horizontal = 4
 
-[node name="Background" type="TextureRect" parent="CanvasLayer"]
-z_index = -18
-offset_right = 6048.0
-offset_bottom = 4032.0
-scale = Vector2(0.35, 0.35)
-size_flags_horizontal = 4
-texture = ExtResource("4_6bp64")
-
 [node name="Player" parent="." instance=ExtResource("2_8gbba")]
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+layer = -7
+
+[node name="Background" type="TextureRect" parent="CanvasLayer2"]
+z_index = -1752
+z_as_relative = false
+anchors_preset = -1
+anchor_left = -0.068
+anchor_top = -0.188
+anchor_right = 1.042
+anchor_bottom = 1.119
+offset_left = 13.5599
+offset_top = 0.0398865
+offset_right = 3930.36
+offset_bottom = 2620.48
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.35, 0.35)
+size_flags_horizontal = 6
+size_flags_vertical = 3
+texture = ExtResource("4_6bp64")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
