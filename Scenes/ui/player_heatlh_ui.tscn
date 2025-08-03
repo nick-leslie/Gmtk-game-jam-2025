@@ -1,34 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://burdmr57e40wc"]
+[gd_scene load_steps=3 format=3 uid="uid://burdmr57e40wc"]
 
 [ext_resource type="Script" uid="uid://b58h3y0du5c8e" path="res://Scripts/UI/player_heatlh_ui.gd" id="1_xyosg"]
-[ext_resource type="Texture2D" uid="uid://bf6f0opv4uvjq" path="res://Sprites/Enemies/catfish.png" id="2_oxs8d"]
-[ext_resource type="Texture2D" uid="uid://bm66c7dupk7fi" path="res://Sprites/Enemies/Gotter.png" id="3_gpcje"]
-[ext_resource type="Texture2D" uid="uid://cy036kvf4o22f" path="res://Sprites/Enemies/Mowel.png" id="4_bvcdt"]
-[ext_resource type="Texture2D" uid="uid://c5hhapen6rqco" path="res://Sprites/Enemies/Ottgle.png" id="5_1myyb"]
-[ext_resource type="Texture2D" uid="uid://8f6iq12ksqrs" path="res://Sprites/Enemies/Wanguine.png" id="6_ja2n3"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_rdlk0"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_oxs8d")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_gpcje")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_bvcdt")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_1myyb")
-}, {
-"duration": 1.0,
-"texture": ExtResource("6_ja2n3")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+[ext_resource type="PackedScene" uid="uid://dbj3bds0122xw" path="res://Scenes/ui/heart_icon.tscn" id="2_jdogr"]
 
 [node name="PlayerHeatlhUI" type="Control"]
 layout_mode = 3
@@ -37,9 +10,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.999672, 1)
 script = ExtResource("1_xyosg")
+distance = 100
 
 [node name="PlayerHealth" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -52,19 +28,15 @@ text = "[font_size={50}]Health: 0[/font_size]
 "
 fit_content = true
 
-[node name="Control" type="Control" parent="."]
+[node name="Heart Ui" parent="." instance=ExtResource("2_jdogr")]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -40.0
+anchors_preset = -1
+anchor_left = 1.00012
+anchor_right = 1.00012
+offset_left = -261.685
+offset_top = 137.0
+offset_right = -261.685
+offset_bottom = 137.0
 grow_horizontal = 0
-grow_vertical = 0
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Control"]
-scale = Vector2(0.07275, 0.10175)
-sprite_frames = SubResource("SpriteFrames_rdlk0")
-autoplay = "default"
+scale = Vector2(0.200002, 0.200002)
+metadata/_edit_use_anchors_ = true
