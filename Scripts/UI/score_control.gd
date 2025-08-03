@@ -1,5 +1,5 @@
 extends Control
-
+class_name  ScoreControl
 @onready var combo_counnter:RichTextLabel = get_node("Combo")
 @onready var score_counter:RichTextLabel = get_node("Score")
 @onready var max_combo_counter:RichTextLabel = get_node("Max")

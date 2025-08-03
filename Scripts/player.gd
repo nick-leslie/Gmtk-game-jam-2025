@@ -44,6 +44,7 @@ func _ready():
 	combo_decay_timer.wait_time = combo_decay_timeout
 	combo_decay_timer.timeout.connect(decay_combo)
 	combo_decay_timer.stop()
+	hit_sfx.finished.connect(game_over_check)
 	add_child(combo_decay_timer)
 	pass
 
@@ -69,7 +70,7 @@ func _physics_process(delta: float) -> void:
 
 	var pos = mouse_position
 	if Input.is_mouse_button_pressed( 1 ) and !been_hit and !is_offscreen: # Left click
-		
+
 		$Stylest/Knot.visible = true
 
 		if is_combo_in_danger == true:
@@ -163,7 +164,7 @@ func increase_combo():
 
 func clear_line():
 	line.clear_points()
-	head_collider.disabled = true
+	head_collider.set_deferred("disabled",true)
 	for child in line_colider.get_children():
 		child.queue_free()
 	drawing = false
@@ -193,7 +194,7 @@ func on_loop_created(area):
 		remove_colider(closest_index-2)
 		var point_count = line.get_point_count()
 		for i in range(closest_index+1,point_count+1):
-			if closest_index < line.points.size():
+			if closest_index+1 < line.points.size():
 				line.remove_point(closest_index+1)
 				remove_colider(i)
 
@@ -217,6 +218,7 @@ func hit_projectile():
 	#print("Hit projectile")
 	#print("Been hit status: " + str(been_hit))
 	if Input.is_mouse_button_pressed( 1 ) and !been_hit:
+		hit_sfx.play()
 		reduce_health()
 
 func reduce_health():
@@ -226,13 +228,19 @@ func reduce_health():
 	if current_health > 0: #making sure health doesn't go negative
 		current_health -= 1
 
-	if current_health == 0:
-		EventBus.GameOver.emit()
-		print("Game over!")
-		await hit_sfx.finished
-		get_tree().change_scene_to_file("res://Scenes/ui/game_over.tscn")
+
 
 	EventBus.SetPlayerHealth.emit(current_health)
+
+
+func game_over_check():
+	if current_health == 0:
+		var score_ui = get_parent().get_node("CanvasLayer/ComboUI")
+		print("score ",score_ui.score)
+		EventBus.GameOver.emit(score_ui.score)
+		print("Game over!")
+
+		get_tree().change_scene_to_file("res://Scenes/ui/game_over.tscn")
 
 func remove_colider(index:int):
 	if col_shape_dict.has(index):

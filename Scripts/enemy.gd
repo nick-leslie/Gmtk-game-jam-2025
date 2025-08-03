@@ -18,6 +18,7 @@ const Utils = preload("res://Scripts/utils.gd")
 @export var capture_score:int
 var telegraph_blink_counter := 0 # Number of times the telegraph has blinked
 var current_projectiles := 0 # Number of projectiles shot
+@export var hurt_flash_duration:float
 
 @export var projectile_scene: PackedScene
 
@@ -72,6 +73,9 @@ var previous_dash_number = 0
 var dash_speed = max_speed * dash_mult
 var current_dash_direction: Vector2 = Vector2.ZERO
 
+@onready var hit_timer:Timer =  Timer.new()
+@onready var hit_spark:CPUParticles2D = get_node("Hit spark")
+
 enum State {
 	IDLE,
 	TELEGRAPH, #Before moving
@@ -93,8 +97,12 @@ var direction := Vector2(
 		randi_range(-1,1)
 		)
 var magnitude := randi_range(1, max_speed)
+var was_circled = false
+@onready var mat:ShaderMaterial
 
 func _ready(): #setup
+	mat = $EnemySprite.material.duplicate() as ShaderMaterial
+	$EnemySprite.material = mat # this is bad but its the nth hour
 	get_parent().add_child(debug_line)
 	enemey_colider.area_entered.connect(_on_area_entered)
 	EventBus.LoopCreated.connect(check_circled)
@@ -105,6 +113,9 @@ func _ready(): #setup
 	capture_bar.max_value = decay_rate.max_value
 	EventBus.GameOver.connect(on_game_over)
 	capture_sfx.finished.connect(on_capture)
+	hit_timer.wait_time = hurt_flash_duration
+	hit_timer.timeout.connect(stop_flash)
+	add_child(hit_timer)
 	reset_timer()
 	pass
 
@@ -187,11 +198,19 @@ func _on_area_entered(area) -> void:
 		pass
 
 func take_damage(combo:int):
-	capture_health += combo
-	if capture_health > decay_rate.max_domain:
-		print("captureded")
-	print(capture_health)
-	reset_timer()
+	print(was_circled)
+	if was_circled:
+		print("hit spark damn it")
+		was_circled = false
+		capture_health += combo
+		mat.set_shader_parameter("active", true)
+		hit_timer.start()
+		hit_spark.emitting = true
+		hit_spark.finished.connect(rest_partical)
+		reset_timer()
+
+func rest_partical():
+	hit_spark.emitting = false
 
 func reset_timer():
 	decay_start_timer.stop()
@@ -199,13 +218,20 @@ func reset_timer():
 	decay_start_timer.start()
 	is_decaying=false
 
+
 func check_circled() -> void:
-	print("gaming????")
 	var looped = check_line_col()
 	print(looped)
 	if looped:
+		print("was looped")
+		was_circled = true
 		EventBus.EnemeyCircled.emit()
 	pass # Replace with function body.
+
+func stop_flash():
+	mat.set_shader_parameter("active", false)
+	hit_timer.stop()
+	hit_timer.wait_time = hurt_flash_duration
 
 func get_normalized_value(current: float, min_value: float, max_value: float) -> float:
 	if max_value == min_value:
@@ -437,7 +463,7 @@ func moveState(delta: float): #Default movement behavior
 	# Move by vector
 	var offset = direction * magnitude
 	position += offset
-	
+
 	#Rotate to match direction
 	$EnemySprite.rotation  = direction.angle() + deg_to_rad(180)
 	$EnemySprite.flip_v = direction.x > 0
@@ -446,8 +472,8 @@ func moveState(delta: float): #Default movement behavior
 	screenClamp()
 
 func windupState(delta: float):
-	var mat = $EnemySprite.material as ShaderMaterial
-	
+
+
 	if windup_elapsed_time == 0.0:
 		projectile_direction = generate_direction()
 		#Rotate to match direction
@@ -474,10 +500,10 @@ func attackState(delta: float):
 		#projectile_direction = generate_direction()
 		projectile_timer = 0.0
 		current_projectiles = 0
-		
-	
+
+
 	var projectile_period = attack_state_time / number_of_projectiles
-	
+
 	if current_projectiles < number_of_projectiles:
 		projectile_timer += delta
 		if projectile_timer >= projectile_period:
@@ -538,12 +564,12 @@ func moveInDirection(new_direction: Vector2, new_magnitude: int):
 	#Rotate to match direction
 	$EnemySprite.rotation  = direction.angle() + deg_to_rad(180)
 	$EnemySprite.flip_v = direction.x > 0
-	
+
 func generate_direction() -> Vector2:
 	var texture_size = $EnemySprite.texture.get_size()
 	var sprite_size = texture_size * $EnemySprite.scale
 	var enemy_radius = max(sprite_size.x, sprite_size.y) * 0.5
-	
+
 	#Repel enemy away from edge of screen if too close
 	var screen_size = get_viewport_rect().size
 	var repel_force := Vector2.ZERO
@@ -587,7 +613,7 @@ func generate_direction() -> Vector2:
 
 		if not invalid:
 			return test_direction.normalized()
-			
+
 
 	# If no safe direction found, default to something safe (e.g. toward center)
 	if not found_valid:
@@ -599,12 +625,12 @@ func change_direction() -> Vector2:
 	# Calculate the opposite direction
 	var opposite_direction = -direction.normalized()
 	var base_angle = opposite_direction.angle()
-	
+
 	# Adding random variation
 	var half_cone_rad = deg_to_rad(dash_cone_degrees / 2.0)
 	var random_angle_offset = randf_range(-half_cone_rad, half_cone_rad)
-	
+
 	var final_angle = base_angle + random_angle_offset
-	
+
 	var varied_direction = Vector2.RIGHT.rotated(final_angle)
 	return varied_direction

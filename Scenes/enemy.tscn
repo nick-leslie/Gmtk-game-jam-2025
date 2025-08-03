@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://brugnqiduxnm5" path="res://Sprites/Arrow.svg" id="3_afpow"]
 [ext_resource type="AudioStream" uid="uid://buy5omigq0yx4" path="res://SFX/Option2.wav" id="4_287tu"]
 [ext_resource type="Texture2D" uid="uid://cwb2xj0v7tyyn" path="res://Sprites/Exclamation.svg" id="4_0830c"]
+[ext_resource type="PackedScene" uid="uid://p3xsnxuqwvoo" path="res://Scenes/hit_spark.tscn" id="5_0830c"]
 
 [sub_resource type="Curve" id="Curve_afpow"]
 _limits = [0.0, 15.0, 0.0, 30.0]
@@ -33,6 +34,7 @@ script = ExtResource("1_4gyqm")
 max_speed = 3.5
 dash_mult = 1.5
 capture_score = 10
+hurt_flash_duration = 0.2
 decay_wait_time = 4.0
 decay_rate = SubResource("Curve_afpow")
 idle_state_time = 1.0
@@ -71,3 +73,7 @@ offset_bottom = 95.0
 
 [node name="CaptureSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_287tu")
+
+[node name="Hit spark" parent="." instance=ExtResource("5_0830c")]
+amount = 50
+lifetime = 0.33

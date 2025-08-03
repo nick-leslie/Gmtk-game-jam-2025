@@ -60,7 +60,7 @@ theme = ExtResource("1_76r4p")
 theme_type_variation = &"HeaderLarge"
 text = "Game Over!"
 
-[node name="Label" type="Label" parent="Control/VBoxContainer"]
+[node name="ScoreLabel" type="Label" parent="Control/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_76r4p")
 theme_type_variation = &"HeaderMedium"

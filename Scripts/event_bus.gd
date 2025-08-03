@@ -16,11 +16,20 @@ signal ProjectileCollision
 
 signal SetPlayerHealth(current_health:int)
 
-signal GameOver
+signal GameOver(final_score:int)
 signal NewGame
 
 signal UpdateScore(count:int)
 
+func _ready() -> void:
+	GameOver.connect(update_final_score)
+	pass
+
+var final_score = 0
+
+func update_final_score(score:int):
+	print(score)
+	final_score = score
 
 
 

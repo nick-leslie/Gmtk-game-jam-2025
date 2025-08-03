@@ -26,12 +26,12 @@ func spawn_new_wave():
 	var wave = waves[wave_choice]
 	for enemy_scene in wave.Enemys:
 		var enemy = enemy_scene.instantiate()
-		enemy.position = get_random_screen_position(50)
+		enemy.position = get_random_screen_position(300)
 		get_parent().add_child(enemy)
 		current_wave.append(enemy)
 		pass
 
-func get_random_screen_position(buffer: float = 150.0) -> Vector2:
+func get_random_screen_position(buffer: float = 300.0) -> Vector2:
 	var viewport_size = get_viewport().get_visible_rect().size
 	return Vector2(
 		randf() * (viewport_size.x - buffer * 2) + buffer,
