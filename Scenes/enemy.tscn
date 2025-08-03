@@ -33,6 +33,11 @@ dash_mult = 1.5
 capture_score = 10
 decay_wait_time = 4.0
 decay_rate = SubResource("Curve_afpow")
+idle_state_time = 1.0
+telegraph_state_time = 0.4
+move_state_time = 1.0
+windup_state_time = 0.4
+attack_state_time = 2.0
 
 [node name="EnemySprite" type="Sprite2D" parent="."]
 scale = Vector2(0.3, 0.3)

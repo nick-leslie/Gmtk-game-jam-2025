@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c3v30e6n6jbwd"]
+[gd_scene load_steps=9 format=3 uid="uid://c3v30e6n6jbwd"]
 
 [ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_366os"]
 [ext_resource type="Script" uid="uid://whxlnigxtbwl" path="res://Scripts/Enemies/test_enemy.gd" id="2_kksxm"]
 [ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_ca8xo"]
 [ext_resource type="Texture2D" uid="uid://c5hhapen6rqco" path="res://Sprites/Enemies/Ottgle.png" id="4_ca8xo"]
 [ext_resource type="Shader" uid="uid://dmp84e0bq5yjk" path="res://Resources/Shaders/flash_shader.gdshader" id="4_s37h6"]
+[ext_resource type="AudioStream" path="res://SFX/Option2.wav" id="6_i7old"]
 
 [sub_resource type="Curve" id="Curve_ca8xo"]
 _limits = [0.0, 15.0, 0.0, 30.0]
@@ -36,3 +37,6 @@ texture = ExtResource("4_ca8xo")
 
 [node name="EnemyHitbox" parent="EnemyArea" index="0"]
 position = Vector2(-0.5, 0.5)
+
+[node name="CaptureSFX" type="AudioStreamPlayer" parent="." index="4"]
+stream = ExtResource("6_i7old")

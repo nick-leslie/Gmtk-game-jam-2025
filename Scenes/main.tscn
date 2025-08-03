@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://sueks7qs46og" path="res://Scripts/Spawner.gd" id="1_21xkr"]
 [ext_resource type="Script" uid="uid://cq4kpe8tmhqtt" path="res://Waves/WaveGenerator.gd" id="2_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bw8emd6n56kf8" path="res://Scenes/player.tscn" id="2_8gbba"]
-[ext_resource type="Resource" uid="uid://clnitijkc8lsw" path="res://Waves/Mowel.tres" id="3_21xkr"]
+[ext_resource type="Resource" uid="uid://dldgjcb0rc6dh" path="res://Waves/Mowel.tres" id="3_21xkr"]
 [ext_resource type="PackedScene" uid="uid://ecmn2amgrast" path="res://Scenes/ui/combo_ui.tscn" id="5_kry3j"]
 [ext_resource type="PackedScene" uid="uid://burdmr57e40wc" path="res://Scenes/ui/player_heatlh_ui.tscn" id="6_21xkr"]
 
