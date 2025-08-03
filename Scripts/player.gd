@@ -21,6 +21,7 @@ var combo_count_decayed = 0
 var max_combo_value:int
 
 @onready var loop_sfx: AudioStreamPlayer = get_node("LoopSfx")
+@onready var hit_sfx: AudioStreamPlayer = get_node("HitSFX")
 
 var col_shape_dict: Dictionary = {} # every colider is indexed by
 var current_health
@@ -196,6 +197,7 @@ func on_loop_created(area):
 
 func hit_enemy():
 	if !been_hit:
+		hit_sfx.play()
 		reduce_health()
 
 func decay_combo():
