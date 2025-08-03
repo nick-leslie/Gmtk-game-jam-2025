@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b2cuidn1p88vj"
-path="res://.godot/imported/knot.png-970cb02aecfc8794fd9332270b7c434a.ctex"
+path="res://.godot/imported/knot.png-6c11b3ee05c3f19a32b50d72a519f47e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://knot.png"
-dest_files=["res://.godot/imported/knot.png-970cb02aecfc8794fd9332270b7c434a.ctex"]
+source_file="res://Sprites/knot.png"
+dest_files=["res://.godot/imported/knot.png-6c11b3ee05c3f19a32b50d72a519f47e.ctex"]
 
 [params]
 
