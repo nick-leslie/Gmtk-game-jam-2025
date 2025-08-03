@@ -22,18 +22,19 @@ mouse_filter = 2
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_1u1h3")
 
-[node name="Title" type="Label" parent="Control"]
+[node name="Title" type="RichTextLabel" parent="Control"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = -1.0
-offset_top = 109.0
-offset_right = -1.0
-offset_bottom = 205.0
+offset_left = 10.0
+offset_top = 315.0
+offset_right = 10.0
+offset_bottom = 411.0
 grow_horizontal = 2
 theme = ExtResource("1_c2fhx")
 theme_type_variation = &"HeaderLarge"
-text = "Game Name Here"
+bbcode_enabled = true
+text = "[outline_size={10}][color=gold][font_size=100]Crypto Critters Capture[/font_size][/color][/outline_size]"
 horizontal_alignment = 1
 vertical_alignment = 1
 

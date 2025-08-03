@@ -1,4 +1,7 @@
-[gd_resource type="Theme" format=3 uid="uid://dfxk3tpasb5ib"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dfxk3tpasb5ib"]
+
+[ext_resource type="FontFile" uid="uid://b7nhwf1hnj08f" path="res://VAST_MX.ttf" id="1_ytblq"]
 
 [resource]
+default_font = ExtResource("1_ytblq")
 HeaderLarge/font_sizes/font_size = 70
