@@ -5,7 +5,11 @@
 [ext_resource type="Script" uid="uid://n3oudpq54nx5" path="res://Scripts/Enemies/mowel.gd" id="2_f31rp"]
 [ext_resource type="Material" uid="uid://d72pxehmuxuq" path="res://Resources/Shaders/flash_shader.tres" id="2_waptr"]
 [ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_f31rp"]
-[ext_resource type="Curve" uid="uid://bmlsewcpo3kki" path="res://Resources/HealthCurves/MowelCurve.tres" id="4_3j3ch"]
+
+[sub_resource type="Curve" id="Curve_f31rp"]
+_limits = [0.0, 7.0, 0.0, 10.0]
+_data = [Vector2(0, 0), 0.0, 6.25051, 0, 1, Vector2(1.0453, 6.53363), 0.0, 0.0, 0, 0, Vector2(10, 7), 0.0520809, 0.0, 1, 0]
+point_count = 3
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_waptr"]
 radius = 37.6052
@@ -18,10 +22,10 @@ projectile_cone = 60
 max_speed = 0.0
 dash_mult = 0.0
 number_of_projectiles = 10
-capture_score = 0
+capture_score = 2
 projectile_scene = ExtResource("3_f31rp")
 decay_wait_time = 3.0
-decay_rate = ExtResource("4_3j3ch")
+decay_rate = SubResource("Curve_f31rp")
 
 [node name="EnemySprite" parent="." index="0"]
 material = ExtResource("2_waptr")
