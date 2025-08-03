@@ -25,7 +25,6 @@ projectile_scene = ExtResource("3_ca8xo")
 decay_rate = SubResource("Curve_ca8xo")
 idle_state_time = 3.0
 telegraph_state_time = 0.5
-move_state_time = 1.0
 windup_state_time = 0.3
 attack_state_time = 1.5
 

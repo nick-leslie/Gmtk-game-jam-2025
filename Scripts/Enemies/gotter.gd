@@ -44,7 +44,7 @@ func moveTransition(delta: float) -> State:
 				next_state = State.WINDUP
 			3:
 				next_state = State.DASHWINDUP
-			4:
+			4, 5, 6:
 				next_state = State.IDLE
 		move_elapsed_time = 0.0
 		return next_state
@@ -58,7 +58,7 @@ func windupTransition(delta: float) -> State:
 		return State.ATTACK
 
 func attackTransition(delta: float) -> State:
-	var random_next_state = randi_range(1, 4)
+	var random_next_state = randi_range(1, 6)
 	var next_state = State.ATTACK
 	
 	if attack_elapsed_time < attack_state_time:

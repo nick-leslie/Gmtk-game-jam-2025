@@ -414,6 +414,10 @@ func moveState(delta: float): #Default movement behavior
 	# Move by vector
 	var offset = direction * magnitude
 	position += offset
+	
+	#Rotate to match direction
+	$EnemySprite.rotation  = direction.angle() + deg_to_rad(180)
+	$EnemySprite.flip_v = direction.x > 0
 
 	#Clamping to screen size
 	screenClamp()
@@ -421,6 +425,11 @@ func moveState(delta: float): #Default movement behavior
 func windupState(delta: float):
 	var mat = $EnemySprite.material as ShaderMaterial
 	
+	if windup_elapsed_time == 0.0:
+		projectile_direction = generate_direction()
+		#Rotate to match direction
+		$EnemySprite.rotation  = projectile_direction.angle() + deg_to_rad(180)
+		$EnemySprite.flip_v = direction.x > 0
 	# Dynamically figure out how long to blink for based on delta and windup blink counter
 	var windup_period = (windup_state_time / (windup_blink_count * 2))
 
@@ -435,12 +444,11 @@ func windupState(delta: float):
 func attackState(delta: float):
 	var mat = $EnemySprite.material as ShaderMaterial
 	mat.set_shader_parameter("active", false)
-	
 	#Do the first time the state is entered
 	if attack_elapsed_time == 0.0:
 		print("First time in attack state")
 		#projectile_direction = Utils.random_direction()
-		projectile_direction = generate_direction()
+		#projectile_direction = generate_direction()
 		projectile_timer = 0.0
 		current_projectiles = 0
 		
@@ -453,6 +461,9 @@ func attackState(delta: float):
 			projectile_timer -= projectile_period
 			var projectile = projectile_scene.instantiate()
 			projectile.set_direction(projectile_direction)
+			#Rotate to match direction
+			$EnemySprite.rotation  = projectile_direction.angle() + deg_to_rad(180)
+			$EnemySprite.flip_v = direction.x > 0
 			get_tree().current_scene.add_child(projectile)
 			projectile.global_position = global_position
 			current_projectiles += 1

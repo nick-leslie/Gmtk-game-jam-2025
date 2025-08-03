@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Wave" load_steps=3 format=3 uid="uid://dldgjcb0rc6dh"]
+[gd_resource type="Resource" script_class="Wave" load_steps=3 format=3 uid="uid://2x5s4upa34ox"]
 
 [ext_resource type="Script" uid="uid://cq4kpe8tmhqtt" path="res://Waves/WaveGenerator.gd" id="1_8lo25"]
 [ext_resource type="PackedScene" path="res://Scenes/Enemies/mowel.tscn" id="1_nct35"]

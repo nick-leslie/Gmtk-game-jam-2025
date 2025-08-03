@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://br6ossimt5dux" path="res://Scenes/enemy.tscn" id="1_lhl6k"]
 [ext_resource type="Texture2D" uid="uid://cy036kvf4o22f" path="res://Sprites/Enemies/Mowel.png" id="2_8b6l7"]
-[ext_resource type="Script" path="res://Scripts/Enemies/mowel.gd" id="2_f31rp"]
+[ext_resource type="Script" uid="uid://n3oudpq54nx5" path="res://Scripts/Enemies/mowel.gd" id="2_f31rp"]
 [ext_resource type="Material" uid="uid://d72pxehmuxuq" path="res://Resources/Shaders/flash_shader.tres" id="2_waptr"]
 [ext_resource type="PackedScene" uid="uid://cy7kv1ou0ubfa" path="res://Scenes/projectile.tscn" id="3_f31rp"]
 [ext_resource type="Curve" uid="uid://bmlsewcpo3kki" path="res://Resources/HealthCurves/MowelCurve.tres" id="4_3j3ch"]
