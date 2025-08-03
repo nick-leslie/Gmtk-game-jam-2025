@@ -4,7 +4,7 @@ extends CanvasLayer
 
 func _ready() -> void:
 	pass
-	
+
 func _process(delta: float) -> void:
 	pass
 
@@ -12,10 +12,13 @@ func _on_play_pressed() -> void:
 	select_sfx.play()
 	EventBus.NewGame.emit()
 	get_tree().change_scene_to_file("res://Scenes/main.tscn") #TODO make a level select screen
-	
 
 
-func _on_options_pressed() -> void:
+
+func _on_credits_pressed() -> void:
+	select_sfx.play()
+	EventBus.NewGame.emit()
+	get_tree().change_scene_to_file("res://Scenes/main.tscn") #TODO make a level select screen
 	pass #TODO replace with the options menu
 
 

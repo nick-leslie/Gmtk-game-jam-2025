@@ -22,7 +22,6 @@ anchor_right = 1.00181
 anchor_bottom = 1.00081
 offset_right = -0.47998
 offset_bottom = 0.119995
-salvage_score_increase = 5
 
 [node name="PlayerHeatlhUI" parent="CanvasLayer" instance=ExtResource("6_21xkr")]
 size_flags_horizontal = 4
