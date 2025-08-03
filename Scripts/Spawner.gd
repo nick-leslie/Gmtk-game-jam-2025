@@ -16,7 +16,7 @@ func _ready() -> void:
 
 	EventBus.GameOver.connect(game_over)
 	EventBus.NewGame.connect(new_game)
-	
+
 
 	spawn_new_wave(easy_waves)
 	pass
@@ -27,15 +27,15 @@ func _process(delta: float) -> void:
 		if is_instance_valid(enemy):
 			return
 	current_wave = []
-  
+
 	if !game_over_status:
-    if player.combo > medium_threashold:
-      spawn_new_wave(easy_waves)
-    elif player.combo > hard_threashold:
-      spawn_new_wave(medium_waves)
-    else:
-      spawn_new_wave(hard_waves)
-	pass
+		if player.combo > medium_threashold:
+		  spawn_new_wave(easy_waves)
+		elif player.combo > hard_threashold:
+		  spawn_new_wave(medium_waves)
+		else:
+		  spawn_new_wave(hard_waves)
+
 
 
 func spawn_new_wave(waves:Array[Wave]):
