@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ccwg62dkvpr11"
-path="res://.godot/imported/knot.png-970cb02aecfc8794fd9332270b7c434a.ctex"
+uid="uid://ctf2fc66tbcyo"
+path="res://.godot/imported/rope_texture_3.png-3460cec3860aaf3ce9c67fe1c77c2d8a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://knot.png"
-dest_files=["res://.godot/imported/knot.png-970cb02aecfc8794fd9332270b7c434a.ctex"]
+source_file="res://Sprites/rope_texture_3.png"
+dest_files=["res://.godot/imported/rope_texture_3.png-3460cec3860aaf3ce9c67fe1c77c2d8a.ctex"]
 
 [params]
 

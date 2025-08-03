@@ -20,7 +20,8 @@ var is_combo_in_danger = false
 var combo_count_decayed = 0
 var max_combo_value:int
 
-
+@onready var loop_sfx: AudioStreamPlayer = get_node("LoopSfx")
+@onready var hit_sfx: AudioStreamPlayer = get_node("HitSFX")
 
 var col_shape_dict: Dictionary = {} # every colider is indexed by
 var current_health
@@ -59,6 +60,7 @@ func _physics_process(delta: float) -> void:
 
 	queue_redraw()
 	var is_offscreen = false
+	$Stylest/Knot.visible = false
 	if mouse_position.x < 0 or mouse_position.y < 0 or mouse_position.x > viewport_size.x or mouse_position.y > viewport_size.y:
 		is_offscreen = true
 	#print("Mouse Offscreen: " + str(is_offscreen))
@@ -67,7 +69,8 @@ func _physics_process(delta: float) -> void:
 
 	var pos = mouse_position
 	if Input.is_mouse_button_pressed( 1 ) and !been_hit and !is_offscreen: # Left click
-
+		
+		$Stylest/Knot.visible = true
 
 		if is_combo_in_danger == true:
 			combo_count_decayed=0
@@ -183,17 +186,20 @@ func _emit_health():
 func on_loop_created(area):
 	if area.name == "HeadColliderBody":
 		EventBus.LoopCreated.emit()
+		loop_sfx.play()
 		var closest_index = get_closest_point_index()
 		remove_colider(closest_index)
 		remove_colider(closest_index-1)
 		remove_colider(closest_index-2)
 		var point_count = line.get_point_count()
 		for i in range(closest_index+1,point_count+1):
-			line.remove_point(closest_index+1)
-			remove_colider(i)
+			if closest_index < line.points.size():
+				line.remove_point(closest_index+1)
+				remove_colider(i)
 
 func hit_enemy():
 	if !been_hit:
+		hit_sfx.play()
 		reduce_health()
 
 func decay_combo():
@@ -223,6 +229,7 @@ func reduce_health():
 	if current_health == 0:
 		EventBus.GameOver.emit()
 		print("Game over!")
+		await hit_sfx.finished
 		get_tree().change_scene_to_file("res://Scenes/ui/game_over.tscn")
 
 	EventBus.SetPlayerHealth.emit(current_health)

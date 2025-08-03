@@ -1,22 +1,58 @@
-[gd_scene load_steps=7 format=3 uid="uid://bgso3ttnhyoq"]
+[gd_scene load_steps=8 format=3 uid="uid://bgso3ttnhyoq"]
 
 [ext_resource type="Script" uid="uid://sueks7qs46og" path="res://Scripts/Spawner.gd" id="1_21xkr"]
 [ext_resource type="Script" uid="uid://cq4kpe8tmhqtt" path="res://Waves/WaveGenerator.gd" id="2_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bw8emd6n56kf8" path="res://Scenes/player.tscn" id="2_8gbba"]
-[ext_resource type="Resource" uid="uid://2x5s4upa34ox" path="res://Waves/Mowel.tres" id="3_21xkr"]
+[ext_resource type="Resource" uid="uid://dl2u0pcq6pq1f" path="res://Waves/Easy.tres" id="3_344ge"]
+[ext_resource type="Texture2D" uid="uid://cps670kh28m3n" path="res://Sprites/TouchGrass.png" id="4_6bp64"]
 [ext_resource type="PackedScene" uid="uid://ecmn2amgrast" path="res://Scenes/ui/combo_ui.tscn" id="5_kry3j"]
 [ext_resource type="PackedScene" uid="uid://burdmr57e40wc" path="res://Scenes/ui/player_heatlh_ui.tscn" id="6_21xkr"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_21xkr")
-waves = Array[ExtResource("2_6bp64")]([ExtResource("3_21xkr")])
+easy_waves = Array[ExtResource("2_6bp64")]([ExtResource("3_344ge")])
+medium_waves = Array[ExtResource("2_6bp64")]([ExtResource("3_344ge")])
+hard_waves = Array[ExtResource("2_6bp64")]([ExtResource("3_344ge")])
+edge_limit = 100.0
+medium_threashold = 15
+hard_threashold = 30
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ComboUI" parent="CanvasLayer" instance=ExtResource("5_kry3j")]
+layout_direction = 0
+anchors_preset = -1
+anchor_right = 1.00181
+anchor_bottom = 1.00081
+offset_right = -0.47998
+offset_bottom = 0.119995
+salvage_score_increase = 5
+
+[node name="PlayerHeatlhUI" parent="CanvasLayer" instance=ExtResource("6_21xkr")]
+size_flags_horizontal = 4
 
 [node name="Player" parent="." instance=ExtResource("2_8gbba")]
 
-[node name="ComboUI" parent="." instance=ExtResource("5_kry3j")]
-offset_left = 59.0
-offset_right = 59.0
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+layer = -7
 
-[node name="PlayerHeatlhUI" parent="." instance=ExtResource("6_21xkr")]
-offset_left = 59.0
-offset_right = 59.0
+[node name="Background" type="TextureRect" parent="CanvasLayer2"]
+z_index = -1752
+z_as_relative = false
+anchors_preset = -1
+anchor_left = -0.068
+anchor_top = -0.188
+anchor_right = 1.042
+anchor_bottom = 1.119
+offset_left = 13.5599
+offset_top = 0.0398865
+offset_right = 3930.36
+offset_bottom = 2620.48
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.35, 0.35)
+size_flags_horizontal = 6
+size_flags_vertical = 3
+texture = ExtResource("4_6bp64")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
