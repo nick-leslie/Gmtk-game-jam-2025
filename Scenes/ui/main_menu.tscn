@@ -66,6 +66,7 @@ action_mode = 0
 text = "Play"
 
 [node name="Credits" type="Button" parent="Control/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("3_baxwh")
 action_mode = 0
